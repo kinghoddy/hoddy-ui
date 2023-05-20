@@ -26,7 +26,7 @@ const darkColors = {
     5: "#aaa",
   },
   white: {
-    1: "#111",
+    1: "#000",
     2: "#222",
     3: "#444",
     4: "#333",
@@ -39,17 +39,17 @@ const darkColors = {
     text: "#000",
   },
   light: {
-    main: "#000",
+    main: "#111",
     light: "#555",
     dark: "#333",
     text: "#fff",
   },
-
+  grey: {
+    dark: "#d0d8d8",
+    main: "#e4e0e4",
+  },
   textSecondary: {
-    main: "#777",
-    light: "#aaa",
-    dark: "#555",
-    text: "#fff",
+    main: "#666",
   },
   secondary: {
     main: "#a00",
@@ -69,11 +69,11 @@ export default function colors(theme: ThemeTypes) {
   const dynamicColors = theme === "dark" ? darkColors : lightColors;
   return {
     primary: {
-      main: "#FD7",
+      main: "#f80",
       light: "#FEFFD3",
       dark: "#fa0",
       orange: "#F68B1E",
-      text: "#000",
+      text: "#fff",
     },
     secondary: {
       main: "#f11",
@@ -98,18 +98,21 @@ export default function colors(theme: ThemeTypes) {
       light: "#777",
       dark: "#111",
       text: "#fff",
+      mid: "#f2f3f4",
     },
     textSecondary: {
       main: "#aaa",
-      light: "#bbb",
-      dark: "#777",
-      text: "#000",
+      mid: "#9ab",
+      dark: "#678",
+      darkBlue: "#123",
     },
     blue: {
       main: "#09F",
       light: "#39f",
       dark: "#028",
       text: "#fff",
+      navy: "#071440",
+      soft: "#EBF2FF",
     },
     info: {
       main: "#09f",
@@ -122,6 +125,9 @@ export default function colors(theme: ThemeTypes) {
       text: "#fff",
       light: "#5c3",
       dark: "#062",
+
+      green: "#49D3BA",
+      lighter: "#00A86B",
     },
 
     warning: {
@@ -135,6 +141,13 @@ export default function colors(theme: ThemeTypes) {
       text: "#fff",
       light: "#f43",
       dark: "#a20",
+      red: "#D92D20",
+      soft: "#fee",
+      bold: "#d22",
+    },
+    grey: {
+      dark: "#101828",
+      main: "#344054",
     },
     ...dynamicColors,
   };

@@ -22,10 +22,10 @@ function themeReducer(
   console.log(type, payload);
   // Platform
   if (payload === "dark" || type === "dark") {
-    SystemUI.setBackgroundColorAsync("#111111");
+    SystemUI.setBackgroundColorAsync("#000000");
     if (Platform.OS === "android") {
       NavigationBar.setButtonStyleAsync("light");
-      NavigationBar.setBackgroundColorAsync("#111111");
+      NavigationBar.setBackgroundColorAsync("#000000");
     }
   } else {
     SystemUI.setBackgroundColorAsync("#ffffff");
@@ -80,4 +80,3 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     </UIThemeContext.Provider>
   );
 };
-

@@ -200,7 +200,12 @@ export interface TextFieldProps extends TextInputProps {
   inputStyles?: any;
   gutterBottom?: number;
   end?: ReactNode;
-  options?: { secondary?: string; value: string | number; label: string }[];
+  options?: {
+    start?: ReactNode;
+    secondary?: string;
+    value: string | number;
+    label: string;
+  }[];
   onFocus?: () => void;
   onBlur?: () => void;
 }
@@ -233,9 +238,9 @@ export interface SafeAreaViewProps {
 export interface SelectMenuProps {
   open: boolean;
   onClose: () => void;
-  value: string | number;
-  options: { secondary?: string; value: string | number; label: string }[];
-  onChange: (value: string | number) => void;
+  value: any;
+  options: { secondary?: string; value: any; label: string }[];
+  onChange: (value: string) => void;
   disableAutoClose?: boolean;
   label?: string;
   secondary?: string;

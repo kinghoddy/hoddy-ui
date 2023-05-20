@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Platform } from "react-native";
-import { ms, vs } from "react-native-size-matters";
-import colors from "./theme/colors";
+import { vs } from "react-native-size-matters";
 import { UIThemeContext } from "./theme";
+import colors from "./theme/colors";
 
 export const useColors = () => {
   const { themeState } = useContext(UIThemeContext);

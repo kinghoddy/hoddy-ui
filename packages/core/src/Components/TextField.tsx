@@ -1,9 +1,10 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { startTransition, useRef, useState } from "react";
 import { Animated, TextInput, TouchableOpacity, View } from "react-native";
 import {
   ScaledSheet,
   moderateScale,
+  ms,
   verticalScale,
 } from "react-native-size-matters";
 import { useColors } from "../hooks";
@@ -15,7 +16,7 @@ const TextField: React.FC<TextFieldProps> = ({
   label,
   keyboardType,
   variant,
-  color = "dark",
+  color = "primary",
   value,
   type,
   helperText,
@@ -44,13 +45,13 @@ const TextField: React.FC<TextFieldProps> = ({
   React.useEffect(() => {
     if (focused || value) {
       Animated.timing(labelAnim, {
-        toValue: variant === "outlined" ? verticalScale(-12) : verticalScale(5),
+        toValue: verticalScale(variant === "text" ? 2 : 4),
         duration: 300,
         useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(labelAnim, {
-        toValue: height / moderateScale(variant === "text" ? 2 : 3.2),
+        toValue: height / moderateScale(variant === "text" ? 2.5 : 3.2),
         duration: 300,
         useNativeDriver: false,
       }).start();
@@ -77,9 +78,9 @@ const TextField: React.FC<TextFieldProps> = ({
         ? colors.error.main
         : focused
         ? colors[color].main
-        : colors.black[1],
-      borderWidth: error ? 1 : variant === "outlined" ? (focused ? 2 : 1) : 0,
-      borderBottomWidth: variant === "text" ? 0.5 : error ? 1 : 0,
+        : colors.textSecondary.main,
+      borderWidth: error ? 1 : variant === "outlined" ? (focused ? 2 : 0.5) : 0,
+      borderBottomWidth: variant === "text" ? 0.5 : undefined,
       width: "100%",
       borderRadius: variant === "text" ? 0 : rounded ? 30 : 7,
       alignItems: "center",
@@ -89,27 +90,29 @@ const TextField: React.FC<TextFieldProps> = ({
       fontSize: "14@s",
       flex: 1,
       alignSelf: "stretch",
-      paddingLeft: moderateScale(15),
+      paddingLeft: variant === "text" ? 0 : moderateScale(15),
       paddingRight: moderateScale(10),
-      paddingTop: variant !== "outlined" ? "11@vs" : 0,
+      paddingTop: "11@vs",
       color: colors.black[1],
       zIndex: 10,
       // backgroundColor: "#284",
     },
     inputText: {
       fontSize: "14@ms",
-      paddingLeft: moderateScale(15),
-      paddingTop: variant !== "outlined" ? "13@ms" : 0,
+      flex: 1,
+      paddingLeft: variant === "text" ? 0 : moderateScale(15),
+      paddingTop: "13@ms",
     },
     label: {
       position: "absolute",
-      left: moderateScale(15),
+      left: variant === "text" ? 0 : moderateScale(15),
       fontSize: focused || value ? "10@s" : "13@s",
-      color: focused ? colors[color].main : colors.black[1],
+      color: focused ? colors[color].main : colors.textSecondary.main,
     },
     helperText: {
       paddingHorizontal: "15@s",
-      color: focused ? colors[color].dark : colors.black[1],
+      flex: 1,
+      color: focused ? colors[color].dark : colors.textSecondary.main,
       paddingTop: "4@ms",
     },
     error: {
@@ -167,9 +170,24 @@ const TextField: React.FC<TextFieldProps> = ({
           </Animated.Text>
           {start}
           {options ? (
-            <Typography style={styles.inputText}>
-              {options.find((cur) => cur.value === value)?.label}
-            </Typography>
+            <View
+              style={{ flex: 1, alignItems: "center", flexDirection: "row" }}
+            >
+              {options.find((cur) => cur.value === value)?.start && (
+                <View
+                  style={{
+                    paddingTop: variant !== "outlined" ? ms(13) : 0,
+                    paddingRight: 10,
+                  }}
+                >
+                  {options.find((cur) => cur.value === value)?.start}
+                </View>
+              )}
+
+              <Typography style={styles.inputText}>
+                {options.find((cur) => cur.value === value)?.label}
+              </Typography>
+            </View>
           ) : (
             <TextInput
               onFocus={() => {
@@ -192,6 +210,15 @@ const TextField: React.FC<TextFieldProps> = ({
             />
           )}
           {end && <View style={{ marginRight: 20 }}>{end}</View>}
+          {options && (
+            <View style={{ marginRight: 20 }}>
+              <Ionicons
+                name="chevron-down"
+                color={colors.textSecondary.main}
+                size={24}
+              />
+            </View>
+          )}
         </TouchableOpacity>
         {helperText && (
           <Typography
@@ -250,11 +277,17 @@ export const TextField2: React.FC<TextFieldProps> = ({
   ...props
 }) => {
   const colors = useColors();
-  const [focused, setFocused] = useState(false);
+  const [focused, _setFocused] = useState(false);
 
   const labelAnim = useRef(new Animated.Value(0)).current;
 
   const height = moderateScale(50);
+
+  const setFocused = (value: boolean) => {
+    startTransition(() => {
+      _setFocused(value);
+    });
+  };
 
   React.useEffect(() => {
     if (focused || value) {
@@ -374,7 +407,6 @@ export const TextField2: React.FC<TextFieldProps> = ({
               <Typography style={styles.inputText}>
                 {options.find((cur) => cur.value === value)?.label}
               </Typography>
-
               <Ionicons
                 name="chevron-down"
                 size={24}

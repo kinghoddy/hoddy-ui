@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const SafeAreaView: React.FC<SafeAreaViewProps> = ({ children, style }) => {
+export const SafeAreaView: React.FC<SafeAreaViewProps> = ({
+  children,
+  style,
+}) => {
   return <Safe style={{ ...styles.droidSafeArea, ...style }}>{children}</Safe>;
 };
-
-export default SafeAreaView;
