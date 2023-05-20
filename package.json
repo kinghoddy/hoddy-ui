@@ -1,4 +1,5 @@
 {
+  "name": "@hoddy-ui/monorepo",
   "private": true,
   "scripts": {
     "postinstall": "patch-package"
