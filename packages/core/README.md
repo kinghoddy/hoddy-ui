@@ -1,17 +1,11 @@
 **npm:**
 
 ```sh
-npm install @mui/material @emotion/react @emotion/styled
+npm install @hoddy-ui/core
 ```
 
 **yarn:**
 
 ```sh
-yarn add @mui/material @emotion/react @emotion/styled
-```
-
-**CDN:**
-
-```html
-<div>hello world</div>
+yarn add @hoddy-ui/core
 ```
