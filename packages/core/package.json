@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "Core rich react native components written in typescript",
   "main": "index.ts",
-  "repository": "https://github.com/kinghoddy/hoddy-ui",
-  "author": "Noel sogbuyi",
+  "repository": {
+    "directory": "packages/core",
+    "type": "git",
+    "url": "https://github.com/kinghoddy/hoddy-ui"
+  },
+  "author": "Hoddy inc",
   "license": "MIT",
   "private": false,
   "peerDependencies": {
@@ -23,5 +27,8 @@
     "@types/react-native": "^0.72.0",
     "typescript": "^5.0.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
 }
