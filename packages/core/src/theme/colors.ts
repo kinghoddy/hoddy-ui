@@ -1,4 +1,4 @@
-import { ThemeTypes } from "../types";
+import { ThemeTypes, extraColorTypes } from "../types";
 
 const lightColors = {
   white: {
@@ -64,6 +64,13 @@ const darkColors = {
     text: "#fff",
   },
 };
+
+let extraColors: extraColorTypes = {
+  dark: {},
+  light: {},
+};
+
+export const setExtraColors = (c: extraColorTypes) => (extraColors = c);
 
 export default function colors(theme: ThemeTypes) {
   const dynamicColors = theme === "dark" ? darkColors : lightColors;
@@ -150,5 +157,6 @@ export default function colors(theme: ThemeTypes) {
       main: "#344054",
     },
     ...dynamicColors,
+    ...extraColors[theme],
   };
 }

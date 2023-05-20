@@ -21,6 +21,25 @@ export type colorTypes =
   | "blue"
   | "textSecondary";
 
+export type extraColorTypes = {
+  dark: {
+    [key: string]: {
+      main: string;
+      light: string;
+      dark: string;
+      text: string;
+    };
+  };
+  light: {
+    [key: string]: {
+      main: string;
+      light: string;
+      dark: string;
+      text: string;
+    };
+  };
+};
+
 export interface ThemeActionTypes {
   type: ThemeModes;
   payload?: ThemeTypes;

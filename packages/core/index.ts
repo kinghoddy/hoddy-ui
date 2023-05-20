@@ -18,4 +18,4 @@ export { default as Typography } from "./src/Components/Typography";
 // Others
 export * from "./src/config";
 export * from "./src/hooks";
-export * from "./src/theme/index";
+export * from "./src/theme";
