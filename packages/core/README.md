@@ -17,3 +17,17 @@ npm install @hoddy-ui/core
 ```sh
 yarn add @hoddy-ui/core
 ```
+
+## Usage/Examples
+
+```javascript
+import { UIThemeProvider } from "hoddy-ui/core";
+
+function App() {
+  return (
+    <UIThemeProvider>
+      <Component />
+    </UIThemeProvider>
+  );
+}
+```
