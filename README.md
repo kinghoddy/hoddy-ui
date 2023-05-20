@@ -1,6 +1,6 @@
 # Hoddy UI
 
-React native components that implement Hoddy's Material Design, which follows Google material design guidelines.
+Hoddy UI is a versatile UI component and theming library for React Native and Expo. It follows the Hoddy UI design guidelines, which are a tweak of Material Design. The library provides a collection of reusable components and a customizable theming system to simplify and accelerate the development of mobile applications.
 
 ## 🚀 About Me
 
