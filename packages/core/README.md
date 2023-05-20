@@ -73,6 +73,27 @@ export default HomeScreen;
 
 Hoddy UI provides the following components for building your UI:
 
+- [AdaptiveStatusBar](#adaptivestatusbar)
+- [Avatar](#avatar)
+- [AlertX](#alertx)
+- [Button](#button)
+- [FlashMessage](#flashmessage)
+- [FormWrapper](#formwrapper)
+- [Grid](#grid)
+- [GridItem](#griditem)
+- [IconButton](#iconbutton)
+- [LinkButton](#linkbutton)
+- [List](#list)
+- [ListItem](#listitem)
+- [ListItemText](#listitemtext)
+- [Locator](#locator)
+- [Popup](#popup)
+- [SafeAreaView](#safeareaview)
+- [Spinner](#spinner)
+- [TextField](#textfield)
+- [TextField2](#textfield2)
+- [Typography](#typography)
+
 ## Component API Reference
 
 ### AdaptiveStatusBar
