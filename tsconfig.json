@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "jsx": "react-native",
+        "declaration": false,
+        "lib": [
+            "es2017"
+        ],
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "noEmit": true,
+        "strict": true,
+        "target": "esnext"
+    },
+    "rules": {
+        // disable the rule for all files
+        "@typescript-eslint/explicit-function-return-type": "off"
+    },
+    "overrides": [
+        {
+            // enable the rule specifically for TypeScript files
+            "files": [
+                "*.ts",
+                "*.tsx"
+            ],
+            "rules": {
+                "@typescript-eslint/explicit-function-return-type": [
+                    "error"
+                ]
+            }
+        }
+    ],
+    "exclude": [
+        "node_modules",
+    ]
+}
