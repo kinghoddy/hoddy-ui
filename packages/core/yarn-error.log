@@ -14,17 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: canceled
-      at Interface.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:136216:13)
-      at Interface.emit (node:events:513:28)
-      at Interface._ttyWrite (node:readline:1085:16)
-      at ReadStream.onkeypress (node:readline:291:10)
-      at ReadStream.emit (node:events:513:28)
-      at emitKeys (node:internal/readline/utils:357:14)
-      at emitKeys.next (<anonymous>)
-      at ReadStream.onData (node:internal/readline/emitKeypressEvents:61:36)
-      at ReadStream.emit (node:events:513:28)
-      at addChunk (node:internal/streams/readable:315:12)
+  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:kinghoddy: child "otp" fails because ["otp" with value "whiteman@5" fails to match the required pattern: /^\d+$/, "otp" length must be 64 characters long]
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66988:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140662:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141634:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141556:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1358:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -49,13 +49,18 @@ npm manifest:
       "react": "^18.2.0",
       "react-native": "^0.71.8",
       "react-native-safe-area-context": "^4.5.3",
-      "react-native-size-matters": "^0.4.0"
-    },
-    "devDependencies": {
+      "react-native-size-matters": "^0.4.0",
       "@types/react": "^18.2.6",
       "@types/react-native": "^0.72.0",
       "typescript": "^5.0.4"
     },
+    "keywords": [
+      "react-native",
+      "react-native-component",
+      "hui",
+      "hoddy-ui",
+      "kinghoddy"
+    ],
     "dependencies": {},
     "publishConfig": {
       "access": "public"
