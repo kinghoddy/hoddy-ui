@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/core",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Core rich react native components written in typescript",
   "main": "index.ts",
   "repository": {
@@ -11,6 +11,9 @@
   "author": "Hoddy inc",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "postinstall": "node -r ts-node/register -e \"require('./config/index').loadConfig()\""
+  },
   "peerDependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
