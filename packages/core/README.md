@@ -107,6 +107,21 @@ A component that adapts the status bar color based on the theme.
 | barStyle        | string | "light-content" | The style of the status bar. Possible values: "default", "light-content", "dark-content". |
 | backgroundColor | string | Theme-dependent | The background color of the status bar.                                                   |
 
+Example usage:
+
+```jsx
+import { AdaptiveStatusBar } from "@hoddy-ui/core";
+
+const App = () => {
+  return (
+    <>
+      <AdaptiveStatusBar />
+      {/* Rest of the app */}
+    </>
+  );
+};
+```
+
 ### Avatar
 
 A component for displaying user avatars.

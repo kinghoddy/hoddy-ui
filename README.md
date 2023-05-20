@@ -12,16 +12,8 @@ I'm a full stack developer...
 
 - Add more integrations
 
-## Usage/Examples
+## What is included
 
-```javascript
-import { UIThemeProvider } from "hoddy-ui/core";
+hoddy ui is divided into 2 parts:
 
-function App() {
-  return (
-    <UIThemeProvider>
-      <Component />
-    </UIThemeProvider>
-  );
-}
-```
+- [The core components](https://github.com/kinghoddy/hoddy-ui/tree/main/packages/core)
