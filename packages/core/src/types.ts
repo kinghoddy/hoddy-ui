@@ -6,8 +6,21 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native";
+
 export type ThemeTypes = "dark" | "light";
 export type ThemeModes = "dark" | "light" | "default";
+export type colorTypes =
+  | "primary"
+  | "secondary"
+  | "light"
+  | "dark"
+  | "info"
+  | "warning"
+  | "error"
+  | "purple"
+  | "blue"
+  | "textSecondary";
+
 export interface ThemeActionTypes {
   type: ThemeModes;
   payload?: ThemeTypes;
@@ -36,17 +49,7 @@ export interface AlertXProps {
 // Component Types
 
 export interface AvatarProps {
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   label?: string;
   variant?: "outlined" | "contained";
   source?: any;
@@ -55,17 +58,7 @@ export interface AvatarProps {
 }
 
 export interface ButtonProps {
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   variant?: "text" | "outlined" | "contained";
   gutterBottom?: number;
   elevation?: number;
@@ -89,17 +82,7 @@ export interface FlashMessageProps {
 export interface LinkButtonProps {
   title: string;
   style?: ViewStyle;
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   fontSize?: number;
   fontWeight: string;
   disabled?: boolean;
@@ -107,24 +90,16 @@ export interface LinkButtonProps {
 }
 export interface IconButtonProps {
   style?: TextStyle;
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue";
+  color?: colorTypes;
   fontSize?: number;
   disabled?: boolean;
   onPress?: () => void;
-  icon: string;
+  icon: any;
   elevation?: number;
   bg?: boolean;
   size?: number;
   containerStyles?: ViewStyle;
+  iconType?: "material" | "ion";
 }
 
 export type locatorLocation = {
@@ -205,17 +180,7 @@ export interface PopupProps {
 export interface SpinnerProps {
   label?: string;
   size?: "large" | "small";
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   fullscreen?: boolean;
   style?: ViewStyle;
 }
@@ -223,17 +188,7 @@ export interface SpinnerProps {
 export interface TextFieldProps extends TextInputProps {
   label?: string;
   variant?: "outlined" | "text" | "contained";
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   type?: "email" | "tel" | "password" | "text" | "number" | "search";
   helperText?: string;
   value: any;
@@ -252,18 +207,7 @@ export interface TextFieldProps extends TextInputProps {
 
 export interface TypographyProps {
   children: ReactNode;
-  color?:
-    | "primary"
-    | "secondary"
-    | "light"
-    | "dark"
-    | "textSecondary"
-    | "info"
-    | "warning"
-    | "error"
-    | "purple"
-    | "blue"
-    | "grey";
+  color?: colorTypes;
   style?: TextStyle | ViewStyle;
   textCase?: "capitalize" | "uppercase" | "lowercase" | null;
   variant?:
@@ -291,7 +235,7 @@ export interface SelectMenuProps {
   onClose: () => void;
   value: string | number;
   options: { secondary?: string; value: string | number; label: string }[];
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
   disableAutoClose?: boolean;
   label?: string;
   secondary?: string;
