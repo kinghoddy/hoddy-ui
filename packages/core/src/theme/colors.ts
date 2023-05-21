@@ -17,6 +17,10 @@ const lightColors = {
   },
 };
 
+let extraColors: extraColorTypes = {};
+
+export const setExtraColors = (c: extraColorTypes) => (extraColors = c);
+
 const darkColors = {
   black: {
     1: "#fff",
@@ -37,104 +41,83 @@ const darkColors = {
     light: "#fff",
     dark: "#ddd",
     text: "#000",
+    ...extraColors?.dark?.dark,
   },
   light: {
     main: "#111",
     light: "#555",
     dark: "#333",
     text: "#fff",
-  },
-  grey: {
-    dark: "#d0d8d8",
-    main: "#e4e0e4",
+    ...extraColors?.dark?.light,
   },
   textSecondary: {
     main: "#666",
-  },
-  secondary: {
-    main: "#a00",
-    light: "#a33",
-    dark: "#900",
+    light: "#777",
+    dark: "#444",
     text: "#fff",
-  },
-  purple: {
-    main: "#815",
-    light: "#f4d",
-    dark: "#a06",
-    text: "#fff",
+    ...extraColors?.dark?.textSecondary,
   },
 };
-
-let extraColors: extraColorTypes = {
-  dark: {},
-  light: {},
-};
-
-export const setExtraColors = (c: extraColorTypes) => (extraColors = c);
 
 export default function colors(theme: ThemeTypes) {
   const dynamicColors = theme === "dark" ? darkColors : lightColors;
   return {
+    ...extraColors[theme],
     primary: {
       main: "#f80",
       light: "#FEFFD3",
       dark: "#fa0",
-      orange: "#F68B1E",
       text: "#fff",
+      ...extraColors?.light?.primary,
     },
     secondary: {
       main: "#f11",
       light: "#f43",
       dark: "#d00",
       text: "#fff",
-    },
-    purple: {
-      main: "#a09",
-      light: "#f4d",
-      dark: "#a06",
-      text: "#fff",
+      ...extraColors?.light?.secondary,
     },
     light: {
       main: "#fff",
       light: "#fff",
       dark: "#ddd",
       text: "#000",
+      ...extraColors?.light?.light,
     },
     dark: {
       main: "#000",
       light: "#777",
       dark: "#111",
       text: "#fff",
-      mid: "#f2f3f4",
+      ...extraColors?.light?.dark,
     },
     textSecondary: {
       main: "#aaa",
-      mid: "#9ab",
-      dark: "#678",
-      darkBlue: "#123",
+      light: "#bbb",
+      dark: "#777",
+      text: "#123",
+      ...extraColors?.light?.textSecondary,
     },
     blue: {
       main: "#09F",
       light: "#39f",
       dark: "#028",
       text: "#fff",
-      navy: "#071440",
-      soft: "#EBF2FF",
+      ...extraColors?.light?.blue,
     },
     info: {
       main: "#09f",
       light: "#3af",
       dark: "#08a",
       text: "#fff",
+      ...extraColors?.light?.info,
     },
     success: {
       main: "#0a4",
       text: "#fff",
       light: "#5c3",
       dark: "#062",
-
-      green: "#49D3BA",
-      lighter: "#00A86B",
+      ...extraColors?.light?.success,
     },
 
     warning: {
@@ -142,21 +125,15 @@ export default function colors(theme: ThemeTypes) {
       light: "#fc7",
       dark: "#f90",
       text: "#fff",
+      ...extraColors?.light?.warning,
     },
     error: {
       main: "#D22",
       text: "#fff",
       light: "#f43",
       dark: "#a20",
-      red: "#D92D20",
-      soft: "#fee",
-      bold: "#d22",
-    },
-    grey: {
-      dark: "#101828",
-      main: "#344054",
+      ...extraColors?.light?.error,
     },
     ...dynamicColors,
-    ...extraColors[theme],
   };
 }

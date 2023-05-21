@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
 import { ListItem } from "./List";
 import TextField from "./TextField";
@@ -16,16 +16,16 @@ import Typography from "./Typography";
 const { GOOGLE_MAP_API_KEY } = getApiKey();
 
 if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
-else
-  console.error(
-    "Google map api key needs to be set to use this component \nMake sure to run initialize() with a valid google map api key"
-  );
 
 type predictionType = {
   id: string;
   description: string;
 };
 export const getPredictionsFromCoords = async (coords: any) => {
+  if (!GOOGLE_MAP_API_KEY)
+    console.error(
+      "Google map api key needs to be set to use this component \nMake sure to run initialize() with a valid google map api key"
+    );
   if (!coords) return [];
   const res = await (
     await fetch(
@@ -149,6 +149,13 @@ export const Locator: React.FC<LocatorProps> = ({
     setChanged(false);
     setPrediction([]);
   };
+
+  useEffect(() => {
+    if (!GOOGLE_MAP_API_KEY)
+      console.error(
+        "Google map api key needs to be set to use this component \nMake sure to run initialize() with a valid google map api key"
+      );
+  }, [GOOGLE_MAP_API_KEY]);
 
   return (
     <View style={{ zIndex: 100 }}>

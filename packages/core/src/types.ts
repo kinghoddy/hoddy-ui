@@ -22,20 +22,20 @@ export type colorTypes =
   | "textSecondary";
 
 export type extraColorTypes = {
-  dark: {
+  dark?: {
     [key: string]: {
-      main: string;
-      light: string;
-      dark: string;
-      text: string;
+      main?: string;
+      light?: string;
+      dark?: string;
+      text?: string;
     };
   };
-  light: {
+  light?: {
     [key: string]: {
-      main: string;
-      light: string;
-      dark: string;
-      text: string;
+      main?: string;
+      light?: string;
+      dark?: string;
+      text?: string;
     };
   };
 };

@@ -1,3 +1,5 @@
+import { initialize } from "./src/config";
+
 // Components
 export { default as AdaptiveStatusBar } from "./src/Components/AdaptiveStatusBar";
 export { default as AlertX } from "./src/Components/AlertX";
@@ -16,6 +18,12 @@ export * from "./src/Components/TextField";
 export { default as TextField } from "./src/Components/TextField";
 export { default as Typography } from "./src/Components/Typography";
 // Others
-export * from "./src/config";
+// export * from "./src/config";
 export * from "./src/hooks";
 export * from "./src/theme";
+
+const HoddyUI = {
+  initialize: initialize,
+};
+
+export default HoddyUI;
