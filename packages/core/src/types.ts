@@ -17,7 +17,6 @@ export type colorTypes =
   | "info"
   | "warning"
   | "error"
-  | "purple"
   | "blue"
   | "textSecondary";
 
@@ -75,7 +74,14 @@ export interface AvatarProps {
   size?: number;
   style?: ViewStyle;
 }
-
+export interface AnimatorProps {
+  style?: ViewStyle;
+  duration?: number;
+  children: ReactNode;
+  delay?: number;
+  animationType?: "easeInEaseOut" | "linear" | "spring";
+  type?: "fade" | "slideInLeft" | "slideInRight" | "slideInUp" | "slideInDown";
+}
 export interface ButtonProps {
   color?: colorTypes;
   variant?: "text" | "outlined" | "contained";
@@ -208,6 +214,7 @@ export interface TextFieldProps extends TextInputProps {
   label?: string;
   variant?: "outlined" | "text" | "contained";
   color?: colorTypes;
+  size?: "small" | "normal" | "large";
   type?: "email" | "tel" | "password" | "text" | "number" | "search";
   helperText?: string;
   value: any;

@@ -26,6 +26,7 @@ const TextField: React.FC<TextFieldProps> = ({
   onBlur = () => {},
   error,
   start,
+  size = "normal",
   rounded,
   disabled = false,
   style = {},
@@ -40,7 +41,9 @@ const TextField: React.FC<TextFieldProps> = ({
 
   const labelAnim = useRef(new Animated.Value(0)).current;
 
-  const height = moderateScale(variant === "text" ? 50 : 45);
+  const height =
+    moderateScale(variant === "text" ? 50 : 45) *
+    (size === "large" ? 1.2 : size === "small" ? 0.8 : 1);
 
   React.useEffect(() => {
     if (focused || value) {
