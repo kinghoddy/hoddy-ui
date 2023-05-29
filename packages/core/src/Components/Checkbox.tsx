@@ -1,36 +1,52 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { FC } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useColors } from "../hooks";
+import { CheckboxProps } from "../types";
+import { ScaledSheet } from "react-native-size-matters";
 
-const CheckBox = (props: any) => {
-  const iconName = props.isChecked
-    ? "checkbox-marked"
-    : "checkbox-blank-outline";
+const CheckBox: FC<CheckboxProps> = ({
+  color = "primary",
+  checked,
+  label,
+  style = {},
+  onChange,
+}) => {
+  const iconName = checked ? "checkbox-marked" : "checkbox-blank-outline";
+  const colors = useColors();
+
+  const styles = ScaledSheet.create({
+    container: {
+      alignItems: "center",
+      flexDirection: "row",
+      ...style,
+    },
+    title: {
+      fontSize: 16,
+      color: "#000",
+      marginLeft: 5,
+      fontWeight: "600",
+    },
+  });
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={props.onPress}>
-        <MaterialCommunityIcons name={iconName} size={24} color="#0195FF" />
-      </Pressable>
+      <TouchableOpacity onPress={onChange}>
+        <MaterialCommunityIcons
+          name={iconName}
+          size={24}
+          color={colors[color].main}
+        />
+      </TouchableOpacity>
+      {label}
     </View>
   );
 };
 
 export default CheckBox;
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
-    width: 20,
-    marginTop: 5,
-    marginRight: 10,
-  },
-  title: {
-    fontSize: 16,
-    color: "#000",
-    marginLeft: 5,
-    fontWeight: "600",
-  },
-});

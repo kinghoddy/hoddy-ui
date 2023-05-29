@@ -1,18 +1,21 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import { Platform, useColorScheme } from "react-native";
 import {
+  FlashMessageProps,
   ThemeActionTypes,
   ThemeContext,
   ThemeProviderProps,
   ThemeState,
   ThemeTypes,
 } from "../types";
+import FlashMessage from "../Components/FlashMessage";
 
 export const UIThemeContext = createContext<ThemeContext>({
   themeState: { mode: "default", value: "light" },
+  showFlashMessage: null,
 });
 
 function themeReducer(
@@ -52,6 +55,8 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     mode: "default",
     value: "light",
   });
+  const [showFlashMessage, setShowFlashMessage] =
+    useState<null | FlashMessageProps>(null);
   const colorScheme: ThemeTypes = useColorScheme()!;
 
   React.useEffect(() => {
@@ -75,8 +80,16 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     });
   }, [colorScheme]);
   return (
-    <UIThemeContext.Provider value={{ themeState, themeDispatch }}>
+    <UIThemeContext.Provider
+      value={{
+        themeState,
+        themeDispatch,
+        showFlashMessage,
+        setShowFlashMessage,
+      }}
+    >
       {children}
+      <FlashMessage />
     </UIThemeContext.Provider>
   );
 };

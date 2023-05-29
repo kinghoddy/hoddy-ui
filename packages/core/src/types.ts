@@ -51,6 +51,8 @@ export interface ThemeState {
 export interface ThemeContext {
   themeState: ThemeState;
   themeDispatch?: any;
+  showFlashMessage: null | FlashMessageProps;
+  setShowFlashMessage?: (value: null | FlashMessageProps) => void;
 }
 export interface ThemeProviderProps {
   children: ReactNode;
@@ -99,9 +101,18 @@ export interface ButtonProps {
   start?: ReactNode;
   end?: ReactNode;
 }
+
+export interface CheckboxProps {
+  color?: colorTypes;
+  label: ReactNode;
+  checked?: boolean;
+  style?: ViewStyle;
+  onChange?: () => void;
+}
 export interface FlashMessageProps {
   message?: string;
   title?: string;
+  actions?: Array<{ title: string; onPress: () => void }>;
   type: "success" | "warning" | "error";
 }
 export interface LinkButtonProps {

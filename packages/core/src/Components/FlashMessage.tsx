@@ -1,19 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
+import { UIThemeContext } from "../theme";
 import { FlashMessageProps } from "../types";
 import Typography from "./Typography";
 
-const FlashMessage: React.FC<FlashMessageProps> = ({
-  title,
-  message,
+export const flashMessageRef = createRef<{
+  value: (value: FlashMessageProps) => void;
+}>();
+export const showFlashMessage = ({
   type,
-}) => {
+  actions,
+  message,
+  title,
+}: FlashMessageProps) => {
+  if (flashMessageRef.current) {
+    flashMessageRef.current.value({ type, actions, message, title });
+  }
+};
+
+const FlashMessage: React.FC = () => {
   const { top } = useSafeAreaInsets();
   const colors = useColors();
+  const { showFlashMessage, setShowFlashMessage } = useContext(UIThemeContext);
   const [show, setShow] = useState(false);
+  const type = showFlashMessage?.type || "success";
+
+  useEffect(() => {
+    flashMessageRef.current?.value = setShowFlashMessage;
+  }, [setShowFlashMessage]);
   const styles = ScaledSheet.create({
     root: {
       position: "absolute",
@@ -28,29 +45,27 @@ const FlashMessage: React.FC<FlashMessageProps> = ({
     },
   });
   useEffect(() => {
-    if (message) setShow(true);
+    if (showFlashMessage?.message) setShow(true);
     setTimeout(() => {
       setShow(false);
     }, 2000);
-  }, [message]);
-  return show ? (
+  }, [showFlashMessage?.message]);
+  return (
     <View style={styles.root}>
-      {title && (
+      {showFlashMessage?.title && (
         <Typography
           variant="body2"
           fontWeight={600}
           gutterBottom={3}
           style={{ color: "#fff" }}
         >
-          {title}
+          {showFlashMessage?.title}
         </Typography>
       )}
       <Typography fontWeight={700} style={{ color: "#fff" }}>
-        {message}
+        {showFlashMessage?.message}
       </Typography>
     </View>
-  ) : (
-    <></>
   );
 };
 
