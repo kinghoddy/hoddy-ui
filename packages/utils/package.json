@@ -1,0 +1,24 @@
+{
+  "name": "@hoddy-ui/utils",
+  "version": "1.0.0",
+  "description": "Utility functions for hoddy ui",
+  "main": "index.ts",
+  "author": "Hoddy inc",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "directory": "packages/utils",
+    "type": "git",
+    "url": "https://github.com/kinghoddy/hoddy-ui"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-component",
+    "hui",
+    "hoddy-ui",
+    "kinghoddy"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

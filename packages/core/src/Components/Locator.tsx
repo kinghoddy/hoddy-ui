@@ -13,15 +13,14 @@ import { LocatorProps } from "../types";
 import { getApiKey } from "../config/KeyManager";
 import Typography from "./Typography";
 
-const { GOOGLE_MAP_API_KEY } = getApiKey();
-
-if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
-
 type predictionType = {
   id: string;
   description: string;
 };
 export const getPredictionsFromCoords = async (coords: any) => {
+  const { GOOGLE_MAP_API_KEY } = getApiKey();
+
+  if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
   if (!GOOGLE_MAP_API_KEY)
     console.error(
       "Google map api key needs to be set to use this component \nMake sure to run initialize() with a valid google map api key"
@@ -61,6 +60,9 @@ export const Locator: React.FC<LocatorProps> = ({
   float = true,
   country = "ng",
 }) => {
+  const { GOOGLE_MAP_API_KEY } = getApiKey();
+
+  if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
   const [changed, setChanged] = useState(false);
   const [value, setValue] = useState("");
   const [prediction, setPrediction] = useState<predictionType[]>([]);
@@ -78,7 +80,7 @@ export const Locator: React.FC<LocatorProps> = ({
       borderRadius: 10,
       marginBottom: 10,
       width: "100%",
-      zIndex: 1000,
+      zIndex: 20,
       marginTop: float ? 2 : "15@ms",
       top: float ? "100%" : undefined,
       position: float ? "absolute" : "relative",
@@ -158,7 +160,7 @@ export const Locator: React.FC<LocatorProps> = ({
   }, [GOOGLE_MAP_API_KEY]);
 
   return (
-    <View style={{ zIndex: 100 }}>
+    <View style={{ zIndex: 10 }}>
       {renderInput ? (
         renderInput({
           onFocus: () => search(value),

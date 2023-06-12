@@ -1,5 +1,4 @@
-import { Button, UIThemeProvider, useColors } from "@hoddy-ui/core";
-import { StyleSheet, View } from "react-native";
+import { UIThemeProvider } from "@hoddy-ui/core";
 import Display from "./display";
 
 export default function App() {
