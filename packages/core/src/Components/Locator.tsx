@@ -82,7 +82,7 @@ export const Locator: React.FC<LocatorProps> = ({
       borderRadius: 10,
       marginBottom: 10,
       width: "100%",
-      zIndex: 1000,
+      zIndex: 20,
       marginTop: float ? 2 : "15@ms",
       top: float ? "100%" : undefined,
       position: float ? "absolute" : "relative",
@@ -162,7 +162,7 @@ export const Locator: React.FC<LocatorProps> = ({
   }, [GOOGLE_MAP_API_KEY]);
 
   return (
-    <View style={{ zIndex: 100 }}>
+    <View style={{ zIndex: 10 }}>
       {renderInput ? (
         renderInput({
           onFocus: () => search(value),
