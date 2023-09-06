@@ -83,8 +83,8 @@ const FlashMessage: React.FC = () => {
         {/* <MaterialIcons color="#fff" size={36} name="error-outline" /> */}
       </View>
 
-      {message?.actions?.map((cur) => (
-        <TouchableOpacity style={styles.action} onPress={cur.onPress}>
+      {message?.actions?.map((cur, i) => (
+        <TouchableOpacity key={i} style={styles.action} onPress={cur.onPress}>
           <Typography fontWeight={700} style={{ color: "#fff" }}>
             {cur.title}
           </Typography>
