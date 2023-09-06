@@ -48,6 +48,8 @@ const FlashMessage: React.FC = () => {
       paddingHorizontal: "15@ms",
       backgroundColor: colors[type].main,
       width: "100%",
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
       paddingBottom: "15@ms",
     },
 
