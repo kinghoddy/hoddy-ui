@@ -77,6 +77,7 @@ export const ListItem: React.FC<ListItemProps> = ({
           {link && (
             <MaterialIcons
               color={colors.white[5]}
+              style={{ marginLeft: "auto" }}
               name="arrow-forward-ios"
               size={15}
             />

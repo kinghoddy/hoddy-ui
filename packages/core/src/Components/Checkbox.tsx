@@ -1,19 +1,14 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { FC } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { FC } from "react";
+import { TouchableOpacity, View } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { CheckboxProps } from "../types";
-import { ScaledSheet } from "react-native-size-matters";
 
-const CheckBox: FC<CheckboxProps> = ({
+export const CheckBox: FC<CheckboxProps> = ({
   color = "primary",
   checked,
+  size = 24,
   label,
   style = {},
   onChange,
@@ -27,12 +22,6 @@ const CheckBox: FC<CheckboxProps> = ({
       flexDirection: "row",
       ...style,
     },
-    title: {
-      fontSize: 16,
-      color: "#000",
-      marginLeft: 5,
-      fontWeight: "600",
-    },
   });
 
   return (
@@ -40,7 +29,7 @@ const CheckBox: FC<CheckboxProps> = ({
       <TouchableOpacity onPress={onChange}>
         <MaterialCommunityIcons
           name={iconName}
-          size={24}
+          size={size}
           color={colors[color].main}
         />
       </TouchableOpacity>
@@ -48,5 +37,3 @@ const CheckBox: FC<CheckboxProps> = ({
     </View>
   );
 };
-
-export default CheckBox;

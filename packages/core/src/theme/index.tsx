@@ -12,10 +12,10 @@ import {
   ThemeTypes,
 } from "../types";
 import FlashMessage from "../Components/FlashMessage";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export const UIThemeContext = createContext<ThemeContext>({
   themeState: { mode: "default", value: "light" },
-  showFlashMessage: null,
 });
 
 function themeReducer(
@@ -55,8 +55,7 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     mode: "default",
     value: "light",
   });
-  const [showFlashMessage, setShowFlashMessage] =
-    useState<null | FlashMessageProps>(null);
+
   const colorScheme: ThemeTypes = useColorScheme()!;
 
   React.useEffect(() => {
@@ -80,16 +79,16 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     });
   }, [colorScheme]);
   return (
-    <UIThemeContext.Provider
-      value={{
-        themeState,
-        themeDispatch,
-        showFlashMessage,
-        setShowFlashMessage,
-      }}
-    >
-      {children}
-      <FlashMessage />
-    </UIThemeContext.Provider>
+    <SafeAreaProvider>
+      <UIThemeContext.Provider
+        value={{
+          themeState,
+          themeDispatch,
+        }}
+      >
+        {children}
+        <FlashMessage />
+      </UIThemeContext.Provider>
+    </SafeAreaProvider>
   );
 };

@@ -9,19 +9,21 @@ import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { LocatorProps } from "../types";
 
-// import { GOOGLE_MAP_API } from "../../api/config";
 import { getApiKey } from "../config/KeyManager";
 import Typography from "./Typography";
 
-const { GOOGLE_MAP_API_KEY } = getApiKey();
-
-if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
+setTimeout(() => {
+  const { GOOGLE_MAP_API_KEY } = getApiKey();
+  if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
+}, 500);
 
 type predictionType = {
   id: string;
   description: string;
 };
 export const getPredictionsFromCoords = async (coords: any) => {
+  const { GOOGLE_MAP_API_KEY } = getApiKey();
+
   if (!GOOGLE_MAP_API_KEY)
     console.error(
       "Google map api key needs to be set to use this component \nMake sure to run initialize() with a valid google map api key"
@@ -61,6 +63,8 @@ export const Locator: React.FC<LocatorProps> = ({
   float = true,
   country = "ng",
 }) => {
+  const { GOOGLE_MAP_API_KEY } = getApiKey();
+
   const [changed, setChanged] = useState(false);
   const [value, setValue] = useState("");
   const [prediction, setPrediction] = useState<predictionType[]>([]);
