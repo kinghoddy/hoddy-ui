@@ -1,34 +1,23 @@
-import { default as React, default as React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-   LayoutAnimation,
-   TouchableOpacity,
-   View
+  LayoutAnimation,
+  Touchable,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
+import { MaterialIcons } from "@expo/vector-icons";
 import { FlashMessageProps } from "../types";
 import Typography from "./Typography";
 
-export let showFlashMessage: (msg: FlashMessageProps) => void = () => {
-  console.log("hi");
-export let showFlashMessage: (msg: FlashMessageProps) => void = () => {
-  console.log("hi");
-};
+export let showFlashMessage: (msg: FlashMessageProps) => void = () => {};
 
 const FlashMessage: React.FC = () => {
   const { top } = useSafeAreaInsets();
   const [message, setMessage] = useState<null | FlashMessageProps>(null);
-  const [message, setMessage] = useState<null | FlashMessageProps>(null);
   const [show, setShow] = useState(false);
-  const colors = useColors();
-  const type = message?.type || "success";
-
-  showFlashMessage = (msg: FlashMessageProps) => {
-    setMessage(msg);
-    setTimeout(() => {
-      setShow(true);
-    }, 50);
   const colors = useColors();
   const type = message?.type || "success";
 
@@ -49,13 +38,9 @@ const FlashMessage: React.FC = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [show]);
 
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }, [show]);
-
   const styles = ScaledSheet.create({
     root: {
       position: "absolute",
-      top: show ? 0 : -200,
       top: show ? 0 : -200,
       zIndex: 1000,
       left: 0,
@@ -74,20 +59,8 @@ const FlashMessage: React.FC = () => {
       paddingHorizontal: "20@ms",
       paddingVertical: "8@vs",
       backgroundColor: "#fff3",
-      paddingBottom: "15@ms",
-    },
-
-    action: {
-      borderRadius: 20,
-      marginTop: "10@vs",
-      flexDirection: "row",
-      justifyContent: "center",
-      paddingHorizontal: "20@ms",
-      paddingVertical: "8@vs",
-      backgroundColor: "#fff3",
     },
   });
-
 
   return (
     <View style={styles.root}>
