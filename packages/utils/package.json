@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/utils",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Utility functions for hoddy ui",
   "main": "index.ts",
   "author": "Hoddy inc",
