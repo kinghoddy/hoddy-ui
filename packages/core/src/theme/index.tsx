@@ -22,7 +22,6 @@ function themeReducer(
   state: ThemeState,
   { type, payload }: ThemeActionTypes
 ): ThemeState {
-  console.log(type, payload);
   // Platform
   if (payload === "dark" || type === "dark") {
     SystemUI.setBackgroundColorAsync("#000000");

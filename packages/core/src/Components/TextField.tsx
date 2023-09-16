@@ -395,7 +395,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
     <>
       <View style={styles.root}>
         {label && (
-          <Typography variant="body1" gutterBottom={10} fontWeight={600}>
+          <Typography variant="body1" gutterBottom={7}>
             {label}
           </Typography>
         )}

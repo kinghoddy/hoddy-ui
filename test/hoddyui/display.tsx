@@ -1,8 +1,10 @@
-import { Button, showFlashMessage, useColors } from "@hoddy-ui/core";
-import { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { OTPInput, showFlashMessage, useColors } from "@hoddy-ui/core";
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 const Display = () => {
   const colors = useColors();
+
+  const [otp, setOtp] = useState("");
 
   const styles = StyleSheet.create({
     container: {
@@ -27,7 +29,7 @@ const Display = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <Button fullWidth title="Hello world" />
+      <OTPInput value={otp} onChange={setOtp} />
     </View>
   );
 };

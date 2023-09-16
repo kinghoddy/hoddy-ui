@@ -19,6 +19,7 @@ export { default as Spinner } from "./src/Components/Spinner";
 export * from "./src/Components/TextField";
 export { default as TextField } from "./src/Components/TextField";
 export { default as Typography } from "./src/Components/Typography";
+export * from "./src/Components/OTPInput";
 // Others
 // export * from "./src/config";
 export * from "./src/hooks";

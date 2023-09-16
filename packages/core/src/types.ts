@@ -91,7 +91,7 @@ export interface ButtonProps {
   disabled?: boolean;
   title?: string;
   loading?: boolean;
-  size?: "large" | "small";
+  size?: "large" | "normal" | "small";
   rounded?: boolean;
   style?: ViewStyle;
   fullWidth?: boolean;
@@ -282,4 +282,13 @@ export interface SelectMenuProps {
   label?: string;
   secondary?: string;
   helperText?: string;
+}
+
+export interface OTPInputProps {
+  length?: number;
+  onChange: (value: string) => void;
+  value: string;
+  variant?: "outlined" | "text" | "contained";
+  spacing?: number;
+  size?: number;
 }
