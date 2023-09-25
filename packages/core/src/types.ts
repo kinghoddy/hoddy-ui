@@ -17,6 +17,7 @@ export type colorTypes =
   | "info"
   | "warning"
   | "error"
+  | "success"
   | "blue"
   | "textSecondary";
 
