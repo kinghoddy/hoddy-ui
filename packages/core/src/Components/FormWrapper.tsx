@@ -2,6 +2,7 @@ import React from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -9,10 +10,10 @@ import { ScaledSheet } from "react-native-size-matters";
 import { FormWrapperProps } from "../types";
 export const FormWrapper: React.FC<FormWrapperProps> = ({
   children,
-  behavior = "position",
+  behavior = Platform.OS === "ios" ? "padding" : "height",
   contentContainerStyle,
   mode = "scroll",
-  keyboardVerticalOffset = 50,
+  keyboardVerticalOffset = 10,
   style = {},
   onScroll,
 }) => {
