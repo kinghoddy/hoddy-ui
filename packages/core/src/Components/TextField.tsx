@@ -207,6 +207,7 @@ const TextField: React.FC<TextFieldProps> = ({
               editable={!disabled}
               selectTextOnFocus={!disabled}
               onSubmitEditing={onSubmitEditing}
+              placeholderTextColor={colors.textSecondary.main}
               {...formProps}
               {...props}
               style={styles.input}
@@ -275,6 +276,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
   style = {},
   inputStyles = {},
   gutterBottom = 8,
+  placeholder,
   end,
   options,
   ...props
@@ -284,7 +286,9 @@ export const TextField2: React.FC<TextFieldProps> = ({
 
   const labelAnim = useRef(new Animated.Value(0)).current;
 
-  const height = moderateScale(50);
+  const height = moderateScale(
+    props.multiline ? 50 + (props.numberOfLines || 1) * 18 : 50
+  );
 
   const setFocused = (value: boolean) => {
     startTransition(() => {
@@ -340,6 +344,11 @@ export const TextField2: React.FC<TextFieldProps> = ({
     inputText: {
       fontSize: "14@ms",
       color: colors.dark.light,
+      paddingLeft: moderateScale(10),
+    },
+    placeholder: {
+      fontSize: "14@ms",
+      color: colors.textSecondary.main,
       paddingLeft: moderateScale(10),
     },
     label: {},
@@ -407,9 +416,15 @@ export const TextField2: React.FC<TextFieldProps> = ({
 
           {options ? (
             <>
-              <Typography style={styles.inputText}>
-                {options.find((cur) => cur.value === value)?.label}
-              </Typography>
+              {value ? (
+                <Typography style={styles.inputText}>
+                  {options.find((cur) => cur.value === value)?.label}
+                </Typography>
+              ) : (
+                <Typography style={styles.placeholder}>
+                  {placeholder}
+                </Typography>
+              )}
               <Ionicons
                 name="chevron-down"
                 size={24}
@@ -430,7 +445,9 @@ export const TextField2: React.FC<TextFieldProps> = ({
               value={value}
               onChangeText={onChangeText}
               keyboardType={keyboardType}
+              placeholderTextColor={colors.textSecondary.main}
               editable={!disabled}
+              placeholder={placeholder}
               selectTextOnFocus={!disabled}
               onSubmitEditing={onSubmitEditing}
               {...formProps}

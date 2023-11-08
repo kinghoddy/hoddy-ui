@@ -2,7 +2,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import { ScaledSheet, moderateScale } from "react-native-size-matters";
-import { useColors } from "../hooks";
+import { useColors, useTheme } from "../hooks";
 import { ButtonProps, IconButtonProps, LinkButtonProps } from "../types";
 
 export const LinkButton: React.FC<LinkButtonProps> = ({
@@ -43,16 +43,13 @@ export const IconButton: React.FC<IconButtonProps> = ({
   iconType = "material",
 }) => {
   const colors = useColors();
-
+  const theme = useTheme();
+  const bgColor = theme === "light" ? "#fff" : "#222";
   const styles: any = ScaledSheet.create({
     container: {
       alignSelf: "flex-start",
       flexGrow: 0,
-      backgroundColor: bg
-        ? colors.white[1]
-        : elevation! > 0
-        ? colors.white[1]
-        : null,
+      backgroundColor: bg ? bgColor : elevation! > 0 ? bgColor : null,
       padding: "5@ms",
       shadowColor: "#000",
       shadowOpacity: 0.1,
@@ -66,7 +63,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       justifyContent: "center",
       shadowRadius: elevation,
       elevation: elevation,
-      borderRadius: size,
+      borderRadius: size * 5,
     },
     text: {
       color: disabled ? "#777" : colors[color].main,

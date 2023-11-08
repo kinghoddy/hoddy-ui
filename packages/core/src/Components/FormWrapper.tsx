@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
-  View,
 } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { FormWrapperProps } from "../types";
@@ -36,21 +35,21 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   ) : (
-    <ScrollView
-      onScroll={onScroll}
-      showsVerticalScrollIndicator={false}
-      scrollEventThrottle={40}
-      keyboardDismissMode="interactive"
-      contentContainerStyle={contentContainerStyle}
-      keyboardShouldPersistTaps="handled"
+    <KeyboardAvoidingView
+      behavior={behavior}
+      style={styles.root}
+      keyboardVerticalOffset={keyboardVerticalOffset}
     >
-      <KeyboardAvoidingView
-        behavior={behavior}
-        style={styles.root}
-        keyboardVerticalOffset={keyboardVerticalOffset}
+      <ScrollView
+        onScroll={onScroll}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={40}
+        keyboardDismissMode="interactive"
+        contentContainerStyle={contentContainerStyle}
+        keyboardShouldPersistTaps="handled"
       >
         {children}
-      </KeyboardAvoidingView>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

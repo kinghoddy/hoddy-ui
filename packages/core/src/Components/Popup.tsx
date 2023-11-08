@@ -1,4 +1,10 @@
-import { Modal, Pressable, StyleSheet, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import React, { useState } from "react";
 import { ScaledSheet } from "react-native-size-matters";
@@ -17,23 +23,26 @@ export const Popup: React.FC<PopupProps> = ({
 }) => {
   const colors = useColors();
   const [show, setShow] = useState(open);
+  const [showSecondary, setShowSecondary] = useState(false);
 
   const styles: any = ScaledSheet.create({
-    container: {
+    avoidingView: {
       marginTop: sheet ? "auto" : "50%",
-      paddingBottom: sheet ? "30@ms" : 0,
-      minHeight: sheet,
+      minHeight: typeof sheet === "number" ? sheet : undefined,
       maxHeight: "80%",
+      zIndex: 1000,
+      alignSelf: "center",
+      maxWidth: sheet ? undefined : "90%",
+      width: sheet ? "100%" : undefined,
+    },
+    container: {
+      paddingBottom: sheet ? "30@ms" : 0,
       backgroundColor: colors.white[2],
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       borderBottomRightRadius: sheet ? 0 : 20,
       borderBottomLeftRadius: sheet ? 0 : 20,
-      borderColor: colors.white[5],
-      borderWidth: 0,
-      alignSelf: "center",
-      maxWidth: sheet ? undefined : "90%",
-      width: sheet ? "100%" : undefined,
+      width: "100%",
     },
     content: {
       paddingHorizontal: bare ? undefined : "10@ms",
@@ -49,14 +58,17 @@ export const Popup: React.FC<PopupProps> = ({
     backdrop: {
       position: "absolute",
       height: "100%",
+      zIndex: -1,
       width: "100%",
-      zIndex: 10000,
       backgroundColor: "#000b",
     },
   });
 
   React.useEffect(() => {
     setShow(open);
+    setTimeout(() => {
+      setShowSecondary(open);
+    }, 500);
   }, [open]);
 
   const closeAction = () => {
@@ -66,31 +78,41 @@ export const Popup: React.FC<PopupProps> = ({
 
   return (
     <>
-      {open && <Pressable style={styles.backdrop} />}
       <Modal
         transparent
-        animationType="slide"
+        animationType="fade"
         visible={show}
         onRequestClose={() => setShow(false)}
       >
-        {open && (
-          <Pressable style={StyleSheet.absoluteFill} onPress={closeAction} />
-        )}
+        <View style={styles.backdrop} />
 
-        <View style={styles.container}>
-          {!bare && (
-            <View style={styles.title}>
-              <IconButton size={20} icon="close" onPress={closeAction} />
-              <View style={{ flex: 1 }}>
-                <Typography color="textSecondary" align="center">
-                  {title}
-                </Typography>
-              </View>
-            </View>
+        <Modal
+          transparent
+          animationType="slide"
+          visible={showSecondary}
+          onRequestClose={() => setShow(false)}
+        >
+          {open && (
+            <Pressable style={StyleSheet.absoluteFill} onPress={closeAction} />
           )}
 
-          <View style={styles.content}>{children}</View>
-        </View>
+          <KeyboardAvoidingView style={styles.avoidingView} behavior="position">
+            <View style={styles.container}>
+              {!bare && (
+                <View style={styles.title}>
+                  <IconButton size={20} icon="close" onPress={closeAction} />
+                  <View style={{ flex: 1 }}>
+                    <Typography color="textSecondary" align="center">
+                      {title}
+                    </Typography>
+                  </View>
+                </View>
+              )}
+
+              <View style={styles.content}>{children}</View>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
       </Modal>
     </>
   );

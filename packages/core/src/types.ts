@@ -293,3 +293,14 @@ export interface OTPInputProps {
   spacing?: number;
   size?: number;
 }
+
+export interface RatingStarsProps {
+  rating: number;
+  size: number;
+}
+
+export interface RatingInputProps {
+  rating?: number;
+  size?: number;
+  onSubmit?: (data: { rating: number; review: string }) => Promise<void>;
+}
