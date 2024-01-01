@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/core",
-  "version": "1.0.59",
+  "version": "1.0.60",
   "description": "Core rich react native components written in typescript",
   "main": "index.ts",
   "repository": {
@@ -16,7 +16,7 @@
     "@react-navigation/native": ">=6.1.7",
     "@types/react": "^18.2.6",
     "@types/react-native": "^0.72.0",
-    "expo-haptics": "^12.6.0",
+    "expo-haptics": ">=12.4.0",
     "expo-location": ">=15.1.1",
     "expo-navigation-bar": ">=2.1.1",
     "expo-system-ui": ">=2.2.1",
