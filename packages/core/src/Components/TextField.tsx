@@ -283,7 +283,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
 }) => {
   const colors = useColors();
   const [focused, _setFocused] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const labelAnim = useRef(new Animated.Value(0)).current;
 
   const height = moderateScale(
@@ -394,7 +394,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
         }
       : type === "password"
       ? {
-          secureTextEntry: true,
+          secureTextEntry: !showPassword,
           autoCompleteType: "password",
           autoCapitalize: "none",
           textContentType: "password",
@@ -444,6 +444,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
               }}
               value={value}
               onChangeText={onChangeText}
+              key={showPassword ? "show" : "hide"}
               keyboardType={keyboardType}
               placeholderTextColor={colors.textSecondary.main}
               editable={!disabled}
@@ -456,7 +457,22 @@ export const TextField2: React.FC<TextFieldProps> = ({
             />
           )}
 
-          {end && <View style={{ marginRight: 20 }}>{end}</View>}
+          {end ? (
+            <View style={{ marginRight: 20 }}>{end}</View>
+          ) : (
+            type === "password" && (
+              <TouchableOpacity
+                style={{ marginRight: 20 }}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={24}
+                  color={colors.textSecondary.main}
+                />
+              </TouchableOpacity>
+            )
+          )}
         </TouchableOpacity>
         {helperText && (
           <Typography
