@@ -27,7 +27,7 @@ export const Grid: React.FC<GridProps> = ({
   const styles = ScaledSheet.create({
     grid: {
       flexWrap: "wrap",
-      marginHorizontal: -spacing * 10 + "@ms",
+      margin: -spacing * 10 + "@ms",
       flexDirection: "row",
     },
   });

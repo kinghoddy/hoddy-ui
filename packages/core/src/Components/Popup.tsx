@@ -82,7 +82,7 @@ export const Popup: React.FC<PopupProps> = ({
         transparent
         animationType="fade"
         visible={show}
-        onRequestClose={() => setShow(false)}
+        onRequestClose={closeAction}
       >
         <View style={styles.backdrop} />
 
@@ -90,7 +90,7 @@ export const Popup: React.FC<PopupProps> = ({
           transparent
           animationType="slide"
           visible={showSecondary}
-          onRequestClose={() => setShow(false)}
+          onRequestClose={closeAction}
         >
           {open && (
             <Pressable style={StyleSheet.absoluteFill} onPress={closeAction} />
