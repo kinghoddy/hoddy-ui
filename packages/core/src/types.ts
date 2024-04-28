@@ -306,6 +306,7 @@ export interface RatingStarsProps {
 
 export interface RatingInputProps {
   rating?: number;
+  noReview?: boolean;
   size?: number;
   onSubmit?: (data: { rating: number; review: string }) => Promise<void>;
 }

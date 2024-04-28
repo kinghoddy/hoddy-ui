@@ -41,6 +41,7 @@ export const RatingStars: FC<RatingStarsProps> = ({
 export const RatingInput: FC<RatingInputProps> = ({
   onSubmit: _onSubmit,
   rating = 0,
+  noReview,
   size = 16,
 }) => {
   const [showReviewsModal, setShowReviewsModal] = useState(false);
@@ -73,9 +74,11 @@ export const RatingInput: FC<RatingInputProps> = ({
     setRate(index + 1);
     Haptics.selectionAsync();
 
-    setTimeout(() => {
-      setShowReviewsModal(true);
-    }, 500);
+    if (!noReview)
+      setTimeout(() => {
+        setShowReviewsModal(true);
+      }, 500);
+    else onSubmit();
   };
 
   const onSubmit = async () => {
