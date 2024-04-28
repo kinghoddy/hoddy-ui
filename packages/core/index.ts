@@ -15,6 +15,7 @@ export * from "./src/Components/Grid";
 export * from "./src/Components/Locator";
 export * from "./src/Components/Popup";
 export * from "./src/Components/SafeAreaView";
+export * from "./src/Components/Divider";
 export { default as SelectMenu } from "./src/Components/SelectMenu";
 export { default as Spinner } from "./src/Components/Spinner";
 export * from "./src/Components/TextField";

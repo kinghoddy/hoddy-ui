@@ -89,7 +89,7 @@ export const Locator: React.FC<LocatorProps> = ({
     },
   });
   const search = async (query: string) => {
-    const endpoint = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:${country}&radius=20000&location=6.465422,3.406448&key=${GOOGLE_MAP_API_KEY}`;
+    const endpoint = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:${country}&radius=20000&key=${GOOGLE_MAP_API_KEY}`;
     const res = await (await fetch(endpoint)).json();
     const p = [];
     for (let key in res.predictions) {
@@ -145,11 +145,15 @@ export const Locator: React.FC<LocatorProps> = ({
         `https://maps.googleapis.com/maps/api/place/details/json?place_id=${loc.id}&fields=formatted_address%2Cgeometry&key=${GOOGLE_MAP_API_KEY}`
       )
     ).json();
-    onLocationSelected({
-      latitude: res.result?.geometry.location.lat,
-      longitude: res.result?.geometry.location.lng,
-      description: loc.description,
-    });
+    onLocationSelected(
+      {
+        latitude: res.result?.geometry.location.lat,
+        longitude: res.result?.geometry.location.lng,
+
+        description: loc.description,
+      },
+      res.result?.formatted_address
+    );
     setChanged(false);
     setPrediction([]);
   };

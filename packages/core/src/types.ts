@@ -154,7 +154,10 @@ export type LocatorInputProps = {
 };
 export interface LocatorProps {
   variant?: "contained" | "outlined";
-  onLocationSelected: (location: locatorLocation | null) => void;
+  onLocationSelected: (
+    location: locatorLocation | null,
+    formatted_address?: string
+  ) => void;
   label?: string;
   error?: string;
   float?: boolean;
@@ -265,6 +268,8 @@ export interface TypographyProps {
     | "h1";
   align?: "center" | "left" | "right";
   gutterBottom?: number;
+  numberOfLines?: number;
+  adjustsFontSizeToFit?: boolean;
   fontWeight?: 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 }
 
@@ -303,4 +308,11 @@ export interface RatingInputProps {
   rating?: number;
   size?: number;
   onSubmit?: (data: { rating: number; review: string }) => Promise<void>;
+}
+
+export interface DividerProps {
+  color?: colorTypes;
+  gutterBottom?: number;
+  style?: ViewStyle;
+  height?: number;
 }

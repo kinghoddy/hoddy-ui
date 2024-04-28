@@ -12,6 +12,8 @@ const Typography: React.FC<TypographyProps> = ({
   variant = "body1",
   align = "left",
   gutterBottom = 0,
+  numberOfLines,
+  adjustsFontSizeToFit,
   fontWeight = 400,
 }) => {
   const colors = useColors();
@@ -38,7 +40,11 @@ const Typography: React.FC<TypographyProps> = ({
     },
   });
   return (
-    <Text adjustsFontSizeToFit style={{ ...styles.text, ...style }}>
+    <Text
+      numberOfLines={numberOfLines}
+      adjustsFontSizeToFit={adjustsFontSizeToFit}
+      style={{ ...styles.text, ...style }}
+    >
       {children}
     </Text>
   );

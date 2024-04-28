@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { vs } from "react-native-size-matters";
 import { UIThemeContext } from "./theme";
 import colors from "./theme/colors";
@@ -15,7 +15,7 @@ export const useTheme = () => {
 };
 export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
   const colors = useColors();
-  const options = {
+  const options: any = {
     stack: {
       headerShown: false,
 
@@ -42,7 +42,6 @@ export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
         // shadowOffset: { height: -3, width: 0 },
         // shadowRadius: 7,
         // shadowOpacity: 0.1,
-        height: vs(70),
         backgroundColor: colors.white[1],
       },
       tabBarActiveTintColor: colors.blue.main,
@@ -69,5 +68,10 @@ export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
       },
     },
   };
+
+  if (Platform.OS === "android") {
+    options.tab.tabBarStyle.height = Dimensions.get("screen").height * 0.08;
+    options.tab.tabBarStyle.paddingBottom = vs(15);
+  }
   return options[type];
 };

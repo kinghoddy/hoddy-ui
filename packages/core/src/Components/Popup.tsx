@@ -26,13 +26,18 @@ export const Popup: React.FC<PopupProps> = ({
   const [showSecondary, setShowSecondary] = useState(false);
 
   const styles: any = ScaledSheet.create({
+    root: {
+      height: "100%",
+      width: "100%",
+      justifyContent: sheet ? "flex-end" : "center",
+    },
     avoidingView: {
-      marginTop: sheet ? "auto" : "50%",
       minHeight: typeof sheet === "number" ? sheet : undefined,
       maxHeight: "80%",
       zIndex: 1000,
       alignSelf: "center",
       maxWidth: sheet ? undefined : "90%",
+
       width: sheet ? "100%" : undefined,
     },
     container: {
@@ -92,26 +97,34 @@ export const Popup: React.FC<PopupProps> = ({
           visible={showSecondary}
           onRequestClose={closeAction}
         >
-          {open && (
-            <Pressable style={StyleSheet.absoluteFill} onPress={closeAction} />
-          )}
+          <View style={styles.root}>
+            {open && (
+              <Pressable
+                style={StyleSheet.absoluteFill}
+                onPress={closeAction}
+              />
+            )}
 
-          <KeyboardAvoidingView style={styles.avoidingView} behavior="position">
-            <View style={styles.container}>
-              {!bare && (
-                <View style={styles.title}>
-                  <IconButton size={20} icon="close" onPress={closeAction} />
-                  <View style={{ flex: 1 }}>
-                    <Typography color="textSecondary" align="center">
-                      {title}
-                    </Typography>
+            <KeyboardAvoidingView
+              style={styles.avoidingView}
+              behavior="position"
+            >
+              <View style={styles.container}>
+                {!bare && (
+                  <View style={styles.title}>
+                    <IconButton size={20} icon="close" onPress={closeAction} />
+                    <View style={{ flex: 1 }}>
+                      <Typography color="textSecondary" align="center">
+                        {title}
+                      </Typography>
+                    </View>
                   </View>
-                </View>
-              )}
+                )}
 
-              <View style={styles.content}>{children}</View>
-            </View>
-          </KeyboardAvoidingView>
+                <View style={styles.content}>{children}</View>
+              </View>
+            </KeyboardAvoidingView>
+          </View>
         </Modal>
       </Modal>
     </>
