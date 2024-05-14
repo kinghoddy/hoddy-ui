@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/core",
-  "version": "1.0.79",
+  "version": "1.0.80",
   "description": "Core rich react native components written in typescript",
   "main": "index.ts",
   "repository": {
