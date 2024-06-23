@@ -210,6 +210,7 @@ export interface GridProps {
 }
 export interface PopupProps {
   title?: string;
+  keyboardVerticalOffset?: number;
   sheet?: number | boolean;
   bare?: boolean;
   children: ReactNode;
@@ -253,7 +254,7 @@ export interface TextFieldProps extends TextInputProps {
 
 export interface TypographyProps {
   children: ReactNode;
-  color?: colorTypes;
+  color?: colorTypes & string;
   style?: TextStyle | ViewStyle;
   textCase?: "capitalize" | "uppercase" | "lowercase" | null;
   variant?:

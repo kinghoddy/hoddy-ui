@@ -1,8 +1,11 @@
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -17,6 +20,7 @@ export const Popup: React.FC<PopupProps> = ({
   title,
   sheet,
   bare = false,
+  keyboardVerticalOffset,
   children,
   open,
   onClose = () => {},
@@ -86,6 +90,7 @@ export const Popup: React.FC<PopupProps> = ({
       <Modal
         transparent
         animationType="fade"
+        statusBarTranslucent
         visible={show}
         onRequestClose={closeAction}
       >
@@ -94,37 +99,45 @@ export const Popup: React.FC<PopupProps> = ({
         <Modal
           transparent
           animationType="slide"
+          statusBarTranslucent
           visible={showSecondary}
           onRequestClose={closeAction}
         >
-          <View style={styles.root}>
-            {open && (
-              <Pressable
-                style={StyleSheet.absoluteFill}
-                onPress={closeAction}
-              />
-            )}
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.root}>
+              {open && (
+                <Pressable
+                  style={StyleSheet.absoluteFill}
+                  onPress={closeAction}
+                />
+              )}
 
-            <KeyboardAvoidingView
-              style={styles.avoidingView}
-              behavior="position"
-            >
-              <View style={styles.container}>
-                {!bare && (
-                  <View style={styles.title}>
-                    <IconButton size={20} icon="close" onPress={closeAction} />
-                    <View style={{ flex: 1 }}>
-                      <Typography color="textSecondary" align="center">
-                        {title}
-                      </Typography>
+              <KeyboardAvoidingView
+                style={styles.avoidingView}
+                keyboardVerticalOffset={keyboardVerticalOffset}
+                behavior={Platform.OS === "ios" ? "position" : "padding"}
+              >
+                <View style={styles.container}>
+                  {!bare && (
+                    <View style={styles.title}>
+                      <IconButton
+                        size={20}
+                        icon="close"
+                        onPress={closeAction}
+                      />
+                      <View style={{ flex: 1 }}>
+                        <Typography color="textSecondary" align="center">
+                          {title}
+                        </Typography>
+                      </View>
                     </View>
-                  </View>
-                )}
+                  )}
 
-                <View style={styles.content}>{children}</View>
-              </View>
-            </KeyboardAvoidingView>
-          </View>
+                  <View style={styles.content}>{children}</View>
+                </View>
+              </KeyboardAvoidingView>
+            </View>
+          </TouchableWithoutFeedback>
         </Modal>
       </Modal>
     </>

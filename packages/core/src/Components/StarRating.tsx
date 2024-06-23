@@ -57,7 +57,7 @@ export const RatingInput: FC<RatingInputProps> = ({
     inputCon: {
       marginBottom: "20@vs",
       backgroundColor: colors.white[3],
-      padding: "15@ms",
+      padding: "10@ms",
       borderRadius: 20,
     },
     input: {
@@ -66,6 +66,10 @@ export const RatingInput: FC<RatingInputProps> = ({
       height: "100@vs",
     },
   });
+
+  useEffect(() => {
+    if (noReview && rate) onSubmit();
+  }, [rate, noReview]);
 
   useEffect(() => {
     setRate(rating);
@@ -78,7 +82,6 @@ export const RatingInput: FC<RatingInputProps> = ({
       setTimeout(() => {
         setShowReviewsModal(true);
       }, 500);
-    else onSubmit();
   };
 
   const onSubmit = async () => {
@@ -135,6 +138,7 @@ export const RatingInput: FC<RatingInputProps> = ({
           <TextInput
             style={styles.input}
             multiline
+            placeholderTextColor={colors.textSecondary.main}
             value={review}
             onChangeText={(text) => setReview(text)}
             placeholder="Type review here.."
