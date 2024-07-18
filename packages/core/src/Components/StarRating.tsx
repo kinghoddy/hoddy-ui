@@ -1,7 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { FC, useEffect, useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { RatingInputProps, RatingStarsProps } from "../types";
@@ -41,7 +46,6 @@ export const RatingStars: FC<RatingStarsProps> = ({
 export const RatingInput: FC<RatingInputProps> = ({
   onSubmit: _onSubmit,
   rating = 0,
-  noReview,
   size = 16,
 }) => {
   const [showReviewsModal, setShowReviewsModal] = useState(false);
@@ -57,7 +61,7 @@ export const RatingInput: FC<RatingInputProps> = ({
     inputCon: {
       marginBottom: "20@vs",
       backgroundColor: colors.white[3],
-      padding: "10@ms",
+      padding: "15@ms",
       borderRadius: 20,
     },
     input: {
@@ -68,47 +72,46 @@ export const RatingInput: FC<RatingInputProps> = ({
   });
 
   useEffect(() => {
-    if (noReview && rate) onSubmit();
-  }, [rate, noReview]);
-
-  useEffect(() => {
     setRate(rating);
   }, [rating]);
   const onRate = (index: number) => {
     setRate(index + 1);
     Haptics.selectionAsync();
 
-    if (!noReview)
-      setTimeout(() => {
-        setShowReviewsModal(true);
-      }, 500);
+    setTimeout(() => {
+      setShowReviewsModal(true);
+    }, 500);
   };
 
   const onSubmit = async () => {
     setLoading(true);
-    _onSubmit && (await _onSubmit({ rating: rate, review }));
     setShowReviewsModal(false);
+    _onSubmit && (await _onSubmit({ rating: rate, review }));
     setLoading(false);
   };
   return (
     <>
       <View style={styles.root}>
-        {[...Array(5)].map((_, index) => (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={0.9}
-            onPress={() => {
-              onRate(index);
-            }}
-          >
-            <Ionicons
-              style={{ marginLeft: 10 }}
-              name={index < rate ? "star" : "star-outline"}
-              size={size}
-              color={colors.primary.light}
-            />
-          </TouchableOpacity>
-        ))}
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          [...Array(5)].map((_, index) => (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={0.9}
+              onPress={() => {
+                onRate(index);
+              }}
+            >
+              <Ionicons
+                style={{ marginLeft: 10 }}
+                name={index < rate ? "star" : "star-outline"}
+                size={size}
+                color={colors.primary.light}
+              />
+            </TouchableOpacity>
+          ))
+        )}
       </View>
       <Popup
         sheet
@@ -138,7 +141,6 @@ export const RatingInput: FC<RatingInputProps> = ({
           <TextInput
             style={styles.input}
             multiline
-            placeholderTextColor={colors.textSecondary.main}
             value={review}
             onChangeText={(text) => setReview(text)}
             placeholder="Type review here.."

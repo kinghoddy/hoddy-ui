@@ -16,7 +16,7 @@ const Typography: React.FC<TypographyProps> = ({
   adjustsFontSizeToFit,
   fontWeight = 400,
 }) => {
-  const colors = useColors();
+  const colors: any = useColors();
   const fontSize = {
     h1: moderateScale(42),
     h2: moderateScale(37),
@@ -50,4 +50,5 @@ const Typography: React.FC<TypographyProps> = ({
   );
 };
 
+<Typography color="#f90">col</Typography>;
 export default Typography;

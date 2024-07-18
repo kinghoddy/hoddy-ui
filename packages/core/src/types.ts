@@ -254,7 +254,7 @@ export interface TextFieldProps extends TextInputProps {
 
 export interface TypographyProps {
   children: ReactNode;
-  color?: colorTypes & string;
+  color?: colorTypes | (string & {});
   style?: TextStyle | ViewStyle;
   textCase?: "capitalize" | "uppercase" | "lowercase" | null;
   variant?:
