@@ -57,6 +57,14 @@ const darkColors = {
     text: "#fff",
     ...extraColors?.dark?.textSecondary,
   },
+  primary: {
+    main: "#f80",
+    light: "#FEFFD3",
+    dark: "#fa0",
+    text: "#fff",
+    ...extraColors?.light?.primary,
+    ...extraColors?.dark?.primary,
+  },
 };
 
 export default function colors(theme: ThemeTypes) {

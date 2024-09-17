@@ -15,6 +15,7 @@ import { useColors } from "../hooks";
 import { PopupProps } from "../types";
 import { IconButton } from "./Button";
 import Typography from "./Typography";
+import { UIThemeProvider } from "../theme";
 
 export const Popup: React.FC<PopupProps> = ({
   title,
@@ -95,50 +96,51 @@ export const Popup: React.FC<PopupProps> = ({
         onRequestClose={closeAction}
       >
         <View style={styles.backdrop} />
+        <UIThemeProvider>
+          <Modal
+            transparent
+            animationType="slide"
+            statusBarTranslucent
+            visible={showSecondary}
+            onRequestClose={closeAction}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.root}>
+                {open && (
+                  <Pressable
+                    style={StyleSheet.absoluteFill}
+                    onPress={closeAction}
+                  />
+                )}
 
-        <Modal
-          transparent
-          animationType="slide"
-          statusBarTranslucent
-          visible={showSecondary}
-          onRequestClose={closeAction}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.root}>
-              {open && (
-                <Pressable
-                  style={StyleSheet.absoluteFill}
-                  onPress={closeAction}
-                />
-              )}
-
-              <KeyboardAvoidingView
-                style={styles.avoidingView}
-                keyboardVerticalOffset={keyboardVerticalOffset}
-                behavior={Platform.OS === "ios" ? "position" : "padding"}
-              >
-                <View style={styles.container}>
-                  {!bare && (
-                    <View style={styles.title}>
-                      <IconButton
-                        size={20}
-                        icon="close"
-                        onPress={closeAction}
-                      />
-                      <View style={{ flex: 1 }}>
-                        <Typography color="textSecondary" align="center">
-                          {title}
-                        </Typography>
+                <KeyboardAvoidingView
+                  style={styles.avoidingView}
+                  keyboardVerticalOffset={keyboardVerticalOffset}
+                  behavior={Platform.OS === "ios" ? "position" : "padding"}
+                >
+                  <View style={styles.container}>
+                    {!bare && (
+                      <View style={styles.title}>
+                        <IconButton
+                          size={20}
+                          icon="close"
+                          onPress={closeAction}
+                        />
+                        <View style={{ flex: 1 }}>
+                          <Typography color="textSecondary" align="center">
+                            {title}
+                          </Typography>
+                        </View>
                       </View>
-                    </View>
-                  )}
+                    )}
 
-                  <View style={styles.content}>{children}</View>
-                </View>
-              </KeyboardAvoidingView>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+                    <View style={styles.content}>{children}</View>
+                  </View>
+                </KeyboardAvoidingView>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </UIThemeProvider>
       </Modal>
     </>
   );
