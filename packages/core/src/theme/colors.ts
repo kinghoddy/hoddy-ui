@@ -1,73 +1,73 @@
 import { ThemeTypes, extraColorTypes } from "../types";
 
-const lightColors = {
-  white: {
-    1: "#fff",
-    2: "#f7f7f7",
-    3: "#eee",
-    4: "#ddd",
-    5: "#bbb",
-  },
-  black: {
-    1: "#888",
-    2: "#777",
-    3: "#555",
-    4: "#333",
-    5: "#000",
-  },
-};
-
 let extraColors: extraColorTypes = {};
 
 export const setExtraColors = (c: extraColorTypes) => (extraColors = c);
 
-const darkColors = {
-  black: {
-    1: "#fff",
-    2: "#f7f7f7",
-    3: "#eee",
-    4: "#ddd",
-    5: "#aaa",
-  },
-  white: {
-    1: "#000",
-    2: "#222",
-    3: "#333",
-    4: "#444",
-    5: "#555",
-  },
-  dark: {
-    main: "#f2f3f4",
-    light: "#fff",
-    dark: "#ddd",
-    text: "#000",
-    ...extraColors?.dark?.dark,
-  },
-  light: {
-    main: "#111",
-    light: "#555",
-    dark: "#333",
-    text: "#fff",
-    ...extraColors?.dark?.light,
-  },
-  textSecondary: {
-    main: "#666",
-    light: "#777",
-    dark: "#444",
-    text: "#fff",
-    ...extraColors?.dark?.textSecondary,
-  },
-  primary: {
-    main: "#f80",
-    light: "#FEFFD3",
-    dark: "#fa0",
-    text: "#fff",
-    ...extraColors?.light?.primary,
-    ...extraColors?.dark?.primary,
-  },
-};
-
 export default function colors(theme: ThemeTypes) {
+  const lightColors = {
+    white: {
+      1: "#fff",
+      2: "#f7f7f7",
+      3: "#eee",
+      4: "#ddd",
+      5: "#bbb",
+    },
+    black: {
+      1: "#888",
+      2: "#777",
+      3: "#555",
+      4: "#333",
+      5: "#000",
+    },
+  };
+
+  const darkColors = {
+    black: {
+      1: "#fff",
+      2: "#f7f7f7",
+      3: "#eee",
+      4: "#ddd",
+      5: "#aaa",
+    },
+    white: {
+      1: "#000",
+      2: "#222",
+      3: "#333",
+      4: "#444",
+      5: "#555",
+    },
+    dark: {
+      main: "#f2f3f4",
+      light: "#fff",
+      dark: "#ddd",
+      text: "#000",
+      ...extraColors?.dark?.dark,
+    },
+    light: {
+      main: "#111",
+      light: "#555",
+      dark: "#333",
+      text: "#fff",
+      ...extraColors?.dark?.light,
+    },
+    textSecondary: {
+      main: "#666",
+      light: "#777",
+      dark: "#444",
+      text: "#fff",
+      ...extraColors?.dark?.textSecondary,
+    },
+    primary: {
+      main: "#f80",
+      light: "#FEFFD3",
+      dark: "#fa0",
+      text: "#fff",
+      ...extraColors?.light?.primary,
+      ...extraColors?.dark?.primary,
+    },
+  };
+
   const dynamicColors = theme === "dark" ? darkColors : lightColors;
   return {
     ...extraColors[theme],

@@ -1,8 +1,10 @@
 {
   "name": "@hoddy-ui/next",
-  "version": "2.0.1",
+  "version": "1.0.2",
   "description": "Core rich react native components written in typescript, with support for expo-router",
-  "main": "index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "dist/index.d.ts",
   "repository": {
     "directory": "packages/core/next",
     "type": "git",
@@ -11,6 +13,9 @@
   "author": "Hoddy inc",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "tsup"
+  },
   "peerDependencies": {
     "@expo/vector-icons": ">=13.0.0",
     "@types/react": "^18.2.6",
@@ -35,6 +40,9 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",
     "react-native-size-matters": "^0.4.0"
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0"
   },
   "publishConfig": {
     "access": "public"
