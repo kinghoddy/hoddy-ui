@@ -284,7 +284,6 @@ export const TextField2: React.FC<TextFieldProps> = ({
   const colors = useColors();
   const [focused, _setFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const labelAnim = useRef(new Animated.Value(0)).current;
 
   const height = moderateScale(
     props.multiline ? 50 + (props.numberOfLines || 1) * 18 : 50
@@ -296,21 +295,6 @@ export const TextField2: React.FC<TextFieldProps> = ({
     });
   };
 
-  React.useEffect(() => {
-    if (focused || value) {
-      Animated.timing(labelAnim, {
-        toValue: verticalScale(5),
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(labelAnim, {
-        toValue: height / moderateScale(3),
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [focused, value]);
   const styles: any = ScaledSheet.create({
     root: {
       marginBottom: gutterBottom + "@vs",
