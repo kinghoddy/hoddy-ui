@@ -5,6 +5,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   dts: true,
-  format: ["cjs", "esm", "iife"],
+  format: ["esm", "cjs"],
+  // external: ["expo-linking", "expo-router", "react-native", "expo-system-ui"],
   clean: true,
 });

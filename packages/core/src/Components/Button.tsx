@@ -1,5 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { forwardRef } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import { ScaledSheet, moderateScale } from "react-native-size-matters";
 import { useColors, useTheme } from "../hooks";
@@ -85,88 +85,98 @@ export const IconButton: React.FC<IconButtonProps> = ({
   );
 };
 
-const Button: React.FC<ButtonProps> = ({
-  elevation = 0,
-  onPress = () => {},
-  disabled = false,
-  title,
-  loading,
-  size = "normal",
-  rounded = false,
-  gutterBottom,
-  style = {},
-  fullWidth = false,
-  translucent = false,
-  color = "primary",
-  variant = "contained",
-  start,
-  end,
-}) => {
-  const colors = useColors();
+const Button: React.FC<ButtonProps> = forwardRef(
+  (
+    {
+      elevation = 0,
+      onPress = () => {},
+      disabled = false,
+      title,
+      loading,
+      size = "normal",
+      rounded = false,
+      gutterBottom,
+      style = {},
+      fullWidth = false,
+      translucent = false,
+      color = "primary",
+      variant = "contained",
+      start,
+      end,
+    },
+    ref
+  ) => {
+    const colors = useColors();
 
-  const styles: any = ScaledSheet.create({
-    con: {
-      flexDirection: "row",
-      alignItems: "center",
-      alignSelf: "flex-start",
-      justifyContent: "center",
-      backgroundColor:
-        variant === "text" || variant === "outlined"
-          ? null
-          : translucent
-          ? translucent === "dark"
-            ? colors.white[3] + "2"
-            : colors.black[3] + "2"
-          : loading
-          ? colors[color].light
-          : disabled
-          ? colors.white[4]
-          : colors[color].main,
-      borderRadius: rounded ? 30 : 10,
-      elevation: variant === "text" ? 0 : elevation,
-      paddingVertical:
-        size === "small" ? 8 : size === "large" ? "15@ms" : "13@ms",
-      paddingHorizontal: size === "small" ? "10@ms" : "18@ms",
-      borderColor: colors[color].main,
-      borderWidth: variant === "outlined" ? 1 : 0,
-      shadowColor: "#000",
-      shadowRadius: elevation,
-      marginBottom: gutterBottom,
-      shadowOffset: {
-        height: elevation / 2,
-        width: 0,
+    const styles: any = ScaledSheet.create({
+      con: {
+        flexDirection: "row",
+        alignItems: "center",
+        alignSelf: "flex-start",
+        justifyContent: "center",
+        backgroundColor:
+          variant === "text" || variant === "outlined"
+            ? null
+            : translucent
+            ? translucent === "dark"
+              ? colors.white[3] + "2"
+              : colors.black[3] + "2"
+            : loading
+            ? colors[color].light
+            : disabled
+            ? colors.white[4]
+            : colors[color].main,
+        borderRadius: rounded ? 30 : 10,
+        elevation: variant === "text" ? 0 : elevation,
+        paddingVertical:
+          size === "small" ? 8 : size === "large" ? "15@ms" : "13@ms",
+        paddingHorizontal: size === "small" ? "10@ms" : "18@ms",
+        borderColor: colors[color].main,
+        borderWidth: variant === "outlined" ? 1 : 0,
+        shadowColor: "#000",
+        shadowRadius: elevation,
+        marginBottom: gutterBottom,
+        shadowOffset: {
+          height: elevation / 2,
+          width: 0,
+        },
+        shadowOpacity: variant === "text" ? 0 : 0.3,
+        width: fullWidth ? "100%" : null,
+        ...style,
       },
-      shadowOpacity: variant === "text" ? 0 : 0.3,
-      width: fullWidth ? "100%" : null,
-      ...style,
-    },
-    text: {
-      color: disabled
-        ? variant === "text" || variant === "outlined"
-          ? colors.black[1]
-          : colors[color].text
-        : colors[color][
-            variant === "text" || variant === "outlined" ? "main" : "text"
-          ],
-      fontWeight: variant === "outlined" ? "700" : "500",
-      fontSize: size === "small" ? "12@ms" : "16@ms",
-    },
-  });
+      text: {
+        color: disabled
+          ? variant === "text" || variant === "outlined"
+            ? colors.black[1]
+            : colors[color].text
+          : colors[color][
+              variant === "text" || variant === "outlined" ? "main" : "text"
+            ],
+        fontWeight: variant === "outlined" ? "700" : "500",
+        fontSize: size === "small" ? "12@ms" : "16@ms",
+      },
+    });
 
-  return (
-    <TouchableOpacity onPress={onPress} disabled={disabled} style={styles.con}>
-      {start}
-      {loading && (
-        <ActivityIndicator
-          size="small"
-          color={colors[color].text}
-          style={{ marginRight: 10 }}
-        />
-      )}
-      <Text style={styles.text}>{title}</Text>
-      {end}
-    </TouchableOpacity>
-  );
-};
+    return (
+      <TouchableOpacity
+        ref={ref as any}
+        onPress={onPress}
+        disabled={disabled}
+        style={styles.con}
+      >
+        {start}
+        {loading && (
+          <ActivityIndicator
+            size="small"
+            color={colors[color].text}
+            style={{ marginRight: 10 }}
+          />
+        )}
+        <Text style={styles.text}>{title}</Text>
+        {end}
+      </TouchableOpacity>
+    );
+  }
+);
 
 export default Button;
