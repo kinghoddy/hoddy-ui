@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/next",
-  "version": "2.0.16",
+  "version": "2.0.18",
   "description": "Core rich react native components written in typescript, with support for expo-router",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -14,7 +14,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "deploy": "yarn build && yarn publish"
   },
   "peerDependencies": {
     "@expo/vector-icons": ">=13.0.0",
