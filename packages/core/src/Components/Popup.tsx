@@ -82,8 +82,11 @@ export const Popup: React.FC<PopupProps> = ({
   }, [open]);
 
   const closeAction = () => {
-    setShow(false);
-    onClose();
+    setShowSecondary(false);
+    setTimeout(() => {
+      setShow(false);
+      onClose();
+    }, 300);
   };
 
   return (

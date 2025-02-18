@@ -260,7 +260,6 @@ const TextField: React.FC<TextFieldProps> = ({
 export const TextField2: React.FC<TextFieldProps> = ({
   label,
   keyboardType,
-  variant,
   color = "primary",
   value,
   type,
@@ -290,9 +289,7 @@ export const TextField2: React.FC<TextFieldProps> = ({
   );
 
   const setFocused = (value: boolean) => {
-    startTransition(() => {
-      _setFocused(value);
-    });
+    _setFocused(value);
   };
 
   const styles: any = ScaledSheet.create({
@@ -321,13 +318,13 @@ export const TextField2: React.FC<TextFieldProps> = ({
       alignSelf: "stretch",
       paddingLeft: moderateScale(10),
       paddingRight: moderateScale(10),
-      color: colors.dark.light,
+      color: colors.dark.main,
       zIndex: 10,
       // backgroundColor: "#284",
     },
     inputText: {
       fontSize: "14@ms",
-      color: colors.dark.light,
+      color: colors.dark.main,
       paddingLeft: moderateScale(10),
     },
     placeholder: {
