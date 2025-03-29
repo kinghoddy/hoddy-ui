@@ -2,6 +2,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { forwardRef } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import { ScaledSheet, moderateScale } from "react-native-size-matters";
+import { getConfig } from "../config/KeyManager";
 import { useColors, useTheme } from "../hooks";
 import { ButtonProps, IconButtonProps, LinkButtonProps } from "../types";
 
@@ -20,6 +21,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
     text: {
       fontSize: moderateScale(fontSize),
       fontWeight: fontWeight,
+      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       color: disabled ? "#777" : colors[color].main,
     },
   });
@@ -154,6 +156,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
             ],
         fontWeight: variant === "outlined" ? "700" : "500",
         fontSize: size === "small" ? "12@ms" : "16@ms",
+        fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       },
     });
 

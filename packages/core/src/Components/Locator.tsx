@@ -9,11 +9,11 @@ import { ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { LocatorProps } from "../types";
 
-import { getApiKey } from "../config/KeyManager";
+import { getConfig } from "../config/KeyManager";
 import Typography from "./Typography";
 
 setTimeout(() => {
-  const { GOOGLE_MAP_API_KEY } = getApiKey();
+  const { GOOGLE_MAP_API_KEY } = getConfig();
   if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
 }, 500);
 
@@ -22,7 +22,7 @@ type predictionType = {
   description: string;
 };
 export const getPredictionsFromCoords = async (coords: any) => {
-  const { GOOGLE_MAP_API_KEY } = getApiKey();
+  const { GOOGLE_MAP_API_KEY } = getConfig();
 
   if (!GOOGLE_MAP_API_KEY)
     console.error(
@@ -63,7 +63,7 @@ export const Locator: React.FC<LocatorProps> = ({
   float = true,
   country = "ng",
 }) => {
-  const { GOOGLE_MAP_API_KEY } = getApiKey();
+  const { GOOGLE_MAP_API_KEY } = getConfig();
 
   const [changed, setChanged] = useState(false);
   const [value, setValue] = useState("");

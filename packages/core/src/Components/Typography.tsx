@@ -3,6 +3,7 @@ import { StyleSheet, Text } from "react-native";
 import { moderateScale, verticalScale } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { TypographyProps } from "../types";
+import { getConfig } from "../config/KeyManager";
 
 const Typography: React.FC<TypographyProps> = forwardRef(
   (
@@ -17,6 +18,7 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       numberOfLines,
       adjustsFontSizeToFit,
       fontWeight = 400,
+      fontFamily, // NEW PROP ADDED
       ...props
     },
     ref
@@ -33,6 +35,7 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       body2: moderateScale(12),
       caption: moderateScale(10),
     };
+
     const styles: any = StyleSheet.create({
       text: {
         fontSize: fontSize[variant],
@@ -42,14 +45,16 @@ const Typography: React.FC<TypographyProps> = forwardRef(
         alignItems: "center",
         textAlign: align,
         fontWeight: fontWeight.toString(),
+        fontFamily: fontFamily || getConfig().DEFAULT_FONT_FAMILY || "System", // Use custom font if provided, else default
       },
     });
+
     return (
       <Text
         ref={ref as any}
         numberOfLines={numberOfLines}
         adjustsFontSizeToFit={adjustsFontSizeToFit}
-        style={{ ...styles.text, ...style }}
+        style={[styles.text, style]} // Ensures external styles are applied
         {...props}
       >
         {children}

@@ -1,5 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { startTransition, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Animated, TextInput, TouchableOpacity, View } from "react-native";
 import {
   ScaledSheet,
@@ -7,6 +7,7 @@ import {
   ms,
   verticalScale,
 } from "react-native-size-matters";
+import { getConfig } from "../config/KeyManager";
 import { useColors } from "../hooks";
 import { TextFieldProps } from "../types";
 import SelectMenu from "./SelectMenu";
@@ -96,6 +97,7 @@ const TextField: React.FC<TextFieldProps> = ({
       paddingLeft: variant === "text" ? 0 : moderateScale(15),
       paddingRight: moderateScale(10),
       paddingTop: "11@vs",
+      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       color: colors.black[1],
       zIndex: 10,
       // backgroundColor: "#284",
@@ -107,6 +109,7 @@ const TextField: React.FC<TextFieldProps> = ({
       paddingTop: "13@ms",
     },
     label: {
+      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       position: "absolute",
       left: variant === "text" ? 0 : moderateScale(15),
       fontSize: focused || value ? "10@s" : "13@s",

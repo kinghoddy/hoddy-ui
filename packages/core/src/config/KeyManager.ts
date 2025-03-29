@@ -1,15 +1,16 @@
-type apikeys = {
+type configTypes = {
   GOOGLE_MAP_API_KEY?: string;
+  DEFAULT_FONT_FAMILY?: string;
 };
 
-let apiKey: apikeys = {
+let config: configTypes = {
   GOOGLE_MAP_API_KEY: "",
 };
 
-export function setApiKey(key: apikeys): void {
-  apiKey = key;
+export function setConfig(key: configTypes): void {
+  config = key;
 }
 
-export function getApiKey(): apikeys {
-  return apiKey;
+export function getConfig(): configTypes {
+  return config;
 }

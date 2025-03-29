@@ -2,7 +2,9 @@ import { ReactNode } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Text,
   TextInputProps,
+  TextProps,
   TextStyle,
   ViewStyle,
 } from "react-native";
@@ -252,7 +254,7 @@ export interface TextFieldProps extends TextInputProps {
   onBlur?: () => void;
 }
 
-export interface TypographyProps {
+export interface TypographyProps extends TextProps {
   children: ReactNode;
   color?: colorTypes | (string & {});
   style?: TextStyle | ViewStyle;
@@ -271,6 +273,7 @@ export interface TypographyProps {
   gutterBottom?: number;
   numberOfLines?: number;
   adjustsFontSizeToFit?: boolean;
+  fontFamily?: string;
   fontWeight?: 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 }
 
