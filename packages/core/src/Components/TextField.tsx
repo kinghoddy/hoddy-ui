@@ -39,12 +39,13 @@ const TextField: React.FC<TextFieldProps> = ({
 }) => {
   const colors = useColors();
   const [focused, setFocused] = useState(false);
-
-  const labelAnim = useRef(new Animated.Value(0)).current;
-
   const height =
     moderateScale(variant === "text" ? 50 : 45) *
     (size === "large" ? 1.2 : size === "small" ? 0.8 : 1);
+
+  const labelAnim = useRef(
+    new Animated.Value(height / moderateScale(variant === "text" ? 2.5 : 3.2))
+  ).current;
 
   React.useEffect(() => {
     if (focused || value) {
@@ -216,9 +217,23 @@ const TextField: React.FC<TextFieldProps> = ({
               style={styles.input}
             />
           )}
-          {end && <View style={{ marginRight: 20 }}>{end}</View>}
+          {end && (
+            <View
+              style={{
+                marginRight: 20,
+                paddingTop: variant === "text" ? ms(13) : 0,
+              }}
+            >
+              {end}
+            </View>
+          )}
           {options && (
-            <View style={{ marginRight: 20 }}>
+            <View
+              style={{
+                marginRight: variant === "text" ? 0 : 20,
+                paddingTop: variant === "text" ? ms(13) : 0,
+              }}
+            >
               <Ionicons
                 name="chevron-down"
                 color={colors.textSecondary.main}

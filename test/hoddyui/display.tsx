@@ -1,4 +1,9 @@
-import { OTPInput, showFlashMessage, useColors } from "@hoddy-ui/core";
+import {
+  OTPInput,
+  showFlashMessage,
+  Typography,
+  useColors,
+} from "@hoddy-ui/core";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 const Display = () => {
@@ -29,6 +34,9 @@ const Display = () => {
   }, []);
   return (
     <View style={styles.container}>
+      <Typography gutterBottom={20} variant="h3">
+        Hello hoody ui
+      </Typography>
       <OTPInput value={otp} onChange={setOtp} />
     </View>
   );

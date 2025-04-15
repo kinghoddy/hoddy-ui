@@ -1,5 +1,10 @@
-import React, { FC, useMemo, useState } from "react";
-import { TextInput, View } from "react-native";
+import React, { FC, useMemo } from "react";
+import {
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { ScaledSheet, ms } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { OTPInputProps } from "../types";
@@ -19,6 +24,42 @@ export const OTPInput: FC<OTPInputProps> = ({
         .map((_) => React.createRef<TextInput>()),
     [length]
   );
+
+  console.log("v", value);
+
+  const onChangeHandler = (val: string, index: number) => {
+    if (value.length >= length && val.length > 0) return;
+    // Handle pasting of full OTP
+    if (val.length > 1) {
+      console.log("reached", val);
+
+      const digits = val.replace(/\D/g, "").slice(0, length);
+      onChange(digits);
+      if (digits.length === length) {
+        inputRefs[length - 1].current?.focus();
+      }
+      return;
+    }
+    // Handle backspace
+    if (val.length === 0) {
+      const newValue = value.slice(0, index) + value.slice(index + 1);
+      onChange(newValue);
+      if (index > 0) {
+        inputRefs[index - 1].current?.focus();
+      }
+      return;
+    }
+    // Only allow numbers and take first digit
+    const digit = val.replace(/\D/g, "").slice(0, 1);
+    if (!digit) return;
+    // Create new value string
+    const newValue = value.slice(0, index) + digit + value.slice(index + 1);
+    onChange(newValue);
+    // Auto advance to next input if not at end
+    if (index < length - 1) {
+      inputRefs[index + 1].current?.focus();
+    }
+  };
 
   const colors = useColors();
   const styles = ScaledSheet.create({
@@ -45,32 +86,10 @@ export const OTPInput: FC<OTPInputProps> = ({
         {[...Array(length)].map((_, index) => (
           <TextInput
             ref={inputRefs[index]}
-            onChangeText={(val) => {
-              if (val.length === 1) {
-                if (index !== length - 1) inputRefs[index + 1].current?.focus();
-                let text = value;
-
-                text = text.slice(0, index) + val + text.slice(index + 1);
-                onChange(text);
-              } else if (val.length === 0) {
-                if (index !== 0) {
-                  inputRefs[index - 1].current?.focus();
-                  let text = value;
-
-                  text = text.slice(0, index);
-                  onChange(text);
-                } else onChange("");
-              } else {
-                let text = val.replace(/\D/g, "").slice(0, length);
-                onChange(text);
-                inputRefs[
-                  text.length < length - 1 ? text.length : length - 1
-                ]?.current?.focus();
-              }
-            }}
+            onChangeText={(val) => onChangeHandler(val, index)}
             value={value[index] || ""}
-            // maxLength={1}
             blurOnSubmit={false}
+            // maxLength={1}
             keyboardType="number-pad"
             key={index}
             style={[styles.input]}
