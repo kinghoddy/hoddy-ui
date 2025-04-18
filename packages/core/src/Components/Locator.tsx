@@ -12,11 +12,6 @@ import { LocatorProps } from "../types";
 import { getConfig } from "../config/KeyManager";
 import Typography from "./Typography";
 
-setTimeout(() => {
-  const { GOOGLE_MAP_API_KEY } = getConfig();
-  if (GOOGLE_MAP_API_KEY) Location.setGoogleApiKey(GOOGLE_MAP_API_KEY);
-}, 500);
-
 type predictionType = {
   id: string;
   description: string;
