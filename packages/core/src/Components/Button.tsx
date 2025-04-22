@@ -121,8 +121,8 @@ const Button: React.FC<ButtonProps> = forwardRef(
             ? null
             : translucent
             ? translucent === "dark"
-              ? colors.white[3] + "2"
-              : colors.black[3] + "2"
+              ? colors.white[3] + "22"
+              : colors.black[3] + "22"
             : loading
             ? colors[color].light
             : disabled

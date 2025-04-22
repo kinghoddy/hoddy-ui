@@ -11,7 +11,7 @@ import {
 
 import React, { useState } from "react";
 import { ScaledSheet } from "react-native-size-matters";
-import { useColors } from "../hooks";
+import { useColors, useTheme } from "../hooks";
 import { PopupProps } from "../types";
 import { IconButton } from "./Button";
 import Typography from "./Typography";
@@ -25,7 +25,9 @@ export const Popup: React.FC<PopupProps> = ({
   children,
   open,
   onClose = () => {},
+  style,
 }) => {
+  const theme = useTheme();
   const colors = useColors();
   const [show, setShow] = useState(open);
   const [showSecondary, setShowSecondary] = useState(false);
@@ -47,12 +49,13 @@ export const Popup: React.FC<PopupProps> = ({
     },
     container: {
       paddingBottom: sheet ? "30@ms" : 0,
-      backgroundColor: colors.white[2],
+      backgroundColor: theme === "dark" ? "#111" : colors.white[2],
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       borderBottomRightRadius: sheet ? 0 : 20,
       borderBottomLeftRadius: sheet ? 0 : 20,
       width: "100%",
+      ...style,
     },
     content: {
       paddingHorizontal: bare ? undefined : "10@ms",

@@ -59,7 +59,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
         style={{
           ...styles.option,
           backgroundColor:
-            item.value === value ? colors.blue.light + "2" : colors.white[2],
+            item.value === value ? colors.blue.light + "22" : colors.white[2],
         }}
         onPress={() => {
           onChange(item.value);

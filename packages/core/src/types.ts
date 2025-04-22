@@ -30,6 +30,7 @@ export type extraColorTypes = {
       light?: string;
       dark?: string;
       text?: string;
+      [key: number]: string;
     };
   };
   light?: {
@@ -38,6 +39,7 @@ export type extraColorTypes = {
       light?: string;
       dark?: string;
       text?: string;
+      [key: number]: string;
     };
   };
 };
@@ -218,6 +220,7 @@ export interface PopupProps {
   children: ReactNode;
   open: boolean;
   onClose?: () => void;
+  style?: ViewStyle;
 }
 
 export interface SpinnerProps {
@@ -258,7 +261,7 @@ export interface TypographyProps extends TextProps {
   children: ReactNode;
   color?: colorTypes | (string & {});
   style?: TextStyle | ViewStyle;
-  textCase?: "capitalize" | "uppercase" | "lowercase" | null;
+  textCase?: "capitalize" | "uppercase" | "lowercase" | undefined;
   variant?:
     | "caption"
     | "body1"

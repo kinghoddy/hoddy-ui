@@ -24,7 +24,7 @@ const Spinner: React.FC<SpinnerProps> = ({
       alignItems: "center",
       justifyContent: "center",
       position: fullscreen ? "absolute" : "relative",
-      backgroundColor: fullscreen ? colors.white[1] + "d" : undefined,
+      backgroundColor: fullscreen ? colors.white[1] + "dd" : undefined,
       ...style,
     },
     content: {

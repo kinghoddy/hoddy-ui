@@ -17,7 +17,7 @@ export const ListItemText: React.FC<ListItemTextProps> = ({
   const colors = useColors();
   const styles = ScaledSheet.create({
     container: {
-      borderBottomColor: colors.white[4],
+      borderBottomColor: colors.white[2],
       borderBottomWidth: divider ? 1 : 0,
       paddingVertical: 0,
       flexGrow: 1,
@@ -59,7 +59,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       flexDirection: "row",
       alignItems: "center",
       paddingHorizontal: "10@s",
-      borderBottomColor: colors.white[4],
+      borderBottomColor: colors.white[2],
       borderBottomWidth: divider ? 1 : 0,
       paddingVertical: "10@vs",
     },

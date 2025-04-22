@@ -1,18 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 import { Platform, useColorScheme } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import FlashMessage from "../Components/FlashMessage";
+import { useColors, useTheme } from "../hooks";
 import {
-  FlashMessageProps,
   ThemeActionTypes,
   ThemeContext,
   ThemeProviderProps,
   ThemeState,
   ThemeTypes,
 } from "../types";
-import FlashMessage from "../Components/FlashMessage";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export const UIThemeContext = createContext<ThemeContext>({
   themeState: { mode: "default", value: "light" },
@@ -23,19 +23,6 @@ function themeReducer(
   { type, payload }: ThemeActionTypes
 ): ThemeState {
   // Platform
-  if (payload === "dark" || type === "dark") {
-    SystemUI.setBackgroundColorAsync("#000000");
-    if (Platform.OS === "android") {
-      NavigationBar.setButtonStyleAsync("light");
-      NavigationBar.setBackgroundColorAsync("#000000");
-    }
-  } else {
-    SystemUI.setBackgroundColorAsync("#ffffff");
-    if (Platform.OS === "android") {
-      NavigationBar.setButtonStyleAsync("dark");
-      NavigationBar.setBackgroundColorAsync("#fff");
-    }
-  }
 
   switch (type) {
     case "dark":
@@ -48,6 +35,27 @@ function themeReducer(
       return state;
   }
 }
+
+const ConfigureSystemUI = () => {
+  const theme = useTheme();
+  const colors = useColors();
+
+  useEffect(() => {
+    if (colors) {
+      SystemUI.setBackgroundColorAsync(colors.white[1]);
+      if (Platform.OS === "android") {
+        NavigationBar.setBackgroundColorAsync(colors.white[1]);
+        if (theme === "dark") {
+          NavigationBar.setButtonStyleAsync("light");
+        } else {
+          NavigationBar.setButtonStyleAsync("dark");
+        }
+      }
+    }
+  }, [colors, theme]);
+
+  return <></>;
+};
 
 export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
   const [themeState, themeDispatch] = useReducer(themeReducer, {
@@ -87,6 +95,7 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
       >
         {children}
         <FlashMessage />
+        <ConfigureSystemUI />
       </UIThemeContext.Provider>
     </SafeAreaProvider>
   );

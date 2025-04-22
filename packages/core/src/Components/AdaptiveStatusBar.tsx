@@ -15,7 +15,7 @@ const AdaptiveStatusBar = ({ translucent = false }) => {
       );
       if (Platform.OS === "android") {
         StatusBar.setBackgroundColor(
-          colors.white[1] + (translucent ? "0" : "")
+          translucent ? "transparent" : colors.white[1]
         );
         StatusBar.setTranslucent(true);
       }

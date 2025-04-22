@@ -15,6 +15,7 @@ export const useTheme = () => {
 };
 export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
   const colors = useColors();
+  const theme = useTheme();
   const options: any = {
     stack: {
       headerShown: false,
@@ -36,7 +37,7 @@ export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
       headerShown: false,
       headerTintColor: colors.dark.main,
       tabBarStyle: {
-        borderTopColor: colors.white[3],
+        borderTopColor: theme === "dark" ? colors.light.main : colors.white[2],
         borderTopWidth: 1,
         // shadowColor: "#000",
         // shadowOffset: { height: -3, width: 0 },
