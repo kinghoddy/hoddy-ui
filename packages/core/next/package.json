@@ -1,6 +1,6 @@
 {
   "name": "@hoddy-ui/next",
-  "version": "2.0.43",
+  "version": "2.0.44",
   "description": "Core rich react native components written in typescript, with support for expo-router",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
