@@ -11,19 +11,20 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       children,
       color = "dark",
       style = {},
-      textCase = null,
+      textCase,
       variant = "body1",
       align = "left",
       gutterBottom = 0,
       adjustsFontSizeToFit,
       fontWeight = 400,
       fontFamily, // NEW PROP ADDED
+      fontSize,
       ...props
     },
     ref
   ) => {
     const colors: any = useColors();
-    const fontSize = {
+    const _fontSize = {
       h1: moderateScale(42),
       h2: moderateScale(37),
       h3: moderateScale(32),
@@ -37,7 +38,7 @@ const Typography: React.FC<TypographyProps> = forwardRef(
 
     const styles: any = StyleSheet.create({
       text: {
-        fontSize: fontSize[variant],
+        fontSize: fontSize || _fontSize[variant],
         marginBottom: verticalScale(gutterBottom) || 0,
         color: colors[color]?.main || color,
         textTransform: textCase,

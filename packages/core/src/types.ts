@@ -273,6 +273,7 @@ export interface TypographyProps extends TextProps {
   numberOfLines?: number;
   adjustsFontSizeToFit?: boolean;
   fontFamily?: string;
+  fontSize?: number;
   fontWeight?: 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 }
 
