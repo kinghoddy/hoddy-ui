@@ -63,10 +63,10 @@ yarn add @hoddy-ui/utils
 Install the required peer dependencies:
 
 ```bash
-npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
+npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated
 ```
 
-**Important**: For `react-native-reanimated`, make sure to follow the [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/) for platform-specific setup as it requires additional configuration for iOS and Android.
+**Important**: For `react-native-reanimated`, make sure to follow the [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/3.x/fundamentals/getting-started) for platform-specific setup as it requires additional configuration for iOS and Android.
 
 ### Basic Setup
 

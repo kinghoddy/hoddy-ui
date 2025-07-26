@@ -27,16 +27,16 @@ yarn add @hoddy-ui/core
 Install the required peer dependencies:
 
 ```bash
-npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
+npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated
 ```
 
 Or with yarn:
 
 ```bash
-yarn add @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
+yarn add @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated
 ```
 
-**Important**: Make sure to follow the [react-native-reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/) for platform-specific setup as it requires additional configuration for iOS and Android.
+**Important**: Make sure to follow the [react-native-reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/3.x/fundamentals/getting-started) for platform-specific setup as it requires additional configuration for iOS and Android.
 
 ## 🚀 Quick Start
 
