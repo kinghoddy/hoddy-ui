@@ -3,7 +3,7 @@ import { initialize } from "./src/config";
 // Components
 export { default as AdaptiveStatusBar } from "./src/Components/AdaptiveStatusBar";
 export { default as AlertX } from "./src/Components/AlertX";
-export * from "./src/Components/Animator";
+export * from "./src/Components/Animators/Animator";
 export { default as Avatar } from "./src/Components/Avatar";
 export * from "./src/Components/Button";
 export { default as Button } from "./src/Components/Button";

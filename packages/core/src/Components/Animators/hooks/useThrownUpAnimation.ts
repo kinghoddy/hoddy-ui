@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Animated, Platform } from "react-native";
+import { Platform } from "react-native";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 interface UseThrownUpAnimationProps {
@@ -9,74 +16,63 @@ interface UseThrownUpAnimationProps {
 
 export const useThrownUpAnimation = ({
   delay = 0,
-  closeAfter = 3000,
+  closeAfter = null,
 }: UseThrownUpAnimationProps = {}) => {
-  const translateY = useRef(new Animated.Value(600)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(600);
+  const opacity = useSharedValue(0);
   const isUnmounting = useRef(false);
   const { isActive } = useAppState();
 
-  useEffect(() => {
-    if (!isActive && Platform.OS === "ios") {
-      translateY.stopAnimation();
-      opacity.stopAnimation();
-    }
-  }, [isActive]);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+      opacity: opacity.value,
+    };
+  });
 
   useEffect(() => {
+    if (!isActive && Platform.OS === "ios") {
+      translateY.value = 600;
+      opacity.value = 0;
+      return;
+    }
+
     // Animate up and fade in when component mounts
-    Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: 0,
+    translateY.value = withDelay(
+      delay,
+      withSpring(0, {
         velocity: 1,
-        tension: 0.001,
-        friction: 2,
-        useNativeDriver: true,
-        delay,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-        delay,
-      }),
-    ]).start();
+        stiffness: 100,
+        damping: 15,
+      })
+    );
+
+    opacity.value = withDelay(delay, withTiming(1, { duration: 500 }));
 
     // Start timer to animate out after duration
     let timer: NodeJS.Timeout | null = null;
     if (closeAfter) {
       timer = setTimeout(() => {
         if (!isUnmounting.current) {
-          Animated.parallel([
-            Animated.spring(translateY, {
-              toValue: 800,
-              velocity: 1,
-              tension: 10,
-              friction: 7,
-              useNativeDriver: true,
-            }),
-            Animated.timing(opacity, {
-              toValue: 0,
-              duration: 500,
-              useNativeDriver: true,
-            }),
-          ]).start();
+          translateY.value = withSpring(800, {
+            velocity: 1,
+            stiffness: 200,
+            damping: 20,
+          });
+          opacity.value = withTiming(0, { duration: 500 });
         }
       }, closeAfter);
     }
 
     return () => {
       if (timer) clearTimeout(timer);
-      translateY.stopAnimation();
-      opacity.stopAnimation();
+      translateY.value = 600;
+      opacity.value = 0;
       isUnmounting.current = true;
     };
-  }, [translateY, opacity, delay, closeAfter]);
+  }, [translateY, opacity, delay, closeAfter, isActive]);
 
   return {
-    animatedStyle: {
-      transform: [{ translateY }],
-      opacity,
-    },
+    animatedStyle,
   };
 };

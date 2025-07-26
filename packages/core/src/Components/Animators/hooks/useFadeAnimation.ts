@@ -1,5 +1,11 @@
-import { useEffect, useRef } from "react";
-import { Animated, Platform } from "react-native";
+import { useEffect } from "react";
+import { Platform } from "react-native";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 interface UseFadeAnimationProps {
@@ -11,40 +17,38 @@ interface UseFadeAnimationProps {
 export const useFadeAnimation = ({
   duration = 1000,
   delay = 0,
-  closeAfter = 2000,
+  closeAfter = null,
 }: UseFadeAnimationProps = {}) => {
-  const opacity = useRef(new Animated.Value(0)).current;
+  const opacity = useSharedValue(0);
   const { isActive } = useAppState();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
 
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
-      opacity.stopAnimation();
+      opacity.value = 0;
+      return;
     }
-  }, [isActive]);
 
-  useEffect(() => {
     // Fade-in animation
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration,
+    opacity.value = withDelay(
       delay,
-      useNativeDriver: true,
-    }).start(() => {
-      if (closeAfter) {
-        setTimeout(() => {
-          Animated.timing(opacity, {
-            toValue: 0,
-            duration,
-            useNativeDriver: true,
-          }).start();
-        }, closeAfter);
-      }
-    });
-
-    return () => opacity.stopAnimation();
-  }, [opacity, duration, delay, closeAfter]);
+      withTiming(1, { duration }, () => {
+        if (closeAfter) {
+          // Schedule fade-out after closeAfter duration
+          setTimeout(() => {
+            opacity.value = withTiming(0, { duration });
+          }, closeAfter);
+        }
+      })
+    );
+  }, [opacity, duration, delay, closeAfter, isActive]);
 
   return {
-    animatedStyle: { opacity },
+    animatedStyle,
   };
 };

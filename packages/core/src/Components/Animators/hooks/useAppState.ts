@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AppState, Platform } from "react-native";
 
 const useAppState = () => {
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(AppState.currentState === "active");
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState: string) => {
@@ -10,24 +10,17 @@ const useAppState = () => {
     };
 
     let subscription: any;
-    let blurSub: any;
-    let focusSub: any;
 
     if (Platform.OS === "android") {
-      blurSub = AppState.addEventListener("blur", () =>
-        handleAppStateChange("inactive")
-      );
-      focusSub = AppState.addEventListener("focus", () =>
-        handleAppStateChange("active")
-      );
+      // For Android, use the change event which covers both blur and focus
+      subscription = AppState.addEventListener("change", handleAppStateChange);
     } else {
+      // For iOS, use the change event as well
       subscription = AppState.addEventListener("change", handleAppStateChange);
     }
 
     return () => {
       subscription?.remove();
-      blurSub?.remove();
-      focusSub?.remove();
     };
   }, []);
 

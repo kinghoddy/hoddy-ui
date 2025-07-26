@@ -1,5 +1,12 @@
-import { useEffect, useRef } from "react";
-import { Animated, Dimensions, Easing, Platform } from "react-native";
+import { useEffect } from "react";
+import { Dimensions, Platform } from "react-native";
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 const { width, height } = Dimensions.get("window");
@@ -34,55 +41,60 @@ export const useSlideAnimation = ({
   closeAfter,
   initialValue,
 }: UseSlideAnimationProps = {}) => {
-  const translateValue = useRef(new Animated.Value(0)).current;
+  const translateValue = useSharedValue(0);
   const { isActive } = useAppState();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const slideStyle =
+      direction === "up" || direction === "down"
+        ? { transform: [{ translateY: translateValue.value }] }
+        : { transform: [{ translateX: translateValue.value }] };
+
+    return slideStyle;
+  });
 
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
-      translateValue.stopAnimation();
+      const initialPosition = initialValue || getInitialPosition(direction);
+      translateValue.value = initialPosition;
+      return;
     }
-  }, [isActive]);
 
-  useEffect(() => {
     const initialPosition = initialValue || getInitialPosition(direction);
-    translateValue.setValue(initialPosition);
+    translateValue.value = initialPosition;
 
     // Slide-in animation with ease-out effect
-    Animated.timing(translateValue, {
-      toValue: 0,
-      duration,
+    translateValue.value = withDelay(
       delay,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start();
+      withTiming(0, {
+        duration,
+        easing: Easing.out(Easing.ease),
+      })
+    );
 
     if (closeAfter) {
       const timer = setTimeout(() => {
-        Animated.timing(translateValue, {
-          toValue: initialPosition,
+        translateValue.value = withTiming(initialPosition, {
           duration,
           easing: Easing.out(Easing.ease),
-          useNativeDriver: true,
-        }).start();
+        });
       }, closeAfter + duration + delay);
 
       return () => {
-        translateValue.stopAnimation();
         clearTimeout(timer);
       };
     }
-
-    return () => {
-      translateValue.stopAnimation();
-    };
-  }, [translateValue, duration, delay, direction, closeAfter]);
-
-  const slideStyle =
-    direction === "up" || direction === "down"
-      ? { transform: [{ translateY: translateValue }] }
-      : { transform: [{ translateX: translateValue }] };
+  }, [
+    translateValue,
+    duration,
+    delay,
+    direction,
+    closeAfter,
+    initialValue,
+    isActive,
+  ]);
 
   return {
-    animatedStyle: slideStyle,
+    animatedStyle,
   };
 };

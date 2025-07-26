@@ -27,14 +27,16 @@ yarn add @hoddy-ui/core
 Install the required peer dependencies:
 
 ```bash
-npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters
+npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
 ```
 
 Or with yarn:
 
 ```bash
-yarn add @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters
+yarn add @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
 ```
+
+**Important**: Make sure to follow the [react-native-reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/) for platform-specific setup as it requires additional configuration for iOS and Android.
 
 ## 🚀 Quick Start
 
@@ -713,7 +715,7 @@ A loading indicator component with customizable appearance.
 
 ### Animator
 
-A unified component that provides a single interface for all animation types with generic props.
+A unified component that provides a single interface for all animation types with generic props. Built with **react-native-reanimated** for optimal performance and smooth animations.
 
 **Features:**
 
@@ -721,7 +723,8 @@ A unified component that provides a single interface for all animation types wit
 - **Generic Props**: Consistent prop naming across all animations (e.g., `closeAfter` instead of animation-specific names)
 - **Modular Hooks**: Animation logic is separated into individual custom hooks
 - **Type Safety**: Full TypeScript support with proper typing
-- **Performance**: Only the specified animation runs, others are not loaded
+- **Performance**: Built with react-native-reanimated for native performance
+- **Smooth Animations**: Runs on the UI thread for 60fps animations
 
 **Generic Props:**
 
@@ -804,20 +807,23 @@ All animation types support these generic props:
 
 **Available Animation Types:**
 
-1. **fade**: Simple fade in/out
-2. **grow**: Scale-based growth animation
-3. **slide**: Directional slide animations
-4. **blink**: Continuous opacity blinking
-5. **float**: Floating up/down motion with fade
-6. **roll**: Combined rotation and translation
-7. **thrownup**: Spring-based upward animation
+1. **fade**: Simple fade in/out using opacity (native performance)
+2. **grow**: Scale-based growth animation with easing
+3. **slide**: Directional slide animations from screen edges
+4. **blink**: Continuous opacity blinking with repeat
+5. **float**: Floating up/down motion with fade effects
+6. **roll**: Combined rotation and translation effects
+7. **thrownup**: Spring-based upward animation with physics
+
+All animations run on the UI thread for optimal performance and smooth 60fps animations.
 
 **Using Animation Hooks Directly:**
 
-You can also use the animation hooks directly for custom implementations:
+You can also use the animation hooks directly for custom implementations with react-native-reanimated:
 
 ```tsx
 import { useFadeAnimation, useSlideAnimation } from "@hoddy-ui/core";
+import Animated from "react-native-reanimated";
 
 const MyComponent = () => {
   const { animatedStyle } = useFadeAnimation({
@@ -933,12 +939,13 @@ function MyScreen() {
 
 ### Animation Hooks
 
-Access animation logic directly for custom implementations:
+Access animation logic directly for custom implementations using react-native-reanimated:
 
 #### useFadeAnimation
 
 ```tsx
 import { useFadeAnimation } from "@hoddy-ui/core";
+import Animated from "react-native-reanimated";
 
 function FadeComponent() {
   const { animatedStyle } = useFadeAnimation({
@@ -958,6 +965,7 @@ function FadeComponent() {
 
 ```tsx
 import { useSlideAnimation } from "@hoddy-ui/core";
+import Animated from "react-native-reanimated";
 
 function SlideComponent() {
   const { animatedStyle } = useSlideAnimation({
@@ -978,6 +986,7 @@ function SlideComponent() {
 
 ```tsx
 import { useGrowAnimation } from "@hoddy-ui/core";
+import Animated from "react-native-reanimated";
 
 function GrowComponent() {
   const { animatedStyle } = useGrowAnimation({
@@ -1000,7 +1009,7 @@ function GrowComponent() {
 - `useRollAnimation` - For rotation and translation effects
 - `useThrownUpAnimation` - For spring-based upward animations
 
-All animation hooks accept similar configuration objects with properties like `duration`, `delay`, and animation-specific options.
+All animation hooks accept similar configuration objects with properties like `duration`, `delay`, and animation-specific options. They return `animatedStyle` objects that work with `Animated.View` from react-native-reanimated for optimal performance.
 
 ## 🎯 Advanced Usage
 

@@ -1,5 +1,13 @@
-import { useEffect, useRef } from "react";
-import { Animated, Easing, Platform } from "react-native";
+import { useEffect } from "react";
+import { Platform } from "react-native";
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 interface UseBlinkAnimationProps {
@@ -15,57 +23,56 @@ export const useBlinkAnimation = ({
   minOpacity = 0.5,
   maxOpacity = 1,
 }: UseBlinkAnimationProps = {}) => {
-  const opacity = useRef(new Animated.Value(maxOpacity)).current;
+  const opacity = useSharedValue(maxOpacity);
   const { isActive } = useAppState();
-  const blinkAnim = useRef<Animated.CompositeAnimation | null>(null);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
 
   const startBlinking = () => {
-    blinkAnim.current = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: minOpacity,
+    opacity.value = withRepeat(
+      withSequence(
+        withTiming(minOpacity, {
           duration: blinkDuration / 2,
           easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
         }),
-        Animated.timing(opacity, {
-          toValue: maxOpacity,
+        withTiming(maxOpacity, {
           duration: blinkDuration / 2,
           easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ])
+        })
+      ),
+      -1,
+      false
     );
-    blinkAnim.current.start();
   };
 
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
-      opacity.stopAnimation();
+      opacity.value = maxOpacity;
+      return;
     }
-  }, [isActive]);
 
-  useEffect(() => {
     if (delay > 0) {
       const timer = setTimeout(() => {
         startBlinking();
       }, delay);
       return () => {
         clearTimeout(timer);
-        opacity.stopAnimation();
-        blinkAnim.current?.stop();
+        opacity.value = maxOpacity;
       };
     } else {
       startBlinking();
     }
 
     return () => {
-      opacity.stopAnimation();
-      blinkAnim.current?.stop();
+      opacity.value = maxOpacity;
     };
-  }, [delay, blinkDuration, minOpacity, maxOpacity]);
+  }, [delay, blinkDuration, minOpacity, maxOpacity, isActive]);
 
   return {
-    animatedStyle: { opacity },
+    animatedStyle,
   };
 };

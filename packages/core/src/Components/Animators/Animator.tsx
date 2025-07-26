@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Animated } from "react-native";
+import Animated from "react-native-reanimated";
 import { AnimatorProps } from "../../types";
 import { useBlinkAnimation } from "./hooks/useBlinkAnimation";
 import { useFadeAnimation } from "./hooks/useFadeAnimation";
@@ -46,7 +46,7 @@ import { useThrownUpAnimation } from "./hooks/useThrownUpAnimation";
  * // ✅ This is correct:
  * // <Animator type="slide" direction="up">
  */
-const Animator: FC<AnimatorProps> = (props) => {
+export const Animator: FC<AnimatorProps> = (props) => {
   const { children, type, duration, delay, closeAfter, style = {} } = props;
 
   // Get animation style based on type
@@ -113,5 +113,3 @@ const Animator: FC<AnimatorProps> = (props) => {
     <Animated.View style={[style, animatedStyle]}>{children}</Animated.View>
   );
 };
-
-export default Animator;

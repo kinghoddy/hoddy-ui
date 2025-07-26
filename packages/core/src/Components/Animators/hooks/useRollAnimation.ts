@@ -1,5 +1,13 @@
-import { useEffect, useRef } from "react";
-import { Animated, Easing, Platform } from "react-native";
+import { useEffect } from "react";
+import { Platform } from "react-native";
+import {
+  Easing,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 interface UseRollAnimationProps {
@@ -13,74 +21,82 @@ interface UseRollAnimationProps {
 export const useRollAnimation = ({
   duration = 500,
   delay = 0,
-  closeAfter = 2000,
+  closeAfter = null,
   initialTranslateY = 100,
   initialRotate = "0deg",
 }: UseRollAnimationProps = {}) => {
-  const translateY = useRef(new Animated.Value(initialTranslateY)).current;
-  const rotate = useRef(new Animated.Value(0.5)).current;
+  const translateY = useSharedValue(initialTranslateY);
+  const rotate = useSharedValue(0);
   const { isActive } = useAppState();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    // Interpolate rotation from 0-1 to initial rotation to 360deg
+    const rotateInterpolated = interpolate(
+      rotate.value,
+      [0, 1],
+      [parseFloat(initialRotate.replace("deg", "")), 360]
+    );
+
+    return {
+      transform: [
+        { translateY: translateY.value },
+        { rotate: `${rotateInterpolated}deg` },
+      ],
+    };
+  });
 
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
-      rotate.stopAnimation();
-      translateY.stopAnimation();
+      translateY.value = initialTranslateY;
+      rotate.value = 0;
+      return;
     }
-  }, [isActive]);
 
-  useEffect(() => {
-    // Start roll-in animation with easing
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: 0.5,
+    // Start roll-in animation with easing (parallel animations)
+    translateY.value = withDelay(
+      delay,
+      withTiming(0, {
         duration,
-        delay,
         easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }),
-      Animated.timing(rotate, {
-        toValue: 1,
-        duration,
-        delay,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      if (closeAfter) {
-        setTimeout(() => {
-          Animated.parallel([
-            Animated.timing(translateY, {
-              toValue: initialTranslateY,
-              duration,
-              easing: Easing.out(Easing.ease),
-              useNativeDriver: true,
-            }),
-            Animated.timing(rotate, {
-              toValue: 0,
-              duration,
-              easing: Easing.out(Easing.ease),
-              useNativeDriver: true,
-            }),
-          ]).start();
-        }, closeAfter);
-      }
-    });
+      })
+    );
 
-    return () => {
-      translateY.stopAnimation();
-      rotate.stopAnimation();
-    };
-  }, [translateY, rotate, duration, delay, closeAfter, initialTranslateY]);
-
-  // Interpolate the rotation value to degrees
-  const rotateInterpolation = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: [initialRotate, "360deg"],
-  });
+    rotate.value = withDelay(
+      delay,
+      withTiming(
+        1,
+        {
+          duration,
+          easing: Easing.out(Easing.ease),
+        },
+        () => {
+          if (closeAfter) {
+            setTimeout(() => {
+              translateY.value = withTiming(initialTranslateY, {
+                duration,
+                easing: Easing.out(Easing.ease),
+              });
+              rotate.value = withTiming(0, {
+                duration,
+                easing: Easing.out(Easing.ease),
+              });
+            }, closeAfter);
+          }
+        }
+      )
+    );
+  }, [
+    translateY,
+    rotate,
+    duration,
+    delay,
+    closeAfter,
+    initialTranslateY,
+    initialRotate,
+    isActive,
+  ]);
 
   return {
-    animatedStyle: {
-      transform: [{ translateY }, { rotate: rotateInterpolation }],
-    },
+    animatedStyle,
   };
 };

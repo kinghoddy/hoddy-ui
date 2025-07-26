@@ -1,5 +1,12 @@
-import { useEffect, useRef } from "react";
-import { Animated, Easing, Platform } from "react-native";
+import { useEffect } from "react";
+import { Platform } from "react-native";
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 import useAppState from "./useAppState";
 
 interface UseGrowAnimationProps {
@@ -12,43 +19,48 @@ interface UseGrowAnimationProps {
 export const useGrowAnimation = ({
   duration = 500,
   delay = 0,
-  closeAfter = 2000,
+  closeAfter = null,
   initialScale = 0,
 }: UseGrowAnimationProps = {}) => {
-  const scale = useRef(new Animated.Value(initialScale)).current;
+  const scale = useSharedValue(initialScale);
   const { isActive } = useAppState();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
 
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
-      scale.stopAnimation();
+      scale.value = initialScale;
+      return;
     }
-  }, [isActive]);
 
-  useEffect(() => {
     // Start grow-in animation with easing
-    Animated.timing(scale, {
-      toValue: 1,
-      duration,
+    scale.value = withDelay(
       delay,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => {
-      if (closeAfter) {
-        setTimeout(() => {
-          Animated.timing(scale, {
-            toValue: initialScale,
-            duration,
-            easing: Easing.out(Easing.ease),
-            useNativeDriver: true,
-          }).start();
-        }, closeAfter);
-      }
-    });
-
-    return () => scale.stopAnimation();
-  }, [scale, duration, delay, closeAfter, initialScale]);
+      withTiming(
+        1,
+        {
+          duration,
+          easing: Easing.out(Easing.ease),
+        },
+        () => {
+          if (closeAfter) {
+            setTimeout(() => {
+              scale.value = withTiming(initialScale, {
+                duration,
+                easing: Easing.out(Easing.ease),
+              });
+            }, closeAfter);
+          }
+        }
+      )
+    );
+  }, [scale, duration, delay, closeAfter, initialScale, isActive]);
 
   return {
-    animatedStyle: { transform: [{ scale }] },
+    animatedStyle,
   };
 };
