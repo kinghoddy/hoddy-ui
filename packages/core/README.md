@@ -1189,4 +1189,4 @@ MIT © [Hoddy Inc](https://github.com/kinghoddy)
 
 ---
 
-**Need help?** [Open an issue](https://github.com/kinghoddy/hoddy-ui/issues) or check out our [examples](../../test/hoddyui).
+**Need help?** [Open an issue](https://github.com/kinghoddy/hoddy-ui/issues) or check out our [examples](../../test/my-app).

@@ -363,7 +363,7 @@ const typography = {
 
 - [Core Components API](./packages/core/README.md)
 - [Migration Guide](./MIGRATION.md) _(coming soon)_
-- [Examples](./test/hoddyui) - Sample implementation
+- [Examples](./test/my-app) - Sample implementation
 
 ## 🤝 Contributing
 
@@ -380,7 +380,7 @@ cd hoddy-ui
 yarn install
 
 # Run the test app
-cd test/hoddyui
+cd test/my-app
 expo start
 ```
 
