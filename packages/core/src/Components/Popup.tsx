@@ -9,13 +9,16 @@ import {
   View,
 } from "react-native";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Animated from "react-native-reanimated";
 import { ScaledSheet } from "react-native-size-matters";
 import { useColors, useTheme } from "../hooks";
+import { UIThemeProvider } from "../theme";
 import { PopupProps } from "../types";
+import { useFadeAnimation } from "./Animators/hooks/useFadeAnimation";
+import { useSlideAnimation } from "./Animators/hooks/useSlideAnimation";
 import { IconButton } from "./Button";
 import Typography from "./Typography";
-import { UIThemeProvider } from "../theme";
 
 export const Popup: React.FC<PopupProps> = ({
   title,
@@ -30,7 +33,19 @@ export const Popup: React.FC<PopupProps> = ({
   const theme = useTheme();
   const colors = useColors();
   const [show, setShow] = useState(open);
-  const [showSecondary, setShowSecondary] = useState(false);
+
+  // Backdrop fade animation
+  const backdropFade = useFadeAnimation({
+    duration: 300,
+    delay: 0,
+  });
+
+  // Content slide animation
+  const contentSlide = useSlideAnimation({
+    duration: 300,
+    delay: 100, // Slight delay after backdrop starts fading in
+    direction: "up",
+  });
 
   const styles: any = ScaledSheet.create({
     root: {
@@ -44,7 +59,6 @@ export const Popup: React.FC<PopupProps> = ({
       zIndex: 1000,
       alignSelf: "center",
       maxWidth: sheet ? undefined : "90%",
-
       width: sheet ? "100%" : undefined,
     },
     container: {
@@ -59,7 +73,6 @@ export const Popup: React.FC<PopupProps> = ({
     },
     content: {
       paddingHorizontal: bare ? undefined : "15@ms",
-      // flex: 1,
     },
     title: {
       flexDirection: "row",
@@ -80,81 +93,87 @@ export const Popup: React.FC<PopupProps> = ({
     },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (open) {
-      setShow(open);
-      setTimeout(() => {
-        setShowSecondary(open);
-      }, 500);
-    } else {
-      closeAction();
+      setShow(true);
+    } else if (show) {
+      // Delay hiding the modal to allow animations to complete
+      const timer = setTimeout(() => {
+        setShow(false);
+        onClose();
+      }, 400); // Total animation duration + buffer
+
+      return () => clearTimeout(timer);
     }
-  }, [open]);
+  }, [open, show, onClose]);
 
   const closeAction = () => {
-    setShowSecondary(false);
-    setTimeout(() => {
-      setShow(false);
-      onClose();
-    }, 300);
+    onClose();
   };
 
+  if (!show) {
+    return null;
+  }
+
   return (
-    <>
-      <Modal
-        transparent
-        animationType="fade"
-        statusBarTranslucent
-        visible={show}
-        onRequestClose={closeAction}
-      >
-        <View style={styles.backdrop} />
-        <UIThemeProvider>
-          <Modal
-            transparent
-            animationType="slide"
-            statusBarTranslucent
-            visible={showSecondary}
-            onRequestClose={closeAction}
-          >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.root}>
-                {open && (
-                  <Pressable
-                    style={StyleSheet.absoluteFill}
-                    onPress={closeAction}
-                  />
-                )}
+    <Modal
+      transparent
+      animationType="none" // We handle animations manually now
+      statusBarTranslucent
+      visible={show}
+      onRequestClose={closeAction}
+    >
+      <Animated.View
+        style={[
+          styles.backdrop,
+          open ? backdropFade.animatedStyle : { opacity: 0 },
+        ]}
+      />
+      <UIThemeProvider>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.root}>
+            {open && (
+              <Pressable
+                style={StyleSheet.absoluteFill}
+                onPress={closeAction}
+              />
+            )}
 
-                <KeyboardAvoidingView
-                  style={styles.avoidingView}
-                  keyboardVerticalOffset={keyboardVerticalOffset}
-                  behavior={Platform.OS === "ios" ? "position" : "padding"}
-                >
-                  <View style={styles.container}>
-                    {!bare && (
-                      <View style={styles.title}>
-                        <View style={styles.titleIcon}>
-                          <IconButton
-                            size={20}
-                            icon="close"
-                            onPress={closeAction}
-                          />
-                        </View>
-                        <Typography align="center" fontWeight={500}>
-                          {title}
-                        </Typography>
+            <Animated.View
+              style={[
+                styles.avoidingView,
+                open
+                  ? contentSlide.animatedStyle
+                  : { transform: [{ translateY: 1000 }] },
+              ]}
+            >
+              <KeyboardAvoidingView
+                keyboardVerticalOffset={keyboardVerticalOffset}
+                behavior={Platform.OS === "ios" ? "position" : "padding"}
+              >
+                <View style={styles.container}>
+                  {!bare && (
+                    <View style={styles.title}>
+                      <View style={styles.titleIcon}>
+                        <IconButton
+                          size={20}
+                          icon="close"
+                          onPress={closeAction}
+                        />
                       </View>
-                    )}
+                      <Typography align="center" fontWeight={500}>
+                        {title}
+                      </Typography>
+                    </View>
+                  )}
 
-                    <View style={styles.content}>{children}</View>
-                  </View>
-                </KeyboardAvoidingView>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </UIThemeProvider>
-      </Modal>
-    </>
+                  <View style={styles.content}>{children}</View>
+                </View>
+              </KeyboardAvoidingView>
+            </Animated.View>
+          </View>
+        </TouchableWithoutFeedback>
+      </UIThemeProvider>
+    </Modal>
   );
 };
