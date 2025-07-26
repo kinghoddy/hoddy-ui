@@ -145,6 +145,7 @@ export interface IconButtonProps {
 
 export type locatorLocation = {
   description: string;
+  formatted_address?: string;
   longitude: number;
   latitude: number;
 };

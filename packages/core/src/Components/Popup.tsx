@@ -58,15 +58,18 @@ export const Popup: React.FC<PopupProps> = ({
       ...style,
     },
     content: {
-      paddingHorizontal: bare ? undefined : "10@ms",
+      paddingHorizontal: bare ? undefined : "15@ms",
       // flex: 1,
     },
     title: {
       flexDirection: "row",
       alignItems: "center",
-      paddingVertical: "5@ms",
-      paddingHorizontal: "10@ms",
-      marginBottom: "10@ms",
+      justifyContent: "center",
+      height: "50@ms",
+    },
+    titleIcon: {
+      position: "absolute",
+      left: "15@ms",
     },
     backdrop: {
       position: "absolute",
@@ -131,16 +134,16 @@ export const Popup: React.FC<PopupProps> = ({
                   <View style={styles.container}>
                     {!bare && (
                       <View style={styles.title}>
-                        <IconButton
-                          size={20}
-                          icon="close"
-                          onPress={closeAction}
-                        />
-                        <View style={{ flex: 1 }}>
-                          <Typography color="textSecondary" align="center">
-                            {title}
-                          </Typography>
+                        <View style={styles.titleIcon}>
+                          <IconButton
+                            size={20}
+                            icon="close"
+                            onPress={closeAction}
+                          />
                         </View>
+                        <Typography align="center" fontWeight={500}>
+                          {title}
+                        </Typography>
                       </View>
                     )}
 

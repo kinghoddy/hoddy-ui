@@ -7,30 +7,24 @@ const AdaptiveStatusBar = ({ translucent = false }) => {
   const [focused, setFocused] = useState(false);
   const colors = useColors();
   const theme = useTheme();
+  const statusbarHandler = () => {
+    StatusBar.setBarStyle(theme === "dark" ? "light-content" : "dark-content");
+    if (Platform.OS === "android") {
+      StatusBar.setBackgroundColor(
+        translucent ? "transparent" : colors.white[1]
+      );
+      StatusBar.setTranslucent(true);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      // setFocused(true);
-      StatusBar.setBarStyle(
-        theme === "dark" ? "light-content" : "dark-content"
-      );
-      if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor(
-          colors.white[1] + (translucent ? "0" : "")
-        );
-        StatusBar.setTranslucent(true);
-      }
-      // return () => setFocused(false);
+      statusbarHandler();
     }, [theme])
   );
 
   React.useEffect(() => {
-    // setFocused(true);
-    StatusBar.setBarStyle(theme === "dark" ? "light-content" : "dark-content");
-    if (Platform.OS === "android") {
-      StatusBar.setBackgroundColor(colors.white[1] + (translucent ? "0" : ""));
-      StatusBar.setTranslucent(true);
-    }
-    // return () => setFocused(false);
+    statusbarHandler();
   }, [theme]);
   return <></>;
 };

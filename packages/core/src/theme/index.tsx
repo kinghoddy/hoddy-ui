@@ -5,6 +5,7 @@ import React, { createContext, useEffect, useReducer } from "react";
 import { Platform, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import FlashMessage from "../Components/FlashMessage";
+import { getConfig } from "../config/KeyManager";
 import { useColors, useTheme } from "../hooks";
 import {
   ThemeActionTypes,
@@ -41,9 +42,10 @@ const ConfigureSystemUI = () => {
   const colors = useColors();
 
   useEffect(() => {
+    const config = getConfig();
     if (colors) {
       SystemUI.setBackgroundColorAsync(colors.white[1]);
-      if (Platform.OS === "android") {
+      if (Platform.OS === "android" && !config.EDGE_TO_EDGE) {
         NavigationBar.setBackgroundColorAsync(colors.white[1]);
         if (theme === "dark") {
           NavigationBar.setButtonStyleAsync("light");

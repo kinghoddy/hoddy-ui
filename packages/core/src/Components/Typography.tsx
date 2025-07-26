@@ -15,7 +15,6 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       variant = "body1",
       align = "left",
       gutterBottom = 0,
-      numberOfLines,
       adjustsFontSizeToFit,
       fontWeight = 400,
       fontFamily, // NEW PROP ADDED
@@ -52,7 +51,6 @@ const Typography: React.FC<TypographyProps> = forwardRef(
     return (
       <Text
         ref={ref as any}
-        numberOfLines={numberOfLines}
         adjustsFontSizeToFit={adjustsFontSizeToFit}
         style={[styles.text, style]} // Ensures external styles are applied
         {...props}

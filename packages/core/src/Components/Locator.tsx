@@ -12,11 +12,14 @@ import { LocatorProps } from "../types";
 import { getConfig } from "../config/KeyManager";
 import Typography from "./Typography";
 
-type predictionType = {
+export type predictionType = {
   id: string;
   description: string;
 };
-export const getPredictionsFromCoords = async (coords: any) => {
+export const getPredictionsFromCoords = async (coords: {
+  latitude: number;
+  longitude: number;
+}) => {
   const { GOOGLE_MAP_API_KEY } = getConfig();
 
   if (!GOOGLE_MAP_API_KEY)
@@ -42,6 +45,45 @@ export const getPredictionsFromCoords = async (coords: any) => {
   }
 
   return p;
+};
+
+export const getPredictionsFromQuery = async (
+  query: string,
+  country: string
+) => {
+  const { GOOGLE_MAP_API_KEY } = getConfig();
+  const endpoint = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:${country}&radius=20000&key=${GOOGLE_MAP_API_KEY}`;
+  const res = await (await fetch(endpoint)).json();
+
+  const p = [];
+  for (let key in res.predictions) {
+    const { description, place_id } = res.predictions[key];
+    p.push({
+      description,
+      id: place_id,
+    });
+  }
+  return p;
+};
+
+export const getLocationFromPlaceId = async (
+  place_id: string
+): Promise<{
+  formatted_address: string;
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
+}> => {
+  const { GOOGLE_MAP_API_KEY } = getConfig();
+  const res = await (
+    await fetch(
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&fields=formatted_address%2Cgeometry&key=${GOOGLE_MAP_API_KEY}`
+    )
+  ).json();
+  return res.result;
 };
 
 export const Locator: React.FC<LocatorProps> = ({
@@ -84,17 +126,8 @@ export const Locator: React.FC<LocatorProps> = ({
     },
   });
   const search = async (query: string) => {
-    const endpoint = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&components=country:${country}&radius=20000&key=${GOOGLE_MAP_API_KEY}`;
-    const res = await (await fetch(endpoint)).json();
-    const p = [];
-    for (let key in res.predictions) {
-      const { description, place_id } = res.predictions[key];
-      p.push({
-        description,
-        id: place_id,
-      });
-    }
-    setPrediction(p);
+    const predictions = await getPredictionsFromQuery(query, country);
+    setPrediction(predictions);
   };
 
   const locateMe = () => {
@@ -135,19 +168,14 @@ export const Locator: React.FC<LocatorProps> = ({
   };
   const locationPressed = async (loc: predictionType) => {
     setValue(loc.description);
-    const res = await (
-      await fetch(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${loc.id}&fields=formatted_address%2Cgeometry&key=${GOOGLE_MAP_API_KEY}`
-      )
-    ).json();
+    const res = await getLocationFromPlaceId(loc.id);
     onLocationSelected(
       {
-        latitude: res.result?.geometry.location.lat,
-        longitude: res.result?.geometry.location.lng,
-
+        latitude: res.geometry.location.lat,
+        longitude: res.geometry.location.lng,
         description: loc.description,
       },
-      res.result?.formatted_address
+      res?.formatted_address
     );
     setChanged(false);
     setPrediction([]);

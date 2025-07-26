@@ -25,6 +25,7 @@ export * from "../src/Components/OTPInput";
 // export * from "../src/config";
 export * from "../src/hooks";
 export * from "../src/theme";
+export * from "../src/types";
 
 const HoddyUI = {
   initialize: initialize,

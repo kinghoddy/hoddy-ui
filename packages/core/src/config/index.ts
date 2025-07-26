@@ -7,6 +7,7 @@ type configProps = {
   googleMapApiKey?: string;
   colors?: extraColorTypes;
   fontFamily?: string;
+  edgeToEdge?: boolean;
 };
 
 export function initialize(config: configProps): void {
@@ -14,6 +15,7 @@ export function initialize(config: configProps): void {
     setConfig({
       GOOGLE_MAP_API_KEY: config.googleMapApiKey,
       DEFAULT_FONT_FAMILY: config.fontFamily,
+      EDGE_TO_EDGE: config.edgeToEdge ?? false,
     });
     if (config.colors) setExtraColors(config.colors);
   } catch (error) {

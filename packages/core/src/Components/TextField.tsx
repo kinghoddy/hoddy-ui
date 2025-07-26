@@ -275,235 +275,245 @@ const TextField: React.FC<TextFieldProps> = ({
   );
 };
 
-export const TextField2: React.FC<TextFieldProps> = ({
-  label,
-  keyboardType,
-  color = "primary",
-  value,
-  type,
-  helperText,
-  onChangeText,
-  onSubmitEditing = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
-  error,
-  start,
-  rounded,
-  disabled = false,
-  style = {},
-  inputStyles = {},
-  gutterBottom = 8,
-  placeholder,
-  end,
-  options,
-  ...props
-}) => {
-  const colors = useColors();
-  const [focused, _setFocused] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
+  (
+    {
+      label,
+      keyboardType,
+      color = "primary",
+      value,
+      type,
+      helperText,
+      onChangeText,
+      onSubmitEditing = () => {},
+      onFocus = () => {},
+      onBlur = () => {},
+      error,
+      start,
+      rounded,
+      disabled = false,
+      style = {},
+      inputStyles = {},
+      gutterBottom = 8,
+      placeholder,
+      end,
+      options,
+      multiline,
+      ...props
+    },
+    ref
+  ) => {
+    const colors = useColors();
+    const [focused, _setFocused] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-  const height = moderateScale(
-    props.multiline ? 50 + (props.numberOfLines || 1) * 18 : 50
-  );
+    const height = moderateScale(
+      multiline ? 50 + (props.numberOfLines || 1) * 18 : 50
+    );
 
-  const setFocused = (value: boolean) => {
-    _setFocused(value);
-  };
+    const setFocused = (value: boolean) => {
+      _setFocused(value);
+    };
 
-  const styles: any = ScaledSheet.create({
-    root: {
-      marginBottom: gutterBottom + "@vs",
-      ...style,
-    },
-    container: {
-      height: height,
-      overflow: "hidden",
-      flexDirection: "row",
-      borderColor: error
-        ? colors.error.main
-        : focused
-        ? colors[color].main
-        : colors.white[5],
-      borderWidth: error ? 1 : focused ? 2 : 1,
-      width: "100%",
-      borderRadius: rounded ? 30 : 10,
-      alignItems: "center",
-      ...inputStyles,
-    },
-    input: {
-      fontSize: "14@s",
-      flex: 1,
-      alignSelf: "stretch",
-      paddingLeft: moderateScale(10),
-      paddingRight: moderateScale(10),
-      color: colors.dark.main,
-      zIndex: 10,
-      // backgroundColor: "#284",
-    },
-    inputText: {
-      fontSize: "14@ms",
-      color: colors.dark.main,
-      paddingLeft: moderateScale(10),
-    },
-    placeholder: {
-      fontSize: "14@ms",
-      color: colors.textSecondary.main,
-      paddingLeft: moderateScale(10),
-    },
-    label: {},
-    helperText: {
-      paddingHorizontal: "15@s",
-      color: focused ? colors[color].dark : "#fffa",
-      paddingTop: "4@ms",
-    },
-    error: {
-      paddingLeft: 10,
-      paddingRight: 10,
-      paddingTop: 5,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    errorText: {
-      fontSize: 12,
-      marginLeft: 10,
-    },
-  });
-  const formProps: any =
-    type === "email"
-      ? {
-          textContentType: "emailAddress",
-          keyboardType: "email-address",
-          autoCapitalize: "none",
-          autoCompleteType: "email",
-        }
-      : type === "number"
-      ? {
-          keyboardType: "numeric",
-        }
-      : type === "tel"
-      ? {
-          textContentType: "telephoneNumber",
-          keyboardType: "phone-pad",
-        }
-      : type === "search"
-      ? {
-          keyboardType: "web-search",
-          returnKeyType: "search",
-          autoCapitalize: "none",
-        }
-      : type === "password"
-      ? {
-          secureTextEntry: !showPassword,
-          autoCompleteType: "password",
-          autoCapitalize: "none",
-          textContentType: "password",
-        }
-      : {};
-  return (
-    <>
-      <View style={styles.root}>
-        {label && (
-          <Typography variant="body1" color="textSecondary" gutterBottom={7}>
-            {label}
-          </Typography>
-        )}
-        <TouchableOpacity
-          onPress={() => setFocused(true)}
-          style={styles.container}
-        >
-          {start}
-
-          {options ? (
-            <>
-              {value ? (
-                <Typography style={styles.inputText}>
-                  {options.find((cur) => cur.value === value)?.label}
-                </Typography>
-              ) : (
-                <Typography style={styles.placeholder}>
-                  {placeholder}
-                </Typography>
-              )}
-              <Ionicons
-                name="chevron-down"
-                size={24}
-                style={{ marginLeft: "auto", marginRight: 15 }}
-                color={colors.dark.light}
-              />
-            </>
-          ) : (
-            <TextInput
-              onFocus={() => {
-                onFocus();
-                setFocused(true);
-              }}
-              onBlur={() => {
-                onBlur();
-                setFocused(false);
-              }}
-              value={value}
-              onChangeText={onChangeText}
-              key={showPassword ? "show" : "hide"}
-              keyboardType={keyboardType}
-              placeholderTextColor={colors.textSecondary.main}
-              editable={!disabled}
-              placeholder={placeholder}
-              selectTextOnFocus={!disabled}
-              onSubmitEditing={onSubmitEditing}
-              {...formProps}
-              {...props}
-              style={styles.input}
-            />
-          )}
-
-          {end ? (
-            <View style={{ marginRight: 20 }}>{end}</View>
-          ) : (
-            type === "password" && (
-              <TouchableOpacity
-                style={{ marginRight: 20 }}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-outline" : "eye-off-outline"}
-                  size={24}
-                  color={colors.textSecondary.main}
-                />
-              </TouchableOpacity>
-            )
-          )}
-        </TouchableOpacity>
-        {helperText && (
-          <Typography
-            color="textSecondary"
-            style={styles.helperText}
-            variant="caption"
-          >
-            {helperText}
-          </Typography>
-        )}
-        {error && (
-          <View style={styles.error}>
-            <MaterialIcons name="error" color={colors.error.main} size={16} />
-            <Typography style={styles.errorText} color="error">
-              {error}
+    const styles: any = ScaledSheet.create({
+      root: {
+        marginBottom: gutterBottom + "@vs",
+        ...style,
+      },
+      container: {
+        height: height,
+        overflow: "hidden",
+        flexDirection: "row",
+        borderColor: error
+          ? colors.error.main
+          : focused
+          ? colors[color].main
+          : colors.white[4],
+        borderWidth: error ? 1 : focused ? 2 : 1,
+        width: "100%",
+        borderRadius: rounded ? 30 : 10,
+        alignItems: multiline ? "flex-start" : "center",
+        paddingVertical: multiline ? 10 : 0,
+        ...inputStyles,
+      },
+      input: {
+        fontSize: "14@s",
+        flex: 1,
+        alignSelf: "stretch",
+        paddingLeft: moderateScale(10),
+        paddingRight: moderateScale(10),
+        color: colors.dark.main,
+        zIndex: 10,
+        // backgroundColor: "#284",
+      },
+      inputText: {
+        fontSize: "14@ms",
+        color: colors.dark.main,
+        paddingLeft: moderateScale(10),
+      },
+      placeholder: {
+        fontSize: "14@ms",
+        color: colors.textSecondary.light,
+        paddingLeft: moderateScale(10),
+      },
+      label: {},
+      helperText: {
+        paddingHorizontal: "15@s",
+        color: focused ? colors[color].dark : "#fffa",
+        paddingTop: "4@ms",
+      },
+      error: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        flexDirection: "row",
+        alignItems: "center",
+      },
+      errorText: {
+        fontSize: 12,
+        marginLeft: 10,
+      },
+    });
+    const formProps: any =
+      type === "email"
+        ? {
+            textContentType: "emailAddress",
+            keyboardType: "email-address",
+            autoCapitalize: "none",
+            autoCompleteType: "email",
+          }
+        : type === "number"
+        ? {
+            keyboardType: "numeric",
+          }
+        : type === "tel"
+        ? {
+            textContentType: "telephoneNumber",
+            keyboardType: "phone-pad",
+          }
+        : type === "search"
+        ? {
+            keyboardType: "web-search",
+            returnKeyType: "search",
+            autoCapitalize: "none",
+          }
+        : type === "password"
+        ? {
+            secureTextEntry: !showPassword,
+            autoCompleteType: "password",
+            autoCapitalize: "none",
+            textContentType: "password",
+          }
+        : {};
+    return (
+      <>
+        <View style={styles.root}>
+          {label && (
+            <Typography variant="body1" color="textSecondary" gutterBottom={7}>
+              {label}
             </Typography>
-          </View>
+          )}
+          <TouchableOpacity
+            onPress={() => setFocused(true)}
+            style={styles.container}
+          >
+            <View style={{ marginTop: multiline ? 5 : 0 }}>{start}</View>
+
+            {options ? (
+              <>
+                {value ? (
+                  <Typography style={styles.inputText}>
+                    {options.find((cur) => cur.value === value)?.label}
+                  </Typography>
+                ) : (
+                  <Typography style={styles.placeholder}>
+                    {placeholder}
+                  </Typography>
+                )}
+                <Ionicons
+                  name="chevron-down"
+                  size={24}
+                  style={{ marginLeft: "auto", marginRight: 15 }}
+                  color={colors.dark.light}
+                />
+              </>
+            ) : (
+              <TextInput
+                ref={ref}
+                onFocus={() => {
+                  onFocus();
+                  setFocused(true);
+                }}
+                onBlur={() => {
+                  onBlur();
+                  setFocused(false);
+                }}
+                value={value}
+                onChangeText={onChangeText}
+                key={showPassword ? "show" : "hide"}
+                keyboardType={keyboardType}
+                placeholderTextColor={colors.textSecondary.light}
+                editable={!disabled}
+                placeholder={placeholder}
+                selectTextOnFocus={!disabled}
+                onSubmitEditing={onSubmitEditing}
+                multiline={multiline}
+                extAlignVertical={multiline ? "top" : "center"}
+                {...formProps}
+                {...props}
+                style={styles.input}
+              />
+            )}
+
+            {end ? (
+              <View style={{ marginRight: 20 }}>{end}</View>
+            ) : (
+              type === "password" && (
+                <TouchableOpacity
+                  style={{ marginRight: 20 }}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color={colors.textSecondary.main}
+                  />
+                </TouchableOpacity>
+              )
+            )}
+          </TouchableOpacity>
+          {helperText && (
+            <Typography
+              color="textSecondary"
+              style={styles.helperText}
+              variant="caption"
+            >
+              {helperText}
+            </Typography>
+          )}
+          {error && (
+            <View style={styles.error}>
+              <MaterialIcons name="error" color={colors.error.main} size={16} />
+              <Typography style={styles.errorText} color="error">
+                {error}
+              </Typography>
+            </View>
+          )}
+        </View>
+        {options && (
+          <SelectMenu
+            options={options}
+            value={value}
+            open={focused}
+            onClose={() => setFocused(false)}
+            label={label}
+            helperText={helperText}
+            onChange={onChangeText!}
+          />
         )}
-      </View>
-      {options && (
-        <SelectMenu
-          options={options}
-          value={value}
-          open={focused}
-          onClose={() => setFocused(false)}
-          label={label}
-          helperText={helperText}
-          onChange={onChangeText!}
-        />
-      )}
-    </>
-  );
-};
+      </>
+    );
+  }
+);
 
 export default TextField;
