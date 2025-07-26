@@ -14,6 +14,7 @@ Hoddy UI is a versatile UI component and theming library that follows the Hoddy 
 - **🎯 Accessibility**: ARIA-compliant and screen reader friendly
 - **🔌 Extensible**: Highly customizable with theming and configuration options
 - **📐 Responsive**: Built-in responsive utilities and grid system
+- **🎬 Rich Animations**: 7 built-in animation types with customizable timing and effects
 
 ## 📦 Packages
 
@@ -98,27 +99,33 @@ export default function Root() {
 ```tsx
 import React from "react";
 import { View } from "react-native";
-import { Typography, Button, TextField } from "@hoddy-ui/core";
+import { Typography, Button, TextField, Animator } from "@hoddy-ui/core";
 
 export default function HomeScreen() {
   return (
     <View style={{ padding: 20 }}>
-      <Typography variant="h4" gutterBottom={20}>
-        Welcome to Hoddy UI!
-      </Typography>
+      <Animator type="fade" duration={1000}>
+        <Typography variant="h4" gutterBottom={20}>
+          Welcome to Hoddy UI!
+        </Typography>
+      </Animator>
 
-      <TextField
-        label="Email"
-        variant="outlined"
-        keyboardType="email-address"
-      />
+      <Animator type="slide" direction="up" delay={200}>
+        <TextField
+          label="Email"
+          variant="outlined"
+          keyboardType="email-address"
+        />
+      </Animator>
 
-      <Button
-        title="Get Started"
-        variant="contained"
-        color="primary"
-        onPress={() => console.log("Button pressed!")}
-      />
+      <Animator type="grow" delay={400}>
+        <Button
+          title="Get Started"
+          variant="contained"
+          color="primary"
+          onPress={() => console.log("Button pressed!")}
+        />
+      </Animator>
     </View>
   );
 }
@@ -212,7 +219,69 @@ Users can switch themes at runtime using the theme context.
 
 ### Animation
 
-- `Animator` - Layout animations and transitions
+- `Animator` - Unified animation component with 7 animation types (fade, grow, slide, blink, float, roll, thrownup)
+- Animation hooks - Direct access to animation logic (`useFadeAnimation`, `useSlideAnimation`, etc.)
+
+## 🎬 Animation System
+
+Hoddy UI includes a comprehensive animation system with a unified `Animator` component that provides 7 different animation types with consistent, easy-to-use props.
+
+### Animation Types
+
+1. **Fade** - Smooth fade in/out transitions
+2. **Grow** - Scale-based growth animations
+3. **Slide** - Directional slide animations (up, down, left, right)
+4. **Blink** - Continuous opacity blinking effects
+5. **Float** - Floating up/down motion with fade
+6. **Roll** - Combined rotation and translation effects
+7. **Thrown Up** - Spring-based upward animations
+
+### Quick Animation Examples
+
+```tsx
+import { Animator } from "@hoddy-ui/core";
+
+// Fade animation with auto-close
+<Animator type="fade" duration={1000} closeAfter={3000}>
+  <Notification>This fades in and out after 3 seconds</Notification>
+</Animator>
+
+// Slide animation from bottom
+<Animator type="slide" direction="up" duration={800}>
+  <Modal>This slides up from the bottom</Modal>
+</Animator>
+
+// Continuous blinking effect
+<Animator type="blink" blinkDuration={1000} minOpacity={0.3}>
+  <Badge>This blinks continuously</Badge>
+</Animator>
+
+// Custom floating effect
+<Animator type="float" floatDistance={20} floatDuration={2000}>
+  <FloatingButton>This floats up and down</FloatingButton>
+</Animator>
+```
+
+### Direct Hook Usage
+
+For advanced use cases, access animation hooks directly:
+
+```tsx
+import { useFadeAnimation, useSlideAnimation } from "@hoddy-ui/core";
+
+const MyComponent = () => {
+  const { animatedStyle } = useFadeAnimation({
+    duration: 800,
+    closeAfter: 2000,
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <CustomContent />
+    </Animated.View>
+  );
+};
+```
 
 ## 🛠️ Utilities (@hoddy-ui/utils)
 

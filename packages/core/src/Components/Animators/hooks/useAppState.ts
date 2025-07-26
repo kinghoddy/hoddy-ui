@@ -5,17 +5,30 @@ const useAppState = () => {
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-    if (Platform.OS === "ios") {
-      const handleAppStateChange = (nextAppState: string) => {
-        setIsActive(nextAppState === "active");
-      };
+    const handleAppStateChange = (nextAppState: string) => {
+      setIsActive(nextAppState === "active");
+    };
 
-      const subscription = AppState.addEventListener(
-        "change",
-        handleAppStateChange
+    let subscription: any;
+    let blurSub: any;
+    let focusSub: any;
+
+    if (Platform.OS === "android") {
+      blurSub = AppState.addEventListener("blur", () =>
+        handleAppStateChange("inactive")
       );
-      return () => subscription?.remove();
+      focusSub = AppState.addEventListener("focus", () =>
+        handleAppStateChange("active")
+      );
+    } else {
+      subscription = AppState.addEventListener("change", handleAppStateChange);
     }
+
+    return () => {
+      subscription?.remove();
+      blurSub?.remove();
+      focusSub?.remove();
+    };
   }, []);
 
   return { isActive };

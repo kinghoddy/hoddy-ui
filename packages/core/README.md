@@ -87,30 +87,43 @@ export default function Root() {
 ```tsx
 import React from "react";
 import { View } from "react-native";
-import { Typography, Button, TextField, useColors } from "@hoddy-ui/core";
+import {
+  Typography,
+  Button,
+  TextField,
+  Animator,
+  useColors,
+  useFadeAnimation,
+} from "@hoddy-ui/core";
 
 export default function HomeScreen() {
   const colors = useColors();
 
   return (
     <View style={{ padding: 20, backgroundColor: colors.white[1] }}>
-      <Typography variant="h4" color="primary" gutterBottom={20}>
-        Welcome to Hoddy UI!
-      </Typography>
+      <Animator type="fade" duration={1000}>
+        <Typography variant="h4" color="primary" gutterBottom={20}>
+          Welcome to Hoddy UI!
+        </Typography>
+      </Animator>
 
-      <TextField
-        label="Email Address"
-        variant="outlined"
-        keyboardType="email-address"
-        gutterBottom={16}
-      />
+      <Animator type="slide" direction="up" delay={200}>
+        <TextField
+          label="Email Address"
+          variant="outlined"
+          keyboardType="email-address"
+          gutterBottom={16}
+        />
+      </Animator>
 
-      <Button
-        title="Get Started"
-        variant="contained"
-        color="primary"
-        onPress={() => console.log("Button pressed!")}
-      />
+      <Animator type="grow" delay={400}>
+        <Button
+          title="Get Started"
+          variant="contained"
+          color="primary"
+          onPress={() => console.log("Button pressed!")}
+        />
+      </Animator>
     </View>
   );
 }
@@ -700,24 +713,139 @@ A loading indicator component with customizable appearance.
 
 ### Animator
 
-A component for adding layout animations and transitions.
+A unified component that provides a single interface for all animation types with generic props.
 
-**Props:**
+**Features:**
 
-| Prop            | Type                                                                        | Default           | Description               |
-| --------------- | --------------------------------------------------------------------------- | ----------------- | ------------------------- |
-| `children`      | `ReactNode`                                                                 | -                 | Content to animate        |
-| `type`          | `"fade" \| "slideInLeft" \| "slideInRight" \| "slideInUp" \| "slideInDown"` | `"fade"`          | Animation type            |
-| `duration`      | `number`                                                                    | `500`             | Animation duration (ms)   |
-| `delay`         | `number`                                                                    | `100`             | Animation delay (ms)      |
-| `animationType` | `"easeInEaseOut" \| "linear" \| "spring"`                                   | `"easeInEaseOut"` | Animation timing function |
-| `style`         | `ViewStyle`                                                                 | `{}`              | Container style overrides |
+- **Single Component**: One component handles all animation types
+- **Generic Props**: Consistent prop naming across all animations (e.g., `closeAfter` instead of animation-specific names)
+- **Modular Hooks**: Animation logic is separated into individual custom hooks
+- **Type Safety**: Full TypeScript support with proper typing
+- **Performance**: Only the specified animation runs, others are not loaded
 
-**Example:**
+**Generic Props:**
+
+All animation types support these generic props:
+
+| Prop         | Type                                                                        | Default | Description                                                   |
+| ------------ | --------------------------------------------------------------------------- | ------- | ------------------------------------------------------------- |
+| `type`       | `"fade" \| "grow" \| "slide" \| "blink" \| "float" \| "roll" \| "thrownup"` | -       | Animation type                                                |
+| `duration`   | `number`                                                                    | `500`   | Animation duration in milliseconds                            |
+| `delay`      | `number`                                                                    | `0`     | Delay before animation starts                                 |
+| `closeAfter` | `number \| null`                                                            | `null`  | Time after which the exit animation starts (null for no exit) |
+| `style`      | `ViewStyle`                                                                 | `{}`    | Additional styles for the animated view                       |
+
+**Animation-Specific Props:**
+
+**Slide Animation:**
+
+- `direction`: `"up" \| "down" \| "left" \| "right"`
+- `initialValue`: Custom initial position value
+
+**Grow Animation:**
+
+- `initialScale`: Starting scale (default: 0)
+
+**Blink Animation:**
+
+- `blinkDuration`: Duration of one blink cycle
+- `minOpacity`: Minimum opacity value
+- `maxOpacity`: Maximum opacity value
+
+**Float Animation:**
+
+- `closeDuration`: Duration of exit animation
+- `floatDistance`: Distance to float up/down
+- `floatDuration`: Duration of one float cycle
+
+**Roll Animation:**
+
+- `initialTranslateY`: Initial vertical position
+- `initialRotate`: Initial rotation value
+
+**Examples:**
 
 ```tsx
-<Animator type="slideInUp" duration={600} delay={200} animationType="spring">
-  <Typography>This content will slide up</Typography>
+// Fade animation
+<Animator type="fade" duration={1000} closeAfter={3000}>
+  <Text>This will fade in and out</Text>
+</Animator>
+
+// Slide animation
+<Animator type="slide" direction="up" duration={800} closeAfter={2000}>
+  <View>This will slide up from bottom</View>
+</Animator>
+
+// Grow animation
+<Animator type="grow" initialScale={0.5} duration={600}>
+  <Button>This will grow from 50% scale</Button>
+</Animator>
+
+// Blink animation (continuous)
+<Animator type="blink" blinkDuration={1000} minOpacity={0.3}>
+  <Icon>This will blink continuously</Icon>
+</Animator>
+
+// Float animation
+<Animator type="float" floatDistance={20} floatDuration={2000} closeAfter={5000}>
+  <View>This will float up and down</View>
+</Animator>
+
+// Roll animation
+<Animator type="roll" initialRotate="45deg" duration={800}>
+  <Image>This will roll and rotate</Image>
+</Animator>
+
+// Thrown up animation
+<Animator type="thrownup" delay={500} closeAfter={4000}>
+  <Notification>This will spring up from bottom</Notification>
+</Animator>
+```
+
+**Available Animation Types:**
+
+1. **fade**: Simple fade in/out
+2. **grow**: Scale-based growth animation
+3. **slide**: Directional slide animations
+4. **blink**: Continuous opacity blinking
+5. **float**: Floating up/down motion with fade
+6. **roll**: Combined rotation and translation
+7. **thrownup**: Spring-based upward animation
+
+**Using Animation Hooks Directly:**
+
+You can also use the animation hooks directly for custom implementations:
+
+```tsx
+import { useFadeAnimation, useSlideAnimation } from "@hoddy-ui/core";
+
+const MyComponent = () => {
+  const { animatedStyle } = useFadeAnimation({
+    duration: 800,
+    closeAfter: 2000,
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Text>Custom animated content</Text>
+    </Animated.View>
+  );
+};
+```
+
+**Migration from Old Components:**
+
+Replace old individual animation components:
+
+```tsx
+// Old way
+<AnimatedFade fadeOutAfter={2000}>
+  <Text>Content</Text>
+</AnimatedFade>
+
+// New way
+<Animator type="fade" closeAfter={2000}>
+  <Text>Content</Text>
 </Animator>
 ```
 
@@ -802,6 +930,77 @@ function MyScreen() {
   );
 }
 ```
+
+### Animation Hooks
+
+Access animation logic directly for custom implementations:
+
+#### useFadeAnimation
+
+```tsx
+import { useFadeAnimation } from "@hoddy-ui/core";
+
+function FadeComponent() {
+  const { animatedStyle } = useFadeAnimation({
+    duration: 800,
+    closeAfter: 2000,
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Text>This will fade in and out</Text>
+    </Animated.View>
+  );
+}
+```
+
+#### useSlideAnimation
+
+```tsx
+import { useSlideAnimation } from "@hoddy-ui/core";
+
+function SlideComponent() {
+  const { animatedStyle } = useSlideAnimation({
+    direction: "up",
+    duration: 600,
+    initialValue: 100,
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Text>This will slide up</Text>
+    </Animated.View>
+  );
+}
+```
+
+#### useGrowAnimation
+
+```tsx
+import { useGrowAnimation } from "@hoddy-ui/core";
+
+function GrowComponent() {
+  const { animatedStyle } = useGrowAnimation({
+    duration: 500,
+    initialScale: 0.5,
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Text>This will grow from 50% scale</Text>
+    </Animated.View>
+  );
+}
+```
+
+#### Other Animation Hooks
+
+- `useBlinkAnimation` - For continuous blinking effects
+- `useFloatAnimation` - For floating up/down motion
+- `useRollAnimation` - For rotation and translation effects
+- `useThrownUpAnimation` - For spring-based upward animations
+
+All animation hooks accept similar configuration objects with properties like `duration`, `delay`, and animation-specific options.
 
 ## 🎯 Advanced Usage
 

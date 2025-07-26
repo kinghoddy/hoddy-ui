@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Text,
   TextInputProps,
   TextProps,
   TextStyle,
@@ -79,14 +78,7 @@ export interface AvatarProps {
   size?: number;
   style?: ViewStyle;
 }
-export interface AnimatorProps {
-  style?: ViewStyle;
-  duration?: number;
-  children: ReactNode;
-  delay?: number;
-  animationType?: "easeInEaseOut" | "linear" | "spring";
-  type?: "fade" | "slideInLeft" | "slideInRight" | "slideInUp" | "slideInDown";
-}
+
 export interface ButtonProps {
   color?: colorTypes;
   variant?: "text" | "outlined" | "contained";
@@ -325,3 +317,58 @@ export interface DividerProps {
   style?: ViewStyle;
   height?: number;
 }
+
+export type AnimationType =
+  | "fade"
+  | "grow"
+  | "slide"
+  | "blink"
+  | "float"
+  | "roll"
+  | "thrownup";
+
+// Base props that are common to all animations
+interface BaseAnimatorProps {
+  children: ReactNode;
+  duration?: number;
+  delay?: number;
+  closeAfter?: number | null;
+  style?: ViewStyle;
+}
+
+// Type-specific animation props using discriminated unions
+export type AnimatorProps =
+  | (BaseAnimatorProps & {
+      type: "fade";
+      // No additional props for fade animation
+    })
+  | (BaseAnimatorProps & {
+      type: "grow";
+      initialScale?: number;
+    })
+  | (BaseAnimatorProps & {
+      type: "slide";
+      direction?: "up" | "down" | "left" | "right";
+      initialValue?: number;
+    })
+  | (BaseAnimatorProps & {
+      type: "blink";
+      blinkDuration?: number;
+      minOpacity?: number;
+      maxOpacity?: number;
+    })
+  | (BaseAnimatorProps & {
+      type: "float";
+      closeDuration?: number;
+      floatDistance?: number;
+      floatDuration?: number;
+    })
+  | (BaseAnimatorProps & {
+      type: "roll";
+      initialTranslateY?: number;
+      initialRotate?: string;
+    })
+  | (BaseAnimatorProps & {
+      type: "thrownup";
+      // No additional props for thrownup animation
+    });
