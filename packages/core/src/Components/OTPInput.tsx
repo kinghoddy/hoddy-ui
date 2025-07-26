@@ -25,14 +25,10 @@ export const OTPInput: FC<OTPInputProps> = ({
     [length]
   );
 
-  console.log("v", value);
-
   const onChangeHandler = (val: string, index: number) => {
     if (value.length >= length && val.length > 0) return;
     // Handle pasting of full OTP
     if (val.length > 1) {
-      console.log("reached", val);
-
       const digits = val.replace(/\D/g, "").slice(0, length);
       onChange(digits);
       if (digits.length === length) {

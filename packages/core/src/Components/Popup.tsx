@@ -10,13 +10,16 @@ import {
 } from "react-native";
 
 import React, { useEffect, useState } from "react";
-import Animated from "react-native-reanimated";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { ScaledSheet } from "react-native-size-matters";
 import { useColors, useTheme } from "../hooks";
 import { UIThemeProvider } from "../theme";
 import { PopupProps } from "../types";
-import { useFadeAnimation } from "./Animators/hooks/useFadeAnimation";
-import { useSlideAnimation } from "./Animators/hooks/useSlideAnimation";
 import { IconButton } from "./Button";
 import Typography from "./Typography";
 
@@ -29,23 +32,48 @@ export const Popup: React.FC<PopupProps> = ({
   open,
   onClose = () => {},
   style,
+  onModalShow,
+  onModalHide,
 }) => {
   const theme = useTheme();
   const colors = useColors();
-  const [show, setShow] = useState(open);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // Backdrop fade animation
-  const backdropFade = useFadeAnimation({
-    duration: 300,
-    delay: 0,
-  });
+  // Animation values
+  const backdropOpacity = useSharedValue(0);
+  const contentTranslateY = useSharedValue(1000);
 
-  // Content slide animation
-  const contentSlide = useSlideAnimation({
-    duration: 300,
-    delay: 100, // Slight delay after backdrop starts fading in
-    direction: "up",
-  });
+  // Trigger animations when open prop changes
+  useEffect(() => {
+    if (open) {
+      setModalVisible(true);
+      // Opening animation
+      backdropOpacity.value = withTiming(1, { duration: 300 });
+      contentTranslateY.value = withTiming(0, { duration: 300 }, () => {
+        if (onModalShow) {
+          runOnJS(onModalShow)();
+        }
+      });
+    } else {
+      // Closing animation
+      backdropOpacity.value = withTiming(0, { duration: 200 });
+      contentTranslateY.value = withTiming(1000, { duration: 200 }, () => {
+        runOnJS(setModalVisible)(false);
+        if (onModalHide) {
+          runOnJS(onModalHide)();
+        }
+      });
+    }
+  }, [open]);
+
+  // Animated styles
+  const backdropAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: backdropOpacity.value,
+  }));
+
+  const contentAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: contentTranslateY.value }],
+  }));
 
   const styles: any = ScaledSheet.create({
     root: {
@@ -62,7 +90,7 @@ export const Popup: React.FC<PopupProps> = ({
       width: sheet ? "100%" : undefined,
     },
     container: {
-      paddingBottom: sheet ? "30@ms" : 0,
+      paddingBottom: sheet ? "30@ms" : undefined,
       backgroundColor: theme === "dark" ? "#111" : colors.white[2],
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
@@ -93,42 +121,19 @@ export const Popup: React.FC<PopupProps> = ({
     },
   });
 
-  useEffect(() => {
-    if (open) {
-      setShow(true);
-    } else if (show) {
-      // Delay hiding the modal to allow animations to complete
-      const timer = setTimeout(() => {
-        setShow(false);
-        onClose();
-      }, 400); // Total animation duration + buffer
-
-      return () => clearTimeout(timer);
-    }
-  }, [open, show, onClose]);
-
   const closeAction = () => {
     onClose();
   };
 
-  if (!show) {
-    return null;
-  }
-
   return (
     <Modal
       transparent
-      animationType="none" // We handle animations manually now
+      animationType="none"
       statusBarTranslucent
-      visible={show}
+      visible={modalVisible}
       onRequestClose={closeAction}
     >
-      <Animated.View
-        style={[
-          styles.backdrop,
-          open ? backdropFade.animatedStyle : { opacity: 0 },
-        ]}
-      />
+      <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
       <UIThemeProvider>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.root}>
@@ -139,14 +144,7 @@ export const Popup: React.FC<PopupProps> = ({
               />
             )}
 
-            <Animated.View
-              style={[
-                styles.avoidingView,
-                open
-                  ? contentSlide.animatedStyle
-                  : { transform: [{ translateY: 1000 }] },
-              ]}
-            >
+            <Animated.View style={[styles.avoidingView, contentAnimatedStyle]}>
               <KeyboardAvoidingView
                 keyboardVerticalOffset={keyboardVerticalOffset}
                 behavior={Platform.OS === "ios" ? "position" : "padding"}

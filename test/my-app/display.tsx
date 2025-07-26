@@ -1,5 +1,8 @@
 import {
+  Animator,
+  Button,
   OTPInput,
+  Popup,
   showFlashMessage,
   Typography,
   useColors,
@@ -8,7 +11,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 const Display = () => {
   const colors = useColors();
-
+  const [isOpen, setIsOpen] = useState(false);
   const [otp, setOtp] = useState("");
 
   const styles = StyleSheet.create({
@@ -37,7 +40,15 @@ const Display = () => {
       <Typography gutterBottom={20} variant="h3">
         Hello hoody ui
       </Typography>
-      <OTPInput value={otp} onChange={setOtp} />
+      <Button title="Click me" onPress={() => setIsOpen(!isOpen)} />
+      {isOpen && (
+        <Animator type="thrownup" duration={1000}>
+          <OTPInput value={otp} onChange={setOtp} />
+        </Animator>
+      )}
+      <Popup open={isOpen} onClose={() => setIsOpen(false)}>
+        <Typography variant="h3">Hello world</Typography>
+      </Popup>
     </View>
   );
 };

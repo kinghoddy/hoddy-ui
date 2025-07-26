@@ -214,6 +214,9 @@ export interface PopupProps {
   open: boolean;
   onClose?: () => void;
   style?: ViewStyle;
+
+  onModalShow?: () => void;
+  onModalHide?: () => void;
 }
 
 export interface SpinnerProps {

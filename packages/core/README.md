@@ -259,6 +259,7 @@ const colors = {
 
 - **`TextField`** - Material Design text input with variants
 - **`TextField2`** - Alternative text field design
+- **`OTPInput`** - One-Time Password input with auto-advance and paste support
 - **`Locator`** - Location picker with Google Maps integration
 
 ### Interactive Elements
@@ -432,6 +433,57 @@ A Material Design text input component with comprehensive features.
   keyboardType="email-address"
   error={!!emailError}
   helperText={emailError}
+/>
+```
+
+### OTPInput
+
+A specialized input component for One-Time Password entry with auto-advance, paste support, and backspace handling.
+
+**Props:**
+
+| Prop       | Type                                  | Default      | Description                      |
+| ---------- | ------------------------------------- | ------------ | -------------------------------- |
+| `length`   | `number`                              | `6`          | Number of OTP digits             |
+| `onChange` | `(value: string) => void`             | -            | Change handler for OTP value     |
+| `value`    | `string`                              | `""`         | Current OTP value                |
+| `variant`  | `"outlined" \| "text" \| "contained"` | `"outlined"` | Input variant style              |
+| `spacing`  | `number`                              | `1`          | Spacing between input boxes      |
+| `size`     | `number`                              | `45`         | Size of each input box in pixels |
+
+**Features:**
+
+- **Auto-advance**: Automatically moves to next input after digit entry
+- **Paste support**: Handles pasting of complete OTP codes
+- **Backspace handling**: Moves to previous input on backspace
+- **Number-only input**: Automatically filters non-numeric characters
+- **Customizable styling**: Supports different variants and sizes
+
+**Example:**
+
+```tsx
+const [otp, setOtp] = useState('');
+
+<OTPInput
+  length={6}
+  value={otp}
+  onChange={setOtp}
+  variant="outlined"
+  size={50}
+  spacing={2}
+/>
+
+// Usage with form validation
+<OTPInput
+  length={4}
+  value={otp}
+  onChange={(value) => {
+    setOtp(value);
+    if (value.length === 4) {
+      verifyOTP(value);
+    }
+  }}
+  variant="contained"
 />
 ```
 
@@ -676,6 +728,8 @@ A modal component for overlays, dialogs, and bottom sheets.
 | `sheet`                  | `boolean \| number` | `false` | Bottom sheet mode/height  |
 | `bare`                   | `boolean`           | `false` | Hide header and padding   |
 | `keyboardVerticalOffset` | `number`            | -       | Keyboard avoidance offset |
+| `onModalShow`            | `() => void`        | -       | Callback when modal shows |
+| `onModalHide`            | `() => void`        | -       | Callback when modal hides |
 | `style`                  | `ViewStyle`         | `{}`    | Container style overrides |
 
 **Example:**
@@ -686,6 +740,8 @@ A modal component for overlays, dialogs, and bottom sheets.
   onClose={() => setIsOpen(false)}
   title="Confirm Action"
   sheet={400}
+  onModalShow={() => console.log("Modal is now visible")}
+  onModalHide={() => console.log("Modal is now hidden")}
 >
   <Typography>Are you sure you want to delete this item?</Typography>
   <Button title="Delete" color="error" />
@@ -725,6 +781,10 @@ A unified component that provides a single interface for all animation types wit
 - **Type Safety**: Full TypeScript support with proper typing
 - **Performance**: Built with react-native-reanimated for native performance
 - **Smooth Animations**: Runs on the UI thread for 60fps animations
+
+**Requirements:**
+
+Requires `react-native-reanimated` as peer dependencies. Make sure to follow the [react-native-reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/3.x/fundamentals/getting-started) for platform-specific setup.
 
 **Generic Props:**
 
@@ -839,7 +899,17 @@ const MyComponent = () => {
 };
 ```
 
-**Migration from Old Components:**
+**Performance Benefits:**
+
+With react-native-reanimated, all animations:
+
+- **Run on the UI thread** for better performance
+- **Maintain 60fps** even during JavaScript thread blocking
+- **Use native drivers** automatically
+- **Support worklets** for complex animation logic
+- **Provide smooth gestures** and interactions
+
+**Migration from Legacy API:**
 
 Replace old individual animation components:
 

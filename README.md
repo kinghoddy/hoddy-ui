@@ -63,8 +63,10 @@ yarn add @hoddy-ui/utils
 Install the required peer dependencies:
 
 ```bash
-npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters
+npm install @expo/vector-icons @react-native-async-storage/async-storage @react-navigation/native expo-navigation-bar expo-system-ui react-native-safe-area-context react-native-size-matters react-native-reanimated react-native-worklets
 ```
+
+**Important**: For `react-native-reanimated`, make sure to follow the [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/) for platform-specific setup as it requires additional configuration for iOS and Android.
 
 ### Basic Setup
 
@@ -97,11 +99,19 @@ export default function Root() {
 2. **Start using components:**
 
 ```tsx
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { Typography, Button, TextField, Animator } from "@hoddy-ui/core";
+import {
+  Typography,
+  Button,
+  TextField,
+  OTPInput,
+  Animator,
+} from "@hoddy-ui/core";
 
 export default function HomeScreen() {
+  const [otp, setOtp] = useState("");
+
   return (
     <View style={{ padding: 20 }}>
       <Animator type="fade" duration={1000}>
@@ -116,6 +126,10 @@ export default function HomeScreen() {
           variant="outlined"
           keyboardType="email-address"
         />
+      </Animator>
+
+      <Animator type="slide" direction="up" delay={300}>
+        <OTPInput length={6} value={otp} onChange={setOtp} variant="outlined" />
       </Animator>
 
       <Animator type="grow" delay={400}>
@@ -193,6 +207,7 @@ Users can switch themes at runtime using the theme context.
 
 - `TextField` - Material Design text input
 - `TextField2` - Alternative text field variant
+- `OTPInput` - One-Time Password input with auto-advance and paste support
 - `FormWrapper` - Form container with validation
 - `Locator` - Location picker with Google Maps integration
 
@@ -215,11 +230,12 @@ Users can switch themes at runtime using the theme context.
 
 ### Overlays
 
-- `Popup` - Modal dialogs and sheets
+- `Popup` - Modal dialogs and sheets with lifecycle callbacks and smooth animations
 
 ### Animation
 
 - `Animator` - Unified animation component with 7 animation types (fade, grow, slide, blink, float, roll, thrownup)
+- Built with react-native-reanimated for 60fps native performance
 - Animation hooks - Direct access to animation logic (`useFadeAnimation`, `useSlideAnimation`, etc.)
 
 ## 🎬 Animation System
