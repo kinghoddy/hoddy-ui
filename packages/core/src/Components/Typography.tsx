@@ -45,7 +45,11 @@ const Typography: React.FC<TypographyProps> = forwardRef(
         alignItems: "center",
         textAlign: align,
         fontWeight: fontWeight,
-        fontFamily: fontFamily || getConfig().DEFAULT_FONT_FAMILY || undefined, // Use custom font if provided, else default
+        fontFamily:
+          fontFamily ||
+          getConfig().TYPOGRAPHY?.fontWeights?.[fontWeight] ||
+          getConfig().TYPOGRAPHY?.fontFamily ||
+          undefined, // Use custom font if provided, else default
       },
     });
 

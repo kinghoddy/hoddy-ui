@@ -1,6 +1,11 @@
 type configTypes = {
   GOOGLE_MAP_API_KEY?: string;
-  DEFAULT_FONT_FAMILY?: string;
+  TYPOGRAPHY?: {
+    fontFamily?: string;
+    fontWeights?: {
+      [K in 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900]?: string;
+    };
+  };
   EDGE_TO_EDGE?: boolean;
 };
 

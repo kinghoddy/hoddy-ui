@@ -115,7 +115,7 @@ export const Popup: React.FC<PopupProps> = ({
     backdrop: {
       position: "absolute",
       height: "100%",
-      zIndex: -1,
+      zIndex: 1,
       width: "100%",
       backgroundColor: "#000b",
     },
@@ -133,13 +133,13 @@ export const Popup: React.FC<PopupProps> = ({
       visible={modalVisible}
       onRequestClose={closeAction}
     >
-      <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
       <UIThemeProvider>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.root}>
+            <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
             {open && (
               <Pressable
-                style={StyleSheet.absoluteFill}
+                style={[StyleSheet.absoluteFill, { zIndex: 2 }]}
                 onPress={closeAction}
               />
             )}

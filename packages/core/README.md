@@ -48,9 +48,6 @@ yarn add @expo/vector-icons @react-native-async-storage/async-storage @react-nav
 import { initialize } from "@hoddy-ui/core";
 
 initialize({
-  // Custom font family
-  fontFamily: "Inter-Regular",
-
   // Google Maps API key for Locator component
   googleMapApiKey: "your-google-maps-api-key",
 
@@ -63,6 +60,17 @@ initialize({
       main: "#6366f1",
       light: "#818cf8",
       dark: "#4f46e5",
+    },
+  },
+
+  // Typography settings
+  typography: {
+    fontFamily: "Inter-Regular",
+    fontWeights: {
+      400: "Inter-Regular",
+      500: "Inter-Medium",
+      600: "Inter-SemiBold",
+      700: "Inter-Bold",
     },
   },
 });
@@ -141,23 +149,63 @@ Use the `initialize` function to configure the library globally:
 import { initialize } from "@hoddy-ui/core";
 
 initialize({
-  // Font family for all typography components
-  fontFamily?: string;
-
-  // Google Maps API key for Locator component
+  // Google Maps API key for map components
   googleMapApiKey?: string;
 
-  // Edge-to-edge display (skips Android navigation bar styling)
-  edgeToEdge?: boolean;
-
-  // Custom color overrides
+  // Custom color palette overrides
   colors?: {
     primary?: { main: string; light?: string; dark?: string };
     secondary?: { main: string; light?: string; dark?: string };
-    // ... and more
+    // ... and more color options
+  };
+
+  // Enable edge-to-edge display mode
+  edgeToEdge?: boolean;
+
+  // Typography settings
+  typography?: {
+    // Primary font family
+    fontFamily?: string;
+
+    // Font family mappings for each weight (Android support)
+    fontWeights?: {
+      100?: string;
+      200?: string;
+      300?: string;
+      400?: string;
+      500?: string;
+      600?: string;
+      700?: string;
+      800?: string;
+      900?: string;
+    };
   };
 });
 ```
+
+### Configuration Example
+
+```tsx
+initialize({
+  googleMapApiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxx",
+  edgeToEdge: true,
+  colors: {
+    primary: "#007AFF",
+    secondary: "#34C759",
+  },
+  typography: {
+    fontFamily: "Inter",
+    fontWeights: {
+      400: "Inter-Regular",
+      500: "Inter-Medium",
+      600: "Inter-SemiBold",
+      700: "Inter-Bold",
+    },
+  },
+});
+```
+
+**Note:** The `fontWeights` property is particularly useful for Android devices where different font weights require separate font family files. This allows you to map each weight (100-900) to its corresponding font family name.
 
 ### Theme Configuration
 

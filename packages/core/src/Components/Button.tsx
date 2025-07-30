@@ -1,7 +1,7 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { forwardRef } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
-import { ScaledSheet, moderateScale } from "react-native-size-matters";
+import { ScaledSheet, moderateScale, ms } from "react-native-size-matters";
 import { getConfig } from "../config/KeyManager";
 import { useColors, useTheme } from "../hooks";
 import { ButtonProps, IconButtonProps, LinkButtonProps } from "../types";
@@ -20,7 +20,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
   const styles: any = ScaledSheet.create({
     text: {
       fontSize: moderateScale(fontSize),
-      fontWeight: fontWeight,
+      fontWeight: fontWeight as any,
       fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       color: disabled ? "#777" : colors[color].main,
     },
@@ -51,7 +51,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
     container: {
       alignSelf: "flex-start",
       flexGrow: 0,
-      backgroundColor: bg ? bgColor : elevation! > 0 ? bgColor : null,
+      backgroundColor: bg ? bgColor : elevation! > 0 ? bgColor : undefined,
       padding: "5@ms",
       shadowColor: "#000",
       shadowOpacity: 0.1,
@@ -59,8 +59,8 @@ export const IconButton: React.FC<IconButtonProps> = ({
         height: 1,
         width: 0,
       },
-      height: bg ? size + 20 + "@ms" : undefined,
-      width: bg ? size + 20 + "@ms" : undefined,
+      height: bg ? ms(size + 20) : undefined,
+      width: bg ? ms(size + 20) : undefined,
       alignItems: "center",
       justifyContent: "center",
       shadowRadius: elevation,
@@ -118,7 +118,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
         justifyContent: "center",
         backgroundColor:
           variant === "text" || variant === "outlined"
-            ? null
+            ? undefined
             : translucent
             ? translucent === "dark"
               ? colors.white[3] + "22"
@@ -131,7 +131,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
         borderRadius: rounded ? 30 : 10,
         elevation: variant === "text" ? 0 : elevation,
         paddingVertical:
-          size === "small" ? 8 : size === "large" ? "15@ms" : "13@ms",
+          size === "small" ? 8 : size === "large" ? "15@mvs" : "13@mvs",
         paddingHorizontal: size === "small" ? "10@ms" : "18@ms",
         borderColor: colors[color].main,
         borderWidth: variant === "outlined" ? 1 : 0,
@@ -143,7 +143,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
           width: 0,
         },
         shadowOpacity: variant === "text" ? 0 : 0.3,
-        width: fullWidth ? "100%" : null,
+        width: fullWidth ? "100%" : undefined,
         ...style,
       },
       text: {
@@ -155,7 +155,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
               variant === "text" || variant === "outlined" ? "main" : "text"
             ],
         fontWeight: variant === "outlined" ? "700" : "500",
-        fontSize: size === "small" ? "12@ms" : "16@ms",
+        fontSize: size === "small" ? "12@ms" : "13@ms",
         fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
       },
     });
