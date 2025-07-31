@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  StyleProp,
   TextInputProps,
   TextProps,
   TextStyle,
@@ -117,7 +118,7 @@ export interface LinkButtonProps {
   style?: TextStyle & ViewStyle;
   color?: colorTypes;
   fontSize?: number;
-  fontWeight?: string;
+  fontWeight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   disabled?: boolean;
   onPress?: () => void;
 }
@@ -229,6 +230,7 @@ export interface SpinnerProps {
 
 export interface TextFieldProps extends TextInputProps {
   label?: string;
+  labelProps?: TypographyProps;
   variant?: "outlined" | "text" | "contained";
   color?: colorTypes;
   size?: "small" | "normal" | "large";
@@ -256,7 +258,7 @@ export interface TextFieldProps extends TextInputProps {
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   color?: colorTypes | (string & {});
-  style?: TextStyle | ViewStyle;
+  style?: StyleProp<TextStyle | ViewStyle>;
   textCase?: "capitalize" | "uppercase" | "lowercase" | undefined;
   variant?:
     | "caption"

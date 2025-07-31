@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { Image, View } from "react-native";
-import { ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { AvatarProps } from "../types";
 import Typography from "./Typography";
@@ -18,8 +18,8 @@ const Avatar: React.FC<AvatarProps> = ({
   const styles: any = ScaledSheet.create({
     root: {
       borderRadius: 150,
-      height: size + "@ms",
-      width: size + "@ms",
+      height: ms(size),
+      width: ms(size),
       alignItems: "center",
       justifyContent: "center",
       overflow: "hidden",
@@ -27,7 +27,7 @@ const Avatar: React.FC<AvatarProps> = ({
       borderColor: variant === "outlined" ? "#fff" : "#0000",
       backgroundColor:
         variant === "outlined"
-          ? null
+          ? undefined
           : label
           ? colors[color].main
           : colors.white[4],

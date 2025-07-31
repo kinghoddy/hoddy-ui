@@ -1,9 +1,10 @@
 import React, { forwardRef } from "react";
 import { StyleSheet, Text } from "react-native";
-import { moderateScale, verticalScale } from "react-native-size-matters";
+import { moderateScale, ms, verticalScale } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { TypographyProps } from "../types";
 import { getConfig } from "../config/KeyManager";
+import { getFontFamily } from "../utility";
 
 const Typography: React.FC<TypographyProps> = forwardRef(
   (
@@ -39,17 +40,13 @@ const Typography: React.FC<TypographyProps> = forwardRef(
     const styles: any = StyleSheet.create({
       text: {
         fontSize: fontSize || _fontSize[variant],
-        marginBottom: verticalScale(gutterBottom) || 0,
+        marginBottom: ms(gutterBottom) || 0,
         color: colors[color]?.main || color,
         textTransform: textCase,
         alignItems: "center",
         textAlign: align,
         fontWeight: fontWeight,
-        fontFamily:
-          fontFamily ||
-          getConfig().TYPOGRAPHY?.fontWeights?.[fontWeight] ||
-          getConfig().TYPOGRAPHY?.fontFamily ||
-          undefined, // Use custom font if provided, else default
+        fontFamily: fontFamily || getFontFamily(fontWeight),
       },
     });
 

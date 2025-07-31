@@ -1,6 +1,6 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { ScaledSheet } from "react-native-size-matters";
+import { View } from "react-native";
+import { ms, ScaledSheet } from "react-native-size-matters";
 import { GridItemProps, GridProps } from "../types";
 
 export const GridItem: React.FC<GridItemProps> = ({
@@ -12,8 +12,8 @@ export const GridItem: React.FC<GridItemProps> = ({
 }) => {
   const styles = ScaledSheet.create({
     gridItem: {
-      width: 100 / col + "%",
-      padding: spacing * 10 + "@ms",
+      width: `${100 / col}%`,
+      padding: ms(spacing * 10),
       alignItems: alignItems,
     },
   });
@@ -27,7 +27,7 @@ export const Grid: React.FC<GridProps> = ({
   const styles = ScaledSheet.create({
     grid: {
       flexWrap: "wrap",
-      margin: -spacing * 10 + "@ms",
+      margin: `${-spacing * 10}@ms`,
       flexDirection: "row",
     },
   });

@@ -5,6 +5,7 @@ import {
   ScaledSheet,
   moderateScale,
   ms,
+  mvs,
   verticalScale,
 } from "react-native-size-matters";
 import { getConfig } from "../config/KeyManager";
@@ -12,6 +13,7 @@ import { useColors } from "../hooks";
 import { TextFieldProps } from "../types";
 import SelectMenu from "./SelectMenu";
 import Typography from "./Typography";
+import { getFontFamily } from "../utility";
 
 const TextField: React.FC<TextFieldProps> = ({
   label,
@@ -64,7 +66,7 @@ const TextField: React.FC<TextFieldProps> = ({
   }, [focused, value]);
   const styles: any = ScaledSheet.create({
     root: {
-      marginBottom: gutterBottom + "@vs",
+      marginBottom: ms(gutterBottom),
       width: "100%",
       ...style,
     },
@@ -98,7 +100,7 @@ const TextField: React.FC<TextFieldProps> = ({
       paddingLeft: variant === "text" ? 0 : moderateScale(15),
       paddingRight: moderateScale(10),
       paddingTop: "11@vs",
-      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
+      fontFamily: getFontFamily(400),
       color: colors.black[1],
       zIndex: 10,
       // backgroundColor: "#284",
@@ -110,7 +112,7 @@ const TextField: React.FC<TextFieldProps> = ({
       paddingTop: "13@ms",
     },
     label: {
-      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
+      fontFamily: getFontFamily(400),
       position: "absolute",
       left: variant === "text" ? 0 : moderateScale(15),
       fontSize: focused || value ? "10@s" : "13@s",
@@ -279,6 +281,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
   (
     {
       label,
+      labelProps,
       keyboardType,
       color = "primary",
       value,
@@ -317,7 +320,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
 
     const styles: any = ScaledSheet.create({
       root: {
-        marginBottom: gutterBottom + "@vs",
+        marginBottom: ms(gutterBottom),
         ...style,
       },
       container: {
@@ -409,7 +412,12 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
       <>
         <View style={styles.root}>
           {label && (
-            <Typography variant="body1" color="textSecondary" gutterBottom={7}>
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              gutterBottom={7}
+              {...labelProps}
+            >
               {label}
             </Typography>
           )}

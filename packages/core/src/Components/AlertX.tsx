@@ -1,7 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { View } from "react-native";
-import { ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
 import { AlertXProps } from "../types";
 import Typography from "./Typography";
@@ -16,7 +16,7 @@ const AlertX: React.FC<AlertXProps> = ({
 }) => {
   const colors = useColors();
 
-  const styles: any = ScaledSheet.create({
+  const styles = ScaledSheet.create({
     container: {
       padding: 20,
       paddingTop: 10,
@@ -24,7 +24,7 @@ const AlertX: React.FC<AlertXProps> = ({
       borderRadius: 8,
       alignItems: "center",
       flexDirection: "row",
-      marginBottom: gutterBottom + "@ms",
+      marginBottom: ms(gutterBottom),
       backgroundColor: colors[type].main + (variant === "contained" ? "" : "3"),
     },
     title: {
@@ -35,7 +35,7 @@ const AlertX: React.FC<AlertXProps> = ({
     },
   });
   return (
-    <View style={{ ...styles.container, ...style }}>
+    <View style={[styles.container, style]}>
       <View style={{ width: "80%" }}>
         <Typography style={styles.title} gutterBottom={3} fontWeight={700}>
           {title}

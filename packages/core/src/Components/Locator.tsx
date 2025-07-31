@@ -115,6 +115,7 @@ export const Locator: React.FC<LocatorProps> = ({
       shadowRadius: float ? 15 : 0,
       shadowOffset: {
         height: 10,
+        width: 0,
       },
       borderRadius: 10,
       marginBottom: 10,

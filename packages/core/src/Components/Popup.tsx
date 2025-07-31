@@ -11,6 +11,7 @@ import {
 
 import React, { useEffect, useState } from "react";
 import Animated, {
+  LinearTransition,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
@@ -147,9 +148,12 @@ export const Popup: React.FC<PopupProps> = ({
             <Animated.View style={[styles.avoidingView, contentAnimatedStyle]}>
               <KeyboardAvoidingView
                 keyboardVerticalOffset={keyboardVerticalOffset}
-                behavior={Platform.OS === "ios" ? "position" : "padding"}
+                behavior={Platform.OS === "ios" ? "padding" : "padding"}
               >
-                <View style={styles.container}>
+                <Animated.View
+                  layout={LinearTransition}
+                  style={styles.container}
+                >
                   {!bare && (
                     <View style={styles.title}>
                       <View style={styles.titleIcon}>
@@ -166,7 +170,7 @@ export const Popup: React.FC<PopupProps> = ({
                   )}
 
                   <View style={styles.content}>{children}</View>
-                </View>
+                </Animated.View>
               </KeyboardAvoidingView>
             </Animated.View>
           </View>

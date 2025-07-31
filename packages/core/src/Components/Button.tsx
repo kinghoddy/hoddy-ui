@@ -5,13 +5,14 @@ import { ScaledSheet, moderateScale, ms } from "react-native-size-matters";
 import { getConfig } from "../config/KeyManager";
 import { useColors, useTheme } from "../hooks";
 import { ButtonProps, IconButtonProps, LinkButtonProps } from "../types";
+import { getFontFamily } from "../utility";
 
 export const LinkButton: React.FC<LinkButtonProps> = ({
   title,
   style = {},
   color = "blue",
   fontSize = 12,
-  fontWeight = "400",
+  fontWeight = 400,
   disabled,
   onPress = () => {},
 }) => {
@@ -20,8 +21,8 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
   const styles: any = ScaledSheet.create({
     text: {
       fontSize: moderateScale(fontSize),
-      fontWeight: fontWeight as any,
-      fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
+      fontWeight: fontWeight.toString() as any,
+      fontFamily: getFontFamily(fontWeight),
       color: disabled ? "#777" : colors[color].main,
     },
   });
@@ -156,7 +157,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
             ],
         fontWeight: variant === "outlined" ? "700" : "500",
         fontSize: size === "small" ? "12@ms" : "13@ms",
-        fontFamily: getConfig().DEFAULT_FONT_FAMILY || "System",
+        fontFamily: getFontFamily(variant === "outlined" ? 700 : 500),
       },
     });
 
