@@ -413,7 +413,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
         <View style={styles.root}>
           {label && (
             <Typography
-              variant="body1"
+              variant="body2"
               color="textSecondary"
               gutterBottom={7}
               {...labelProps}

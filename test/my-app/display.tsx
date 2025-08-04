@@ -12,6 +12,7 @@ import {
   showFlashMessage,
   Spinner,
   TextField,
+  TextField2,
   Typography,
   useColors,
 } from "@hoddy-ui/core";
@@ -27,6 +28,9 @@ const Display = () => {
   const [checkboxValue, setCheckboxValue] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
   const [rating, setRating] = useState(4.5);
+
+  // Layout animation test states
+  const [popupContentItems, setPopupContentItems] = useState(1);
 
   const selectOptions = [
     { label: "Option 1", value: "opt1" },
@@ -328,7 +332,7 @@ const Display = () => {
           {/* Interactive Elements Section */}
           <View style={styles.section}>
             <Typography variant="h2" style={styles.sectionTitle}>
-              🎯 Interactive Elements
+              🎯 Interactive Elements & Layout Animation
             </Typography>
 
             <View style={styles.interactiveSection}>
@@ -363,10 +367,31 @@ const Display = () => {
               />
 
               <Button
-                title="Open Popup"
+                title="🎬 Test Layout Animation"
                 onPress={() => setIsPopupOpen(true)}
                 color="info"
               />
+
+              <View
+                style={{
+                  backgroundColor: colors.info.light + "20",
+                  padding: 15,
+                  borderRadius: 10,
+                  borderLeftWidth: 4,
+                  borderLeftColor: colors.info.main,
+                  marginTop: 15,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="info"
+                  style={{ textAlign: "center" }}
+                >
+                  👆 Tap "Test Layout Animation" to see smooth height
+                  transitions in the popup! Add/remove content dynamically and
+                  watch the modal animate.
+                </Typography>
+              </View>
 
               <View
                 style={{
@@ -405,20 +430,111 @@ const Display = () => {
           </View>
         </View>
 
-        {/* Popup Demo */}
+        {/* Layout Animation Test Popup */}
         <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)} sheet>
-          <View style={{ padding: 20 }}>
-            <Typography variant="h3" gutterBottom={15}>
-              🎊 Popup Demo
+          <Typography variant="h5" gutterBottom={15}>
+            🎬 Layout Animation Test
+          </Typography>
+          <Typography variant="body2" gutterBottom={20} color="textSecondary">
+            Test the popup's layout animation by adding and removing content
+            dynamically. Notice how the modal height animates smoothly!
+          </Typography>
+
+          {/* Animation Test Controls */}
+          <View
+            style={{
+              backgroundColor: colors.info.light + "20",
+              padding: 15,
+              borderRadius: 10,
+              marginBottom: 20,
+              borderLeftWidth: 4,
+              borderLeftColor: colors.info.main,
+            }}
+          >
+            <Typography fontWeight={500} color="info" gutterBottom={10}>
+              🎛️ Animation Controls
             </Typography>
-            <Typography variant="body1" gutterBottom={20}>
-              This is a beautiful popup component that can display any content.
-              It supports both modal and sheet variants.
-            </Typography>
+
+            {/* Content Items Counter */}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Button
+                title="-"
+                size="small"
+                onPress={() =>
+                  setPopupContentItems(Math.max(0, popupContentItems - 1))
+                }
+                style={{ minWidth: 40 }}
+              />
+              <Typography variant="body1" style={{ marginHorizontal: 15 }}>
+                Content Items: {popupContentItems}
+              </Typography>
+              <Button
+                title="+"
+                size="small"
+                onPress={() =>
+                  setPopupContentItems(Math.min(5, popupContentItems + 1))
+                }
+                style={{ minWidth: 40 }}
+              />
+            </View>
+          </View>
+          <TextField2 label="TextField 2" value="" />
+          {/* Dynamic Content Area */}
+          <View style={{ gap: 15 }}>
+            {/* Rendered Content Items */}
+            {Array.from({ length: popupContentItems }, (_, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: colors.white[2],
+                  padding: 15,
+                  borderRadius: 8,
+                  borderLeftWidth: 3,
+                  borderLeftColor: colors.primary.main,
+                }}
+              >
+                <Typography fontWeight={500} gutterBottom={5}>
+                  📦 Content Block {index + 1}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  This is dynamic content block number {index + 1}. Watch how
+                  the modal animates when you add or remove these blocks!
+                </Typography>
+              </View>
+            ))}
+          </View>
+
+          {/* Action Buttons */}
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              marginTop: 20,
+              paddingTop: 20,
+              borderTopWidth: 1,
+              borderTopColor: colors.white[3],
+            }}
+          >
             <Button
-              title="Close Popup"
+              title="Reset All"
+              variant="outlined"
+              onPress={() => {
+                setPopupContentItems(1);
+              }}
+              color="warning"
+              style={{ flex: 1 }}
+            />
+            <Button
+              title="Close"
               onPress={() => setIsPopupOpen(false)}
               color="primary"
+              style={{ flex: 1 }}
             />
           </View>
         </Popup>

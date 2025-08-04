@@ -11,13 +11,16 @@ import {
 
 import React, { useEffect, useState } from "react";
 import Animated, {
+  CurvedTransition,
   LinearTransition,
   runOnJS,
+  SequencedTransition,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ScaledSheet } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ms, ScaledSheet } from "react-native-size-matters";
 import { useColors, useTheme } from "../hooks";
 import { UIThemeProvider } from "../theme";
 import { PopupProps } from "../types";
@@ -39,10 +42,37 @@ export const Popup: React.FC<PopupProps> = ({
   const theme = useTheme();
   const colors = useColors();
   const [modalVisible, setModalVisible] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const { bottom } = useSafeAreaInsets();
 
   // Animation values
   const backdropOpacity = useSharedValue(0);
   const contentTranslateY = useSharedValue(1000);
+
+  // Memoized keyboard vertical offset based on platform and keyboard state
+  const keyboardVerticalOffsetValue =
+    Platform.OS === "ios" ? -bottom : -bottom * 2;
+
+  // Keyboard event listeners
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener?.remove();
+      keyboardDidShowListener?.remove();
+    };
+  }, []);
 
   // Trigger animations when open prop changes
   useEffect(() => {
@@ -82,22 +112,28 @@ export const Popup: React.FC<PopupProps> = ({
       width: "100%",
       justifyContent: sheet ? "flex-end" : "center",
     },
-    avoidingView: {
-      minHeight: typeof sheet === "number" ? sheet : undefined,
-      maxHeight: "80%",
+    keyboardView: {
+      flex: 1,
       zIndex: 1000,
+    },
+    avoidingView: {
+      zIndex: 2,
+      minHeight: typeof sheet === "number" ? sheet : undefined,
+      maxHeight: "90%",
       alignSelf: "center",
       maxWidth: sheet ? undefined : "90%",
       width: sheet ? "100%" : undefined,
+      marginBottom: Platform.OS === "android" && keyboardVisible ? bottom : 0,
     },
     container: {
-      paddingBottom: sheet ? "30@ms" : undefined,
-      backgroundColor: theme === "dark" ? "#111" : colors.white[2],
+      paddingBottom: sheet && !bare ? bottom + ms(10) : undefined,
+      backgroundColor: theme === "dark" ? "#111" : colors.white[1],
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       borderBottomRightRadius: sheet ? 0 : 20,
       borderBottomLeftRadius: sheet ? 0 : 20,
       width: "100%",
+      overflow: "hidden",
       ...style,
     },
     content: {
@@ -135,25 +171,31 @@ export const Popup: React.FC<PopupProps> = ({
       onRequestClose={closeAction}
     >
       <UIThemeProvider>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.root}>
-            <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
-            {open && (
-              <Pressable
-                style={[StyleSheet.absoluteFill, { zIndex: 2 }]}
-                onPress={closeAction}
-              />
-            )}
+        <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
+        <KeyboardAvoidingView
+          style={styles.keyboardView}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={
+            keyboardVerticalOffset || keyboardVerticalOffsetValue
+          }
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.root}>
+              {open && (
+                <Pressable
+                  style={[StyleSheet.absoluteFill, { zIndex: 1 }]}
+                  onPress={closeAction}
+                />
+              )}
 
-            <Animated.View style={[styles.avoidingView, contentAnimatedStyle]}>
-              <KeyboardAvoidingView
-                keyboardVerticalOffset={keyboardVerticalOffset}
-                behavior={Platform.OS === "ios" ? "padding" : "padding"}
+              <Animated.View
+                style={[styles.avoidingView, contentAnimatedStyle]}
+                layout={LinearTransition.springify()
+                  .stiffness(200)
+                  .mass(0.5)
+                  .damping(100)}
               >
-                <Animated.View
-                  layout={LinearTransition}
-                  style={styles.container}
-                >
+                <View style={styles.container}>
                   {!bare && (
                     <View style={styles.title}>
                       <View style={styles.titleIcon}>
@@ -170,11 +212,11 @@ export const Popup: React.FC<PopupProps> = ({
                   )}
 
                   <View style={styles.content}>{children}</View>
-                </Animated.View>
-              </KeyboardAvoidingView>
-            </Animated.View>
-          </View>
-        </TouchableWithoutFeedback>
+                </View>
+              </Animated.View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </UIThemeProvider>
     </Modal>
   );
