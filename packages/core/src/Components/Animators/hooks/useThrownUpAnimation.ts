@@ -50,22 +50,19 @@ export const useThrownUpAnimation = ({
     opacity.value = withDelay(delay, withTiming(1, { duration: 500 }));
 
     // Start timer to animate out after duration
-    let timer: NodeJS.Timeout | null = null;
     if (closeAfter) {
-      timer = setTimeout(() => {
-        if (!isUnmounting.current) {
-          translateY.value = withSpring(800, {
-            velocity: 1,
-            stiffness: 200,
-            damping: 20,
-          });
-          opacity.value = withTiming(0, { duration: 500 });
-        }
-      }, closeAfter);
+      translateY.value = withDelay(
+        closeAfter,
+        withSpring(800, {
+          velocity: 1,
+          stiffness: 200,
+          damping: 20,
+        })
+      );
+      opacity.value = withDelay(closeAfter, withTiming(0, { duration: 500 }));
     }
 
     return () => {
-      if (timer) clearTimeout(timer);
       translateY.value = 600;
       opacity.value = 0;
       isUnmounting.current = true;

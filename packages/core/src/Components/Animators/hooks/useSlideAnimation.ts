@@ -73,16 +73,13 @@ export const useSlideAnimation = ({
     );
 
     if (closeAfter) {
-      const timer = setTimeout(() => {
-        translateValue.value = withTiming(initialPosition, {
+      translateValue.value = withDelay(
+        closeAfter + duration + delay,
+        withTiming(initialPosition, {
           duration,
           easing: Easing.out(Easing.ease),
-        });
-      }, closeAfter + duration + delay);
-
-      return () => {
-        clearTimeout(timer);
-      };
+        })
+      );
     }
   }, [
     translateValue,

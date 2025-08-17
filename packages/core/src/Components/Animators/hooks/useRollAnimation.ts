@@ -71,16 +71,20 @@ export const useRollAnimation = ({
         },
         () => {
           if (closeAfter) {
-            setTimeout(() => {
-              translateY.value = withTiming(initialTranslateY, {
+            translateY.value = withDelay(
+              closeAfter,
+              withTiming(initialTranslateY, {
                 duration,
                 easing: Easing.out(Easing.ease),
-              });
-              rotate.value = withTiming(0, {
+              })
+            );
+            rotate.value = withDelay(
+              closeAfter,
+              withTiming(0, {
                 duration,
                 easing: Easing.out(Easing.ease),
-              });
-            }, closeAfter);
+              })
+            );
           }
         }
       )

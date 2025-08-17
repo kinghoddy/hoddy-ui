@@ -40,9 +40,7 @@ export const useFadeAnimation = ({
       withTiming(1, { duration }, () => {
         if (closeAfter) {
           // Schedule fade-out after closeAfter duration
-          setTimeout(() => {
-            opacity.value = withTiming(0, { duration });
-          }, closeAfter);
+          opacity.value = withDelay(closeAfter, withTiming(0, { duration }));
         }
       })
     );

@@ -64,11 +64,6 @@ export const useFloatAnimation = ({
     }
   };
 
-  const stopFloating = () => {
-    isFloating.current = false;
-    translateY.value = withTiming(0, { duration: 200 });
-  };
-
   useEffect(() => {
     if (!isActive && Platform.OS === "ios") {
       opacity.value = 0;
@@ -84,10 +79,15 @@ export const useFloatAnimation = ({
         startFloating();
 
         if (closeAfter) {
-          setTimeout(() => {
-            stopFloating();
-            opacity.value = withTiming(0, { duration: closeDuration });
-          }, closeAfter);
+          opacity.value = withDelay(
+            closeAfter,
+            withTiming(0, { duration: closeDuration })
+          );
+          translateY.value = withDelay(
+            closeAfter,
+            withTiming(0, { duration: closeDuration })
+          );
+          isFloating.current = false;
         }
       })
     );

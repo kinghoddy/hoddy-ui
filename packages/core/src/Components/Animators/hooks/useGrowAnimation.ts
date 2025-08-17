@@ -48,12 +48,13 @@ export const useGrowAnimation = ({
         },
         () => {
           if (closeAfter) {
-            setTimeout(() => {
-              scale.value = withTiming(initialScale, {
+            scale.value = withDelay(
+              closeAfter,
+              withTiming(initialScale, {
                 duration,
                 easing: Easing.out(Easing.ease),
-              });
-            }, closeAfter);
+              })
+            );
           }
         }
       )
