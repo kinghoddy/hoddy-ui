@@ -29,7 +29,7 @@ import Typography from "./Typography";
 
 export const Popup: React.FC<PopupProps> = ({
   title,
-  sheet,
+  sheet = true,
   bare = false,
   keyboardVerticalOffset,
   children,

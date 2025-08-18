@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { FormWrapperProps } from "../types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 export const FormWrapper: React.FC<FormWrapperProps> = ({
   children,
   behavior = Platform.OS === "ios" ? "padding" : "height",
@@ -17,6 +18,9 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
   style = {},
   onScroll,
 }) => {
+  const { bottom } = useSafeAreaInsets();
+
+  const defaultOffset = Platform.OS === "ios" ? -bottom : -bottom * 2;
   const styles = ScaledSheet.create({
     root: {
       width: "100%",
@@ -24,13 +28,14 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
       ...style,
     },
   });
+
   return mode === "static" ? (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <KeyboardAvoidingView
         style={styles.root}
         behavior={behavior}
         contentContainerStyle={styles.root}
-        keyboardVerticalOffset={keyboardVerticalOffset}
+        keyboardVerticalOffset={keyboardVerticalOffset || defaultOffset}
       >
         {children}
       </KeyboardAvoidingView>
@@ -39,7 +44,7 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
     <KeyboardAvoidingView
       behavior={behavior}
       style={styles.root}
-      keyboardVerticalOffset={keyboardVerticalOffset}
+      keyboardVerticalOffset={keyboardVerticalOffset || defaultOffset}
     >
       <ScrollView
         onScroll={onScroll}

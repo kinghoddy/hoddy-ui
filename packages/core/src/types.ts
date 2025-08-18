@@ -253,6 +253,7 @@ export interface TextFieldProps extends TextInputProps {
   }[];
   onFocus?: () => void;
   onBlur?: () => void;
+  selectMenuProps?: Partial<SelectMenuProps>;
 }
 
 export interface TypographyProps extends TextProps {
@@ -294,6 +295,8 @@ export interface SelectMenuProps {
   label?: string;
   secondary?: string;
   helperText?: string;
+  searchEnabled?: boolean;
+  searchPlaceholder?: string;
 }
 
 export interface OTPInputProps {

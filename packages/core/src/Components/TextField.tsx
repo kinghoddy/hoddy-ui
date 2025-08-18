@@ -5,15 +5,13 @@ import {
   ScaledSheet,
   moderateScale,
   ms,
-  mvs,
   verticalScale,
 } from "react-native-size-matters";
-import { getConfig } from "../config/KeyManager";
 import { useColors } from "../hooks";
 import { TextFieldProps } from "../types";
+import { getFontFamily } from "../utility";
 import SelectMenu from "./SelectMenu";
 import Typography from "./Typography";
-import { getFontFamily } from "../utility";
 
 const TextField: React.FC<TextFieldProps> = ({
   label,
@@ -37,6 +35,7 @@ const TextField: React.FC<TextFieldProps> = ({
   gutterBottom = 0,
   end,
   options,
+  selectMenuProps,
   ...props
 }) => {
   const colors = useColors();
@@ -271,6 +270,7 @@ const TextField: React.FC<TextFieldProps> = ({
           label={label}
           helperText={helperText}
           onChange={onChangeText!}
+          {...selectMenuProps}
         />
       )}
     </>
@@ -302,6 +302,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
       end,
       options,
       multiline,
+      selectMenuProps,
       ...props
     },
     ref
@@ -517,6 +518,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
             label={label}
             helperText={helperText}
             onChange={onChangeText!}
+            {...selectMenuProps}
           />
         )}
       </>

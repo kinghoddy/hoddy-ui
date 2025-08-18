@@ -273,6 +273,17 @@ const Display = () => {
                 color="success"
               />
 
+              <TextField
+                label="TextField (Select Options)"
+                value={selectedValue}
+                onChangeText={setSelectedValue}
+                options={selectOptions}
+                helperText="Tap to open and choose an option"
+                selectMenuProps={{
+                  searchEnabled: true,
+                }}
+              />
+
               <CheckBox
                 checked={checkboxValue}
                 onChange={() => setCheckboxValue(!checkboxValue)}

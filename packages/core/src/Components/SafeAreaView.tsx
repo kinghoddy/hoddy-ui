@@ -1,20 +1,20 @@
-import { SafeAreaView as Safe } from "react-native";
 import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Platform, StyleSheet } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaViewProps } from "../types";
-
-const styles = StyleSheet.create({
-  droidSafeArea: {
-    flex: 1,
-    paddingTop: Platform.OS === "android" ? moderateScale(35) : 0,
-  },
-});
 
 export const SafeAreaView: React.FC<SafeAreaViewProps> = ({
   children,
   style,
 }) => {
-  return <Safe style={{ ...styles.droidSafeArea, ...style }}>{children}</Safe>;
+  const { top, bottom } = useSafeAreaInsets();
+  const styles = StyleSheet.create({
+    root: {
+      paddingTop: top,
+      paddingBottom: bottom,
+      flex: 1,
+    },
+  });
+  return <View style={[styles.root, style]}>{children}</View>;
 };
