@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { Image, View } from "react-native";
 import { ms, ScaledSheet } from "react-native-size-matters";
 import { useColors } from "../hooks";
@@ -15,6 +15,7 @@ const Avatar: React.FC<AvatarProps> = ({
   style = {},
 }) => {
   const colors = useColors();
+  const [imageError, setImageError] = useState(false);
   const styles: any = ScaledSheet.create({
     root: {
       borderRadius: 150,
@@ -41,8 +42,13 @@ const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <View style={styles.root}>
-      {source ? (
-        <Image resizeMode="cover" style={styles.image} source={source} />
+      {source && !imageError ? (
+        <Image
+          resizeMode="cover"
+          style={styles.image}
+          source={source}
+          onError={() => setImageError(true)}
+        />
       ) : label ? (
         <Typography style={{ color: colors[color].text }}>
           {label[0]}

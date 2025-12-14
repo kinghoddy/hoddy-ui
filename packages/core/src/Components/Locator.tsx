@@ -15,6 +15,7 @@ import Typography from "./Typography";
 export type predictionType = {
   id: string;
   description: string;
+  types: string[];
 };
 export const getPredictionsFromCoords = async (coords: {
   latitude: number;
@@ -36,10 +37,15 @@ export const getPredictionsFromCoords = async (coords: {
   const p = [];
 
   for (let key in res.results) {
-    const { formatted_address: description, place_id } = res.results[key];
+    const {
+      formatted_address: description,
+      place_id,
+      types,
+    } = res.results[key];
     p.push({
       description,
       id: place_id,
+      types,
       latLng: { lst: coords.latitude, lng: coords.longitude },
     });
   }
@@ -57,10 +63,11 @@ export const getPredictionsFromQuery = async (
 
   const p = [];
   for (let key in res.predictions) {
-    const { description, place_id } = res.predictions[key];
+    const { description, place_id, types } = res.predictions[key];
     p.push({
       description,
       id: place_id,
+      types,
     });
   }
   return p;

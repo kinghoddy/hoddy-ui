@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -6,56 +6,63 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
 import { FormWrapperProps } from "../types";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-export const FormWrapper: React.FC<FormWrapperProps> = ({
-  children,
-  behavior = Platform.OS === "ios" ? "padding" : "height",
-  contentContainerStyle,
-  mode = "scroll",
-  keyboardVerticalOffset = 10,
-  style = {},
-  onScroll,
-}) => {
-  const { bottom } = useSafeAreaInsets();
 
-  const defaultOffset = Platform.OS === "ios" ? -bottom : -bottom * 2;
-  const styles = ScaledSheet.create({
-    root: {
-      width: "100%",
-      flex: 1,
-      ...style,
+export const FormWrapper = forwardRef<ScrollView, FormWrapperProps>(
+  (
+    {
+      children,
+      behavior = Platform.OS === "ios" ? "padding" : "height",
+      contentContainerStyle,
+      mode = "scroll",
+      keyboardVerticalOffset = 10,
+      style = {},
+      onScroll,
     },
-  });
+    ref
+  ) => {
+    const { bottom } = useSafeAreaInsets();
 
-  return mode === "static" ? (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    const defaultOffset = Platform.OS === "ios" ? -bottom : -bottom * 2;
+    const styles = ScaledSheet.create({
+      root: {
+        width: "100%",
+        flex: 1,
+        ...style,
+      },
+    });
+
+    return mode === "static" ? (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <KeyboardAvoidingView
+          style={styles.root}
+          behavior={behavior}
+          contentContainerStyle={styles.root}
+          keyboardVerticalOffset={keyboardVerticalOffset || defaultOffset}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    ) : (
       <KeyboardAvoidingView
-        style={styles.root}
         behavior={behavior}
-        contentContainerStyle={styles.root}
+        style={styles.root}
         keyboardVerticalOffset={keyboardVerticalOffset || defaultOffset}
       >
-        {children}
+        <ScrollView
+          ref={ref}
+          onScroll={onScroll}
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={40}
+          keyboardDismissMode="interactive"
+          contentContainerStyle={contentContainerStyle}
+          keyboardShouldPersistTaps="handled"
+        >
+          {children}
+        </ScrollView>
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-  ) : (
-    <KeyboardAvoidingView
-      behavior={behavior}
-      style={styles.root}
-      keyboardVerticalOffset={keyboardVerticalOffset || defaultOffset}
-    >
-      <ScrollView
-        onScroll={onScroll}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={40}
-        keyboardDismissMode="interactive"
-        contentContainerStyle={contentContainerStyle}
-        keyboardShouldPersistTaps="handled"
-      >
-        {children}
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
-};
+    );
+  }
+);

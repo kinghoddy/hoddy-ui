@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import React, { createContext, useEffect, useReducer } from "react";
-import { Platform, useColorScheme } from "react-native";
+import { Appearance, Platform, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import FlashMessage from "../Components/FlashMessage";
 import { getConfig } from "../config/KeyManager";
@@ -24,7 +24,7 @@ function themeReducer(
   { type, payload }: ThemeActionTypes
 ): ThemeState {
   // Platform
-
+  AsyncStorage.setItem("theme", type);
   switch (type) {
     case "dark":
       return { mode: "dark", value: "dark" };
@@ -43,14 +43,24 @@ const ConfigureSystemUI = () => {
 
   useEffect(() => {
     const config = getConfig();
+    // Appearance.setColorScheme(theme);
+
     if (colors) {
       SystemUI.setBackgroundColorAsync(colors.white[1]);
-      if (Platform.OS === "android" && !config.EDGE_TO_EDGE) {
-        NavigationBar.setBackgroundColorAsync(colors.white[1]);
-        if (theme === "dark") {
-          NavigationBar.setButtonStyleAsync("light");
+      if (Platform.OS === "android") {
+        if (config.EDGE_TO_EDGE) {
+          if (theme === "dark") {
+            NavigationBar.setStyle("light");
+          } else {
+            NavigationBar.setStyle("dark");
+          }
         } else {
-          NavigationBar.setButtonStyleAsync("dark");
+          NavigationBar.setBackgroundColorAsync(colors.white[1]);
+          if (theme === "dark") {
+            NavigationBar.setButtonStyleAsync("light");
+          } else {
+            NavigationBar.setButtonStyleAsync("dark");
+          }
         }
       }
     }
@@ -75,15 +85,19 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
             type: "default",
             payload: colorScheme,
           });
-        } else
+          Appearance.setColorScheme(undefined);
+        } else {
           themeDispatch({
             type: val,
           });
+          Appearance.setColorScheme(val);
+        }
       } else {
         themeDispatch({
           type: "default",
           payload: colorScheme,
         });
+        Appearance.setColorScheme(undefined);
       }
     });
   }, [colorScheme]);

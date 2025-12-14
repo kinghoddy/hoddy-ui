@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { Dimensions, Platform } from "react-native";
-import { vs } from "react-native-size-matters";
+import { Platform, useColorScheme } from "react-native";
 import { UIThemeContext } from "./theme";
 import colors from "./theme/colors";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ThemeModes, ThemeTypes } from "./types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const useColors = () => {
   const { themeState } = useContext(UIThemeContext);
@@ -14,14 +14,26 @@ export const useTheme = () => {
   const { themeState } = useContext(UIThemeContext);
   return themeState.value;
 };
+
+export const useThemeContext = () => {
+  const { themeState: theme, themeDispatch } = useContext(UIThemeContext);
+  const colorScheme: ThemeTypes = useColorScheme()!;
+
+  const setTheme = (theme: ThemeModes) => {
+    if (theme === "default") {
+      themeDispatch?.({ type: "default", payload: colorScheme });
+    } else {
+      themeDispatch?.({ type: theme });
+    }
+  };
+  return { theme, setTheme };
+};
+
 export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
   const colors = useColors();
-  const { bottom } = useSafeAreaInsets();
-  const theme = useTheme();
   const options: any = {
     stack: {
       headerShown: false,
-
       headerStyle: {
         backgroundColor: colors.white[1],
       },
@@ -39,11 +51,12 @@ export const useNavScreenOptions = (type: "stack" | "tab" | "drawer") => {
       headerShown: false,
       headerTintColor: colors.dark.main,
       tabBarStyle: {
-        borderTopColor: theme === "dark" ? colors.light.main : colors.white[2],
+        borderTopColor: colors.white[2],
+        borderColor: colors.white[2],
         borderTopWidth: 1,
         backgroundColor: colors.white[1],
       },
-      tabBarActiveTintColor: colors.blue.main,
+      tabBarActiveTintColor: colors.primary.main,
       tabBarInactiveTintColor: colors.textSecondary.main,
       tabBarLabelStyle: {
         // fontSize: ms(12),

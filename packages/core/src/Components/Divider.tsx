@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { View } from "react-native";
 import { ScaledSheet, ms } from "react-native-size-matters";
 import { useColors } from "../hooks";

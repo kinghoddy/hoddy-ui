@@ -55,7 +55,7 @@ export interface ThemeState {
 
 export interface ThemeContext {
   themeState: ThemeState;
-  themeDispatch?: any;
+  themeDispatch?: (action: ThemeActionTypes) => void;
 }
 export interface ThemeProviderProps {
   children: ReactNode;
@@ -215,7 +215,7 @@ export interface PopupProps {
   open: boolean;
   onClose?: () => void;
   style?: ViewStyle;
-
+  disableAutoKeyboardManagement?: boolean;
   onModalShow?: () => void;
   onModalHide?: () => void;
 }
@@ -311,6 +311,7 @@ export interface OTPInputProps {
 export interface RatingStarsProps {
   rating: number;
   size: number;
+  color?: colorTypes | (string & {});
 }
 
 export interface RatingInputProps {
@@ -318,6 +319,7 @@ export interface RatingInputProps {
   noReview?: boolean;
   size?: number;
   onSubmit?: (data: { rating: number; review: string }) => Promise<void>;
+  color?: colorTypes | (string & {});
 }
 
 export interface DividerProps {

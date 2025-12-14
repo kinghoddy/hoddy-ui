@@ -1,6 +1,12 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useRef, useState } from "react";
-import { Animated, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  Keyboard,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   ScaledSheet,
   moderateScale,
@@ -316,7 +322,14 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
     );
 
     const setFocused = (value: boolean) => {
-      _setFocused(value);
+      if (options && value) {
+        Keyboard.dismiss();
+        setTimeout(() => {
+          _setFocused(value);
+        }, 100);
+      } else {
+        _setFocused(value);
+      }
     };
 
     const styles: any = ScaledSheet.create({

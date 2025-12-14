@@ -1,10 +1,23 @@
 import React, { forwardRef } from "react";
 import { StyleSheet, Text } from "react-native";
-import { moderateScale, ms, verticalScale } from "react-native-size-matters";
+import { ms } from "react-native-size-matters";
+import { getConfig } from "../config/KeyManager";
 import { useColors } from "../hooks";
 import { TypographyProps } from "../types";
-import { getConfig } from "../config/KeyManager";
 import { getFontFamily } from "../utility";
+
+// Default font sizes (used as fallback)
+const DEFAULT_FONT_SIZES = {
+  h1: ms(42),
+  h2: ms(37),
+  h3: ms(32),
+  h4: ms(27),
+  h5: ms(22),
+  h6: ms(17),
+  body1: ms(15),
+  body2: ms(12),
+  caption: ms(10),
+};
 
 const Typography: React.FC<TypographyProps> = forwardRef(
   (
@@ -25,21 +38,17 @@ const Typography: React.FC<TypographyProps> = forwardRef(
     ref
   ) => {
     const colors: any = useColors();
-    const _fontSize = {
-      h1: moderateScale(42),
-      h2: moderateScale(37),
-      h3: moderateScale(32),
-      h4: moderateScale(27),
-      h5: moderateScale(22),
-      h6: moderateScale(17),
-      body1: moderateScale(15),
-      body2: moderateScale(12),
-      caption: moderateScale(10),
-    };
+    const config = getConfig();
+    const customFontSizes = config.TYPOGRAPHY?.fontSizes;
 
+    // Get font size: prop > config > default, then apply ms() scaling
+    const baseFontSize =
+      customFontSizes?.[variant] ?? DEFAULT_FONT_SIZES[variant];
+    const f = fontSize || baseFontSize;
     const styles: any = StyleSheet.create({
       text: {
-        fontSize: fontSize || _fontSize[variant],
+        lineHeight: f * 1.2,
+        fontSize: f,
         marginBottom: ms(gutterBottom) || 0,
         color: colors[color]?.main || color,
         textTransform: textCase,

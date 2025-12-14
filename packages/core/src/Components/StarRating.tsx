@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   TextInput,
@@ -14,39 +14,11 @@ import Button from "./Button";
 import { Popup } from "./Popup";
 import Typography from "./Typography";
 
-export const RatingStars: FC<RatingStarsProps> = ({
-  rating = 0,
-  size = 16,
-}) => {
-  const colors = useColors();
-
-  const styles = ScaledSheet.create({
-    root: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-  });
-  return (
-    <View style={styles.root}>
-      {[...Array(Math.floor(rating))].map((_, index) => (
-        <Ionicons key={index} name="star" size={size} color="#FFD700" />
-      ))}
-      {[...Array(5 - Math.floor(rating))].map((_, index) => (
-        <Ionicons
-          key={index}
-          name="star"
-          size={size}
-          color={colors.textSecondary.light}
-        />
-      ))}
-    </View>
-  );
-};
-
 export const RatingInput: FC<RatingInputProps> = ({
   onSubmit: _onSubmit,
   rating = 0,
   size = 16,
+  color = "primary",
 }) => {
   const [showReviewsModal, setShowReviewsModal] = useState(false);
   const [rate, setRate] = useState(0);
@@ -107,7 +79,7 @@ export const RatingInput: FC<RatingInputProps> = ({
                 style={{ marginLeft: 10 }}
                 name={index < rate ? "star" : "star-outline"}
                 size={size}
-                color={colors.primary.light}
+                color={colors[color as keyof typeof colors]?.main || color}
               />
             </TouchableOpacity>
           ))
@@ -144,6 +116,7 @@ export const RatingInput: FC<RatingInputProps> = ({
             value={review}
             onChangeText={(text) => setReview(text)}
             placeholder="Type review here.."
+            verticalAlign="top"
           />
         </View>
         <Button
@@ -157,5 +130,39 @@ export const RatingInput: FC<RatingInputProps> = ({
         />
       </Popup>
     </>
+  );
+};
+
+export const RatingStars: FC<RatingStarsProps> = ({
+  rating = 0,
+  size = 16,
+  color = "#FFD700",
+}) => {
+  const colors = useColors();
+  const styles = ScaledSheet.create({
+    root: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+  });
+  return (
+    <View style={styles.root}>
+      {[...Array(Math.floor(rating))].map((_, index) => (
+        <Ionicons
+          key={index}
+          name="star"
+          size={size}
+          color={colors[color as keyof typeof colors]?.main || color}
+        />
+      ))}
+      {[...Array(5 - Math.floor(rating))].map((_, index) => (
+        <Ionicons
+          key={index}
+          name="star"
+          size={size}
+          color={colors.textSecondary.light}
+        />
+      ))}
+    </View>
   );
 };

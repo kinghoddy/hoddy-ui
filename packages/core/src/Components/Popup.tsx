@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Keyboard,
   KeyboardAvoidingView,
   Modal,
@@ -38,10 +39,12 @@ export const Popup: React.FC<PopupProps> = ({
   style,
   onModalShow,
   onModalHide,
+  disableAutoKeyboardManagement = false,
 }) => {
   const theme = useTheme();
   const colors = useColors();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { bottom } = useSafeAreaInsets();
 
@@ -74,25 +77,31 @@ export const Popup: React.FC<PopupProps> = ({
     };
   }, []);
 
+  const _onModalShow = () => {
+    setModalVisible(true);
+    onModalShow?.();
+  };
+  const _onModalHide = () => {
+    onModalHide?.();
+    setModalOpen(false);
+  };
+
   // Trigger animations when open prop changes
   useEffect(() => {
     if (open) {
-      setModalVisible(true);
+      setModalOpen(true);
       // Opening animation
       backdropOpacity.value = withTiming(1, { duration: 300 });
       contentTranslateY.value = withTiming(0, { duration: 300 }, () => {
-        if (onModalShow) {
-          runOnJS(onModalShow)();
-        }
+        runOnJS(_onModalShow)();
       });
     } else {
       // Closing animation
+      setModalVisible(false);
+
       backdropOpacity.value = withTiming(0, { duration: 200 });
       contentTranslateY.value = withTiming(1000, { duration: 200 }, () => {
-        runOnJS(setModalVisible)(false);
-        if (onModalHide) {
-          runOnJS(onModalHide)();
-        }
+        runOnJS(_onModalHide)();
       });
     }
   }, [open]);
@@ -126,7 +135,7 @@ export const Popup: React.FC<PopupProps> = ({
       marginBottom: Platform.OS === "android" && keyboardVisible ? bottom : 0,
     },
     container: {
-      paddingBottom: sheet && !bare ? bottom + ms(10) : undefined,
+      paddingBottom: sheet && !bare ? bottom + ms(0) : undefined,
       backgroundColor: theme === "dark" ? "#111" : colors.white[1],
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
@@ -137,7 +146,12 @@ export const Popup: React.FC<PopupProps> = ({
       ...style,
     },
     content: {
+      maxHeight:
+        sheet && !bare
+          ? Dimensions.get("screen").height * 0.9 - bottom - ms(60)
+          : undefined,
       paddingHorizontal: bare ? undefined : "15@ms",
+      // backgroundColor : "#f94",
     },
     title: {
       flexDirection: "row",
@@ -167,8 +181,9 @@ export const Popup: React.FC<PopupProps> = ({
       transparent
       animationType="none"
       statusBarTranslucent
-      visible={modalVisible}
+      visible={modalOpen}
       onRequestClose={closeAction}
+      navigationBarTranslucent
     >
       <UIThemeProvider>
         <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
@@ -179,9 +194,12 @@ export const Popup: React.FC<PopupProps> = ({
             keyboardVerticalOffset || keyboardVerticalOffsetValue
           }
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            disabled={disableAutoKeyboardManagement}
+          >
             <View style={styles.root}>
-              {open && (
+              {modalOpen && (
                 <Pressable
                   style={[StyleSheet.absoluteFill, { zIndex: 1 }]}
                   onPress={closeAction}
@@ -190,10 +208,14 @@ export const Popup: React.FC<PopupProps> = ({
 
               <Animated.View
                 style={[styles.avoidingView, contentAnimatedStyle]}
-                layout={LinearTransition.springify()
-                  .stiffness(200)
-                  .mass(0.5)
-                  .damping(100)}
+                layout={
+                  modalVisible
+                    ? LinearTransition.springify()
+                        .stiffness(200)
+                        .mass(0.5)
+                        .damping(100)
+                    : undefined
+                }
               >
                 <View style={styles.container}>
                   {!bare && (

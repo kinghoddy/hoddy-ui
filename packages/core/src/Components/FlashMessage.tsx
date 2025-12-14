@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, {
   runOnJS,
@@ -12,7 +12,20 @@ import { useColors } from "../hooks";
 import { FlashMessageProps } from "../types";
 import Typography from "./Typography";
 
-export let showFlashMessage: (msg: FlashMessageProps) => void = () => {};
+// Event-based API to decouple the trigger from the component instance
+type FlashListener = (msg: FlashMessageProps) => void;
+const flashListeners = new Set<FlashListener>();
+
+export const showFlashMessage = (msg: FlashMessageProps) => {
+  flashListeners.forEach((listener) => listener(msg));
+};
+
+const subscribeToFlashMessages = (listener: FlashListener) => {
+  flashListeners.add(listener);
+  return () => {
+    flashListeners.delete(listener);
+  };
+};
 
 const FlashMessage: React.FC = () => {
   const { top } = useSafeAreaInsets();
@@ -43,33 +56,44 @@ const FlashMessage: React.FC = () => {
     });
   };
 
-  showFlashMessage = (msg: FlashMessageProps) => {
-    // Clear existing timeout if any
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+  useEffect(() => {
+    const listener: FlashListener = (msg) => {
+      // Clear existing timeout if any
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
 
-    // Reset position immediately before starting new animation
-    translateY.value = -200;
-    opacity.value = 0;
+      // Reset position immediately before starting new animation
+      translateY.value = -200;
+      opacity.value = 0;
 
-    setMessage(msg);
+      setMessage(msg);
 
-    // Animate in
-    translateY.value = withTiming(0, { duration: 300 });
-    opacity.value = withTiming(1, { duration: 300 });
+      // Animate in
+      translateY.value = withTiming(0, { duration: 300 });
+      opacity.value = withTiming(1, { duration: 300 });
 
-    // Animate out after duration
-    const duration = msg.duration || 3000;
-    timeoutRef.current = setTimeout(() => {
-      translateY.value = withTiming(-200, { duration: 300 });
-      opacity.value = withTiming(0, { duration: 300 }, () => {
-        runOnJS(hideMessage)();
-      });
-      timeoutRef.current = null;
-    }, duration);
-  };
+      // Animate out after duration
+      const duration = msg.duration || 3000;
+      timeoutRef.current = setTimeout(() => {
+        translateY.value = withTiming(-200, { duration: 300 });
+        opacity.value = withTiming(0, { duration: 300 }, () => {
+          runOnJS(hideMessage)();
+        });
+        timeoutRef.current = null;
+      }, duration);
+    };
+
+    const unsubscribe = subscribeToFlashMessages(listener);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      unsubscribe();
+    };
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

@@ -91,29 +91,40 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
     [value, colors]
   );
   return (
-    <Popup open={open} onClose={onClose} title={label}>
+    <Popup
+      open={open}
+      onClose={onClose}
+      title={label}
+      disableAutoKeyboardManagement
+    >
       <View style={styles.content}>
-        <View style={styles.header}>
-          {helperText && (
-            <Typography variant="body2" color="textSecondary" gutterBottom={5}>
-              {helperText}
-            </Typography>
-          )}
-          {searchEnabled && (
-            <TextField
-              label={searchPlaceholder}
-              value={search}
-              type="search"
-              onChangeText={setSearch}
-              variant="outlined"
-            />
-          )}
-        </View>
         <FlatList
           removeClippedSubviews
           keyExtractor={(item) => item.value}
           bounces={false}
           renderItem={renderItem}
+          ListHeaderComponent={
+            <View style={styles.header}>
+              {helperText && (
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  gutterBottom={5}
+                >
+                  {helperText}
+                </Typography>
+              )}
+              {searchEnabled && (
+                <TextField
+                  label={searchPlaceholder}
+                  value={search}
+                  type="search"
+                  onChangeText={setSearch}
+                  variant="outlined"
+                />
+              )}
+            </View>
+          }
           data={options
             .filter((item) =>
               search.length > 1
