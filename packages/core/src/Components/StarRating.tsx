@@ -137,6 +137,7 @@ export const RatingStars: FC<RatingStarsProps> = ({
   rating = 0,
   size = 16,
   color = "#FFD700",
+  inactiveColor = "textSecondary",
 }) => {
   const colors = useColors();
   const styles = ScaledSheet.create({
@@ -160,7 +161,9 @@ export const RatingStars: FC<RatingStarsProps> = ({
           key={index}
           name="star"
           size={size}
-          color={colors.textSecondary.light}
+          color={
+            colors[inactiveColor as keyof typeof colors]?.main || inactiveColor
+          }
         />
       ))}
     </View>

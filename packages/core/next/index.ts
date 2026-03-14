@@ -27,6 +27,9 @@ export * from "../src/hooks";
 export * from "../src/theme";
 export * from "../src/types";
 
+export * from "../src/Components/Animators/hooks";
+export * from "../src/Components/Animators/Animator";
+
 const HoddyUI = {
   initialize: initialize,
 };

@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Image, View } from "react-native";
 import { ms, ScaledSheet } from "react-native-size-matters";
@@ -13,6 +13,7 @@ const Avatar: React.FC<AvatarProps> = ({
   source,
   size = 48,
   style = {},
+  icon,
 }) => {
   const colors = useColors();
   const [imageError, setImageError] = useState(false);
@@ -53,8 +54,10 @@ const Avatar: React.FC<AvatarProps> = ({
         <Typography style={{ color: colors[color].text }}>
           {label[0]}
         </Typography>
+      ) : icon ? (
+        icon
       ) : (
-        <AntDesign name="user" color="#fff" size={Math.round(size / 1.5)} />
+        <Ionicons name="person" color="#fff" size={Math.round(size / 1.5)} />
       )}
     </View>
   );

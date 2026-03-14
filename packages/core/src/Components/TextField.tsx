@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {
   ScaledSheet,
   moderateScale,
@@ -26,6 +27,7 @@ const TextField: React.FC<TextFieldProps> = ({
   color = "primary",
   value,
   type,
+  placeholder = "",
   helperText,
   onChangeText,
   onSubmitEditing = () => {},
@@ -46,12 +48,14 @@ const TextField: React.FC<TextFieldProps> = ({
 }) => {
   const colors = useColors();
   const [focused, setFocused] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const isDate = type === "date";
   const height =
     moderateScale(variant === "text" ? 50 : 45) *
     (size === "large" ? 1.2 : size === "small" ? 0.8 : 1);
 
   const labelAnim = useRef(
-    new Animated.Value(height / moderateScale(variant === "text" ? 2.5 : 3.2))
+    new Animated.Value(height / moderateScale(variant === "text" ? 2.5 : 3.2)),
   ).current;
 
   React.useEffect(() => {
@@ -83,14 +87,14 @@ const TextField: React.FC<TextFieldProps> = ({
         variant === "outlined" || variant === "text"
           ? "#fff0"
           : focused
-          ? colors.white[3]
-          : colors.white[4],
+            ? colors.white[3]
+            : colors.white[4],
       flexDirection: "row",
       borderColor: error
         ? colors.error.main
         : focused
-        ? colors[color].main
-        : colors.textSecondary.main,
+          ? colors[color].main
+          : colors.textSecondary.main,
       borderWidth: error ? 1 : variant === "outlined" ? (focused ? 2 : 0.5) : 0,
       borderBottomWidth: variant === "text" ? 0.5 : undefined,
       width: "100%",
@@ -106,7 +110,7 @@ const TextField: React.FC<TextFieldProps> = ({
       paddingRight: moderateScale(10),
       paddingTop: "11@vs",
       fontFamily: getFontFamily(400),
-      color: colors.black[1],
+      color: disabled ? colors.textSecondary.main : colors.dark.main,
       zIndex: 10,
       // backgroundColor: "#284",
     },
@@ -115,6 +119,21 @@ const TextField: React.FC<TextFieldProps> = ({
       flex: 1,
       paddingLeft: variant === "text" ? 0 : moderateScale(15),
       paddingTop: "13@ms",
+    },
+    dateContent: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+      paddingLeft: variant === "text" ? 0 : moderateScale(15),
+      paddingRight: moderateScale(10),
+      paddingTop: variant === "text" ? ms(13) : ms(12),
+    },
+    dateText: {
+      fontSize: "14@ms",
+      flex: 1,
+    },
+    datePlaceholder: {
+      color: colors.textSecondary.main,
     },
     label: {
       fontFamily: getFontFamily(400),
@@ -150,33 +169,69 @@ const TextField: React.FC<TextFieldProps> = ({
           autoCompleteType: "email",
         }
       : type === "number"
-      ? {
-          keyboardType: "numeric",
-        }
-      : type === "tel"
-      ? {
-          textContentType: "telephoneNumber",
-          keyboardType: "phone-pad",
-        }
-      : type === "search"
-      ? {
-          keyboardType: "web-search",
-          returnKeyType: "search",
-          autoCapitalize: "none",
-        }
-      : type === "password"
-      ? {
-          secureTextEntry: true,
-          autoCompleteType: "password",
-          autoCapitalize: "none",
-          textContentType: "password",
-        }
-      : {};
+        ? {
+            keyboardType: "numeric",
+          }
+        : type === "tel"
+          ? {
+              textContentType: "telephoneNumber",
+              keyboardType: "phone-pad",
+            }
+          : type === "search"
+            ? {
+                keyboardType: "web-search",
+                returnKeyType: "search",
+                autoCapitalize: "none",
+              }
+            : type === "password"
+              ? {
+                  secureTextEntry: true,
+                  autoCompleteType: "password",
+                  autoCapitalize: "none",
+                  textContentType: "password",
+                }
+              : {};
+  const parseDateValue = () => {
+    if (!value) return new Date();
+    if (value instanceof Date) return value;
+
+    const isoParts = `${value}`.split("-");
+    if (isoParts.length === 3) {
+      const [year, month, day] = isoParts;
+      const parsed = new Date(
+        parseInt(year, 10),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10),
+      );
+      if (!isNaN(parsed.getTime())) return parsed;
+    }
+
+    const fallback = new Date(value);
+    return isNaN(fallback.getTime()) ? new Date() : fallback;
+  };
+
+  const handleDateConfirm = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    const dateString = `${year}-${month}-${day}`;
+    onChangeText?.(dateString);
+    setDatePickerVisible(false);
+  };
+
+  const handleContainerPress = () => {
+    if (disabled) return;
+    setFocused(true);
+    if (isDate) {
+      onFocus();
+      setDatePickerVisible(true);
+    }
+  };
   return (
     <>
       <View style={styles.root}>
         <TouchableOpacity
-          onPress={() => setFocused(true)}
+          onPress={handleContainerPress}
           style={styles.container}
         >
           <Animated.Text style={{ ...styles.label, top: labelAnim }}>
@@ -201,6 +256,27 @@ const TextField: React.FC<TextFieldProps> = ({
               <Typography style={styles.inputText}>
                 {options.find((cur) => cur.value === value)?.label}
               </Typography>
+            </View>
+          ) : isDate ? (
+            <View style={styles.dateContent}>
+              <Typography
+                style={[
+                  styles.dateText,
+                  !value ? styles.datePlaceholder : undefined,
+                ]}
+                color={value ? "dark" : "textSecondary"}
+              >
+                {value || placeholder}
+              </Typography>
+              <View style={{ marginLeft: 8 }}>
+                {end ?? (
+                  <Ionicons
+                    name="calendar-outline"
+                    size={22}
+                    color={colors.textSecondary.main}
+                  />
+                )}
+              </View>
             </View>
           ) : (
             <TextInput
@@ -279,6 +355,18 @@ const TextField: React.FC<TextFieldProps> = ({
           {...selectMenuProps}
         />
       )}
+      {isDate && (
+        <DateTimePickerModal
+          isVisible={datePickerVisible}
+          mode="date"
+          date={parseDateValue()}
+          onConfirm={handleDateConfirm}
+          onCancel={() => {
+            setDatePickerVisible(false);
+            setFocused(false);
+          }}
+        />
+      )}
     </>
   );
 };
@@ -292,6 +380,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
       color = "primary",
       value,
       type,
+      placeholder,
       helperText,
       onChangeText,
       onSubmitEditing = () => {},
@@ -304,21 +393,22 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
       style = {},
       inputStyles = {},
       gutterBottom = 8,
-      placeholder,
       end,
       options,
       multiline,
       selectMenuProps,
       ...props
     },
-    ref
+    ref,
   ) => {
     const colors = useColors();
     const [focused, _setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const isDate = type === "date";
 
     const height = moderateScale(
-      multiline ? 50 + (props.numberOfLines || 1) * 18 : 50
+      multiline ? 50 + (props.numberOfLines || 1) * 18 : 50,
     );
 
     const setFocused = (value: boolean) => {
@@ -344,8 +434,8 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
         borderColor: error
           ? colors.error.main
           : focused
-          ? colors[color].main
-          : colors.white[4],
+            ? colors[color].main
+            : colors.white[4],
         borderWidth: error ? 1 : focused ? 2 : 1,
         width: "100%",
         borderRadius: rounded ? 30 : 10,
@@ -359,7 +449,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
         alignSelf: "stretch",
         paddingLeft: moderateScale(10),
         paddingRight: moderateScale(10),
-        color: colors.dark.main,
+        color: disabled ? colors.textSecondary.main : colors.dark.main,
         zIndex: 10,
         // backgroundColor: "#284",
       },
@@ -372,6 +462,20 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
         fontSize: "14@ms",
         color: colors.textSecondary.light,
         paddingLeft: moderateScale(10),
+      },
+      dateContent: {
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 1,
+        paddingHorizontal: moderateScale(10),
+        paddingTop: multiline ? 4 : 0,
+      },
+      dateText: {
+        fontSize: "14@ms",
+        flex: 1,
+      },
+      datePlaceholder: {
+        color: colors.textSecondary.light,
       },
       label: {},
       helperText: {
@@ -400,28 +504,65 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
             autoCompleteType: "email",
           }
         : type === "number"
-        ? {
-            keyboardType: "numeric",
-          }
-        : type === "tel"
-        ? {
-            textContentType: "telephoneNumber",
-            keyboardType: "phone-pad",
-          }
-        : type === "search"
-        ? {
-            keyboardType: "web-search",
-            returnKeyType: "search",
-            autoCapitalize: "none",
-          }
-        : type === "password"
-        ? {
-            secureTextEntry: !showPassword,
-            autoCompleteType: "password",
-            autoCapitalize: "none",
-            textContentType: "password",
-          }
-        : {};
+          ? {
+              keyboardType: "numeric",
+            }
+          : type === "tel"
+            ? {
+                textContentType: "telephoneNumber",
+                keyboardType: "phone-pad",
+              }
+            : type === "search"
+              ? {
+                  keyboardType: "web-search",
+                  returnKeyType: "search",
+                  autoCapitalize: "none",
+                }
+              : type === "password"
+                ? {
+                    secureTextEntry: !showPassword,
+                    autoCompleteType: "password",
+                    autoCapitalize: "none",
+                    textContentType: "password",
+                  }
+                : {};
+    const parseDateValue = () => {
+      if (!value) return new Date();
+      if (value instanceof Date) return value;
+
+      const isoParts = `${value}`.split("-");
+      if (isoParts.length === 3) {
+        const [year, month, day] = isoParts;
+        const parsed = new Date(
+          parseInt(year, 10),
+          parseInt(month, 10) - 1,
+          parseInt(day, 10),
+        );
+        if (!isNaN(parsed.getTime())) return parsed;
+      }
+
+      const fallback = new Date(value);
+      return isNaN(fallback.getTime()) ? new Date() : fallback;
+    };
+
+    const handleDateConfirm = (date: Date) => {
+      const year = date.getFullYear();
+      const month = `${date.getMonth() + 1}`.padStart(2, "0");
+      const day = `${date.getDate()}`.padStart(2, "0");
+      const dateString = `${year}-${month}-${day}`;
+      onChangeText?.(dateString);
+      setDatePickerVisible(false);
+      setFocused(false);
+    };
+
+    const handleContainerPress = () => {
+      if (disabled) return;
+      setFocused(true);
+      if (isDate) {
+        onFocus();
+        setDatePickerVisible(true);
+      }
+    };
     return (
       <>
         <View style={styles.root}>
@@ -436,7 +577,7 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
             </Typography>
           )}
           <TouchableOpacity
-            onPress={() => setFocused(true)}
+            onPress={handleContainerPress}
             style={styles.container}
           >
             <View style={{ marginTop: multiline ? 5 : 0 }}>{start}</View>
@@ -459,6 +600,27 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
                   color={colors.dark.light}
                 />
               </>
+            ) : isDate ? (
+              <View style={styles.dateContent}>
+                <Typography
+                  style={[
+                    styles.dateText,
+                    !value ? styles.datePlaceholder : undefined,
+                  ]}
+                  color={value ? "dark" : "textSecondary"}
+                >
+                  {value || placeholder}
+                </Typography>
+                <View style={{ marginLeft: 8 }}>
+                  {end ?? (
+                    <Ionicons
+                      name="calendar-outline"
+                      size={22}
+                      color={colors.textSecondary.main}
+                    />
+                  )}
+                </View>
+              </View>
             ) : (
               <TextInput
                 ref={ref}
@@ -534,9 +696,21 @@ export const TextField2 = React.forwardRef<TextInput, TextFieldProps>(
             {...selectMenuProps}
           />
         )}
+        {isDate && (
+          <DateTimePickerModal
+            isVisible={datePickerVisible}
+            mode="date"
+            date={parseDateValue()}
+            onConfirm={handleDateConfirm}
+            onCancel={() => {
+              setDatePickerVisible(false);
+              setFocused(false);
+            }}
+          />
+        )}
       </>
     );
-  }
+  },
 );
 
 export default TextField;

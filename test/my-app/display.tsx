@@ -107,6 +107,7 @@ const Display = () => {
           </View>
 
           <Divider />
+          <TextField2 label="Date Picker" type="date" />
 
           {/* Typography Section */}
           <View style={styles.section}>

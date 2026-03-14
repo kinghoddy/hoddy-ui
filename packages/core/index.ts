@@ -3,7 +3,6 @@ import { initialize } from "./src/config";
 // Components
 export { default as AdaptiveStatusBar } from "./src/Components/AdaptiveStatusBar";
 export { default as AlertX } from "./src/Components/AlertX";
-export * from "./src/Components/Animators/Animator";
 export { default as Avatar } from "./src/Components/Avatar";
 export * from "./src/Components/Button";
 export { default as Button } from "./src/Components/Button";
@@ -25,9 +24,9 @@ export { default as Typography } from "./src/Components/Typography";
 
 // Animation hooks
 export * from "./src/Components/Animators/hooks";
+export * from "./src/Components/Animators/Animator";
 
 // Others
-// export * from "./src/config";
 export * from "./src/hooks";
 export * from "./src/theme";
 

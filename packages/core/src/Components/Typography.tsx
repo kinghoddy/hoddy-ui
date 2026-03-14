@@ -33,6 +33,7 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       fontWeight = 400,
       fontFamily, // NEW PROP ADDED
       fontSize,
+      lineHeight,
       ...props
     },
     ref
@@ -44,10 +45,11 @@ const Typography: React.FC<TypographyProps> = forwardRef(
     // Get font size: prop > config > default, then apply ms() scaling
     const baseFontSize =
       customFontSizes?.[variant] ?? DEFAULT_FONT_SIZES[variant];
-    const f = fontSize || baseFontSize;
+    const f = fontSize || (style as any)?.fontSize || baseFontSize;
+    const lh = lineHeight || f * 1.2;
     const styles: any = StyleSheet.create({
       text: {
-        lineHeight: f * 1.2,
+        lineHeight: lh,
         fontSize: f,
         marginBottom: ms(gutterBottom) || 0,
         color: colors[color]?.main || color,

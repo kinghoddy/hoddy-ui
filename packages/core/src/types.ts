@@ -6,6 +6,7 @@ import {
   TextInputProps,
   TextProps,
   TextStyle,
+  ViewProps,
   ViewStyle,
 } from "react-native";
 
@@ -78,6 +79,7 @@ export interface AvatarProps {
   source?: any;
   size?: number;
   style?: ViewStyle;
+  icon?: ReactNode;
 }
 
 export interface ButtonProps {
@@ -111,7 +113,7 @@ export interface FlashMessageProps {
   title?: string;
   actions?: Array<{ title: string; onPress?: () => void }>;
   duration?: number;
-  type?: "success" | "warning" | "error";
+  type?: "success" | "warning" | "error" | "info" | "default";
 }
 export interface LinkButtonProps {
   title: string;
@@ -234,7 +236,14 @@ export interface TextFieldProps extends TextInputProps {
   variant?: "outlined" | "text" | "contained";
   color?: colorTypes;
   size?: "small" | "normal" | "large";
-  type?: "email" | "tel" | "password" | "text" | "number" | "search";
+  type?:
+  | "email"
+  | "tel"
+  | "password"
+  | "text"
+  | "number"
+  | "search"
+  | "date";
   helperText?: string;
   value: any;
   start?: ReactNode;
@@ -261,16 +270,17 @@ export interface TypographyProps extends TextProps {
   color?: colorTypes | (string & {});
   style?: StyleProp<TextStyle | ViewStyle>;
   textCase?: "capitalize" | "uppercase" | "lowercase" | undefined;
+  lineHeight?: number;
   variant?:
-    | "caption"
-    | "body1"
-    | "body2"
-    | "h6"
-    | "h5"
-    | "h4"
-    | "h3"
-    | "h2"
-    | "h1";
+  | "caption"
+  | "body1"
+  | "body2"
+  | "h6"
+  | "h5"
+  | "h4"
+  | "h3"
+  | "h2"
+  | "h1";
   align?: "center" | "left" | "right";
   gutterBottom?: number;
   numberOfLines?: number;
@@ -280,9 +290,8 @@ export interface TypographyProps extends TextProps {
   fontWeight?: 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 }
 
-export interface SafeAreaViewProps {
+export interface SafeAreaViewProps extends ViewProps {
   children: ReactNode;
-  style?: ViewStyle;
 }
 
 export interface SelectMenuProps {
@@ -312,6 +321,7 @@ export interface RatingStarsProps {
   rating: number;
   size: number;
   color?: colorTypes | (string & {});
+  inactiveColor?: colorTypes | (string & {});
 }
 
 export interface RatingInputProps {
@@ -350,36 +360,36 @@ interface BaseAnimatorProps {
 // Type-specific animation props using discriminated unions
 export type AnimatorProps =
   | (BaseAnimatorProps & {
-      type: "fade";
-      // No additional props for fade animation
-    })
+    type: "fade";
+    // No additional props for fade animation
+  })
   | (BaseAnimatorProps & {
-      type: "grow";
-      initialScale?: number;
-    })
+    type: "grow";
+    initialScale?: number;
+  })
   | (BaseAnimatorProps & {
-      type: "slide";
-      direction?: "up" | "down" | "left" | "right";
-      initialValue?: number;
-    })
+    type: "slide";
+    direction?: "up" | "down" | "left" | "right";
+    initialValue?: number;
+  })
   | (BaseAnimatorProps & {
-      type: "blink";
-      blinkDuration?: number;
-      minOpacity?: number;
-      maxOpacity?: number;
-    })
+    type: "blink";
+    blinkDuration?: number;
+    minOpacity?: number;
+    maxOpacity?: number;
+  })
   | (BaseAnimatorProps & {
-      type: "float";
-      closeDuration?: number;
-      floatDistance?: number;
-      floatDuration?: number;
-    })
+    type: "float";
+    closeDuration?: number;
+    floatDistance?: number;
+    floatDuration?: number;
+  })
   | (BaseAnimatorProps & {
-      type: "roll";
-      initialTranslateY?: number;
-      initialRotate?: string;
-    })
+    type: "roll";
+    initialTranslateY?: number;
+    initialRotate?: string;
+  })
   | (BaseAnimatorProps & {
-      type: "thrownup";
-      // No additional props for thrownup animation
-    });
+    type: "thrownup";
+    // No additional props for thrownup animation
+  });

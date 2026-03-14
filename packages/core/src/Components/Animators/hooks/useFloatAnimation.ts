@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
 import {
   Easing,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -76,21 +77,23 @@ export const useFloatAnimation = ({
     opacity.value = withDelay(
       delay,
       withTiming(1, { duration }, () => {
-        startFloating();
-
-        if (closeAfter) {
-          opacity.value = withDelay(
-            closeAfter,
-            withTiming(0, { duration: closeDuration })
-          );
-          translateY.value = withDelay(
-            closeAfter,
-            withTiming(0, { duration: closeDuration })
-          );
-          isFloating.current = false;
-        }
+        "worklet";
+        runOnJS(startFloating)();
       })
     );
+
+    // Handle auto-close
+    if (closeAfter) {
+      const totalDelay = delay + duration + closeAfter;
+      opacity.value = withDelay(
+        totalDelay,
+        withTiming(0, { duration: closeDuration })
+      );
+      translateY.value = withDelay(
+        totalDelay,
+        withTiming(0, { duration: closeDuration })
+      );
+    }
 
     return () => {
       opacity.value = 0;

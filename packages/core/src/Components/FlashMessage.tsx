@@ -102,6 +102,8 @@ const FlashMessage: React.FC = () => {
     };
   });
 
+  const textColor = type === "default" ? "#fff" : colors[type].text;
+
   const styles = ScaledSheet.create({
     root: {
       position: "absolute",
@@ -110,7 +112,7 @@ const FlashMessage: React.FC = () => {
       left: 0,
       paddingTop: top + 10,
       paddingHorizontal: "15@ms",
-      backgroundColor: colors[type].main,
+      backgroundColor: type === "default" ? "#333" : colors[type].main,
       width: "100%",
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
@@ -140,14 +142,12 @@ const FlashMessage: React.FC = () => {
                 variant="h6"
                 fontWeight={600}
                 gutterBottom={3}
-                style={{ color: "#fff" }}
+                color={textColor}
               >
                 {message?.title}
               </Typography>
             )}
-            <Typography style={{ color: "#fff" }}>
-              {message?.message}
-            </Typography>
+            <Typography color={textColor}>{message?.message}</Typography>
           </View>
           {/* <MaterialIcons color="#fff" size={36} name="error-outline" /> */}
         </View>
