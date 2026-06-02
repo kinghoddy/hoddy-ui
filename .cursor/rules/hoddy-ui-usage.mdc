@@ -1,0 +1,101 @@
+---
+description: Proper usage of @hoddy-ui/core components, colors, theming, and hooks
+alwaysApply: true
+---
+
+# Hoddy UI Usage Guide
+
+This is the source repo for `@hoddy-ui/core`. Follow these rules when authoring components inside `packages/core/**` AND when writing example/consumer code.
+
+## Setup
+
+- Wrap the app in `UIThemeProvider` once at the root. It also mounts `FlashMessage` and configures the system UI.
+- Call `initialize({...})` BEFORE rendering to register `googleMapApiKey`, `colors`, `edgeToEdge`, and `typography`.
+- For Next.js / web entry use `@hoddy-ui/core/next`; for React Native use `@hoddy-ui/core` (root).
+
+```tsx
+import { UIThemeProvider, initialize } from "@hoddy-ui/core";
+
+initialize({
+  edgeToEdge: true,
+  colors: { light: { primary: { main: "#ff8800" } } },
+  typography: { fontFamily: "Inter", fontWeights: { 500: "Inter-Medium" } },
+});
+
+export default () => (
+  <UIThemeProvider>
+    <App />
+  </UIThemeProvider>
+);
+```
+
+## Colors — ALWAYS use `useColors()`, never hardcoded hex
+
+The color object is theme-aware and switches automatically between light/dark.
+
+```tsx
+// ❌ BAD — hardcoded, breaks dark mode
+<View style={{ backgroundColor: "#ffffff", color: "#000000" }} />
+
+// ✅ GOOD — theme-reactive
+const colors = useColors();
+<View style={{ backgroundColor: colors.white[1], borderColor: colors.primary.main }} />
+```
+
+### Color shape
+
+- **Neutrals (1–5 scale, theme-inverting):** `colors.white[1..5]` (surface, lightest → darker), `colors.black[1..5]` (text, lightest → darker). In dark mode `white[1]` is `#060606` and `black[1]` is `#ffffff` — this is intentional. Use `white[1]` for primary surfaces and `black[1]`/`black[5]` for text.
+- **Semantic palettes (always have `main`/`light`/`dark`/`text`):** `primary`, `secondary`, `info`, `success`, `warning`, `error`, `blue`, `light`, `dark`, `textSecondary`.
+- Use `.text` as the foreground that sits ON `.main` (e.g., button label color on a `primary` button).
+
+### Color prop on components
+
+Components like `Button`, `Typography`, `Avatar`, `Spinner`, `Checkbox`, `Divider` accept `color` as a `colorTypes` key (string), NOT a hex value:
+
+```tsx
+// ❌ BAD
+<Button color="#ff8800" />
+
+// ✅ GOOD
+<Button color="primary" />
+<Typography color="textSecondary" />
+```
+
+Allowed `colorTypes`: `"primary" | "secondary" | "light" | "dark" | "info" | "warning" | "error" | "success" | "blue" | "textSecondary"`.
+
+To extend the palette, pass `colors` to `initialize()` — do NOT mutate `colors.ts`.
+
+## Hooks
+
+- `useColors()` — current theme's color object. Use this in every styled component.
+- `useTheme()` — returns `"light" | "dark"`.
+- `useThemeContext()` — returns `{ theme, setTheme }`. Use `setTheme("default" | "light" | "dark")` to switch.
+- `useNavScreenOptions("stack" | "tab" | "drawer")` — themed screen options for React Navigation. Prefer this over hand-rolled nav styling.
+
+```tsx
+// ❌ BAD — destructures themeDispatch directly
+const { themeDispatch } = useTheme();
+
+// ✅ GOOD
+const { theme, setTheme } = useThemeContext();
+setTheme("dark");
+```
+
+## Components
+
+- Prefer `Typography` over raw `<Text>`. Use `variant` (`h1`–`h6`, `body1`, `body2`, `caption`) instead of inline `fontSize`. Use `gutterBottom={n}` for vertical spacing instead of margin styles.
+- Use `Button` with `variant` (`contained`/`outlined`/`text`) and `color` props; pass icons via `start`/`end`, not by composing children.
+- Use `TextField` with `variant`, `label`, `helperText`, and `error` (string or string[]) — do not roll your own input wrappers.
+- Wrap forms in `FormWrapper` (handles keyboard + scroll). Use `mode="scroll"` for long forms.
+- Use `SafeAreaView` from `@hoddy-ui/core` (not from `react-native`) for screen roots.
+- Use `Grid` + `GridItem` (12-col system; `col` is column span) for layout instead of bespoke flex.
+- Use `Popup` for modals/bottom sheets; pass `sheet={number}` for a fixed-height sheet, `sheet` boolean for default sheet, or omit for a centered dialog.
+- For toasts, import and call `showMessage({ message, type })` — do not manually mount `FlashMessage`, the provider already does.
+- For animations, prefer the unified `<Animator type="..." />` over individual hooks. Reach for `useFadeAnimation`/`useSlideAnimation`/etc. only for custom `Animated.View` integrations.
+
+## Library-author rules (when editing `packages/core/**`)
+
+- Add new public exports to BOTH `packages/core/index.ts` (RN entry) and `packages/core/next/index.ts` (Next entry).
+- Add new prop interfaces to `packages/core/src/types.ts` and reuse `colorTypes` for any color-accepting prop.
+- New colors must be added to BOTH the `lightColors` and `darkColors` blocks in `packages/core/src/theme/colors.ts`, and merged with `extraColors?.[theme]?.<key>` so consumers can override via `initialize({ colors })`.
+- Never call `Appearance.setColorScheme` outside `themeReducer` / theme provider.

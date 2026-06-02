@@ -4,15 +4,11 @@ import { Platform, StatusBar } from "react-native";
 import { useColors, useTheme } from "../../src/hooks";
 
 const AdaptiveStatusBar = ({ translucent = false }) => {
-  const [focused, setFocused] = useState(false);
   const colors = useColors();
   const theme = useTheme();
   const statusbarHandler = () => {
     StatusBar.setBarStyle(theme === "dark" ? "light-content" : "dark-content");
     if (Platform.OS === "android") {
-      StatusBar.setBackgroundColor(
-        translucent ? "transparent" : colors.white[1]
-      );
       StatusBar.setTranslucent(true);
     }
   };
@@ -20,7 +16,7 @@ const AdaptiveStatusBar = ({ translucent = false }) => {
   useFocusEffect(
     React.useCallback(() => {
       statusbarHandler();
-    }, [theme])
+    }, [theme]),
   );
 
   React.useEffect(() => {

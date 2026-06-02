@@ -107,7 +107,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
       start,
       end,
     },
-    ref
+    ref,
   ) => {
     const colors = useColors();
 
@@ -120,15 +120,17 @@ const Button: React.FC<ButtonProps> = forwardRef(
         backgroundColor:
           variant === "text" || variant === "outlined"
             ? undefined
-            : translucent
-            ? translucent === "dark"
-              ? colors.white[3] + "22"
-              : colors.black[3] + "22"
-            : loading
-            ? colors[color].light
-            : disabled
-            ? colors.white[4]
-            : colors[color].main,
+            : variant === "translucent"
+              ? colors[color].main + "22"
+              : translucent
+                ? translucent === "dark"
+                  ? colors.white[3] + "22"
+                  : colors.black[3] + "22"
+                : loading
+                  ? colors[color].light
+                  : disabled
+                    ? colors.white[4]
+                    : colors[color].main,
         borderRadius: rounded ? 30 : 10,
         elevation: variant === "text" ? 0 : elevation,
         paddingVertical:
@@ -149,15 +151,28 @@ const Button: React.FC<ButtonProps> = forwardRef(
       },
       text: {
         color: disabled
-          ? variant === "text" || variant === "outlined"
+          ? variant === "text" ||
+            variant === "outlined" ||
+            variant === "translucent"
             ? colors.black[1]
             : colors[color].text
           : colors[color][
-              variant === "text" || variant === "outlined" ? "main" : "text"
+              variant === "text" ||
+              variant === "outlined" ||
+              variant === "translucent"
+                ? "main"
+                : "text"
             ],
-        fontWeight: variant === "outlined" ? "700" : "500",
+        fontWeight:
+          variant === "outlined"
+            ? "700"
+            : variant === "translucent"
+            ? "600"
+            : "500",
         fontSize: size === "small" ? "12@ms" : "13@ms",
-        fontFamily: getFontFamily(variant === "outlined" ? 700 : 500),
+        fontFamily: getFontFamily(
+          variant === "outlined" ? 700 : variant === "translucent" ? 600 : 500
+        ),
       },
     });
 
@@ -172,7 +187,13 @@ const Button: React.FC<ButtonProps> = forwardRef(
         {loading && (
           <ActivityIndicator
             size="small"
-            color={colors[color].text}
+            color={
+              variant === "text" ||
+              variant === "outlined" ||
+              variant === "translucent"
+                ? colors[color].main
+                : colors[color].text
+            }
             style={{ marginRight: 10 }}
           />
         )}
@@ -180,7 +201,7 @@ const Button: React.FC<ButtonProps> = forwardRef(
         {end}
       </TouchableOpacity>
     );
-  }
+  },
 );
 
 export default Button;

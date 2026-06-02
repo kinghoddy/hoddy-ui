@@ -21,7 +21,7 @@ export const UIThemeContext = createContext<ThemeContext>({
 
 function themeReducer(
   state: ThemeState,
-  { type, payload }: ThemeActionTypes
+  { type, payload }: ThemeActionTypes,
 ): ThemeState {
   // Platform
   AsyncStorage.setItem("theme", type);
@@ -85,7 +85,7 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
             type: "default",
             payload: colorScheme,
           });
-          Appearance.setColorScheme(undefined);
+          // Appearance.setColorScheme(null);
         } else {
           themeDispatch({
             type: val,
@@ -97,7 +97,7 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
           type: "default",
           payload: colorScheme,
         });
-        Appearance.setColorScheme(undefined);
+        // Appearance.setColorScheme(null);
       }
     });
   }, [colorScheme]);

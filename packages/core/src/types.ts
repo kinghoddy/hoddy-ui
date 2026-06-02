@@ -84,7 +84,7 @@ export interface AvatarProps {
 
 export interface ButtonProps {
   color?: colorTypes;
-  variant?: "text" | "outlined" | "contained";
+  variant?: "text" | "outlined" | "contained" | "translucent";
   gutterBottom?: number;
   elevation?: number;
   onPress?: () => void;
@@ -156,7 +156,7 @@ export interface LocatorProps {
   variant?: "contained" | "outlined";
   onLocationSelected: (
     location: locatorLocation | null,
-    formatted_address?: string
+    formatted_address?: string,
   ) => void;
   label?: string;
   error?: string;
@@ -236,14 +236,7 @@ export interface TextFieldProps extends TextInputProps {
   variant?: "outlined" | "text" | "contained";
   color?: colorTypes;
   size?: "small" | "normal" | "large";
-  type?:
-  | "email"
-  | "tel"
-  | "password"
-  | "text"
-  | "number"
-  | "search"
-  | "date";
+  type?: "email" | "tel" | "password" | "text" | "number" | "search" | "date";
   helperText?: string;
   value: any;
   start?: ReactNode;
@@ -263,6 +256,7 @@ export interface TextFieldProps extends TextInputProps {
   onFocus?: () => void;
   onBlur?: () => void;
   selectMenuProps?: Partial<SelectMenuProps>;
+  labelAlwaysOpen?: boolean;
 }
 
 export interface TypographyProps extends TextProps {
@@ -272,15 +266,15 @@ export interface TypographyProps extends TextProps {
   textCase?: "capitalize" | "uppercase" | "lowercase" | undefined;
   lineHeight?: number;
   variant?:
-  | "caption"
-  | "body1"
-  | "body2"
-  | "h6"
-  | "h5"
-  | "h4"
-  | "h3"
-  | "h2"
-  | "h1";
+    | "caption"
+    | "body1"
+    | "body2"
+    | "h6"
+    | "h5"
+    | "h4"
+    | "h3"
+    | "h2"
+    | "h1";
   align?: "center" | "left" | "right";
   gutterBottom?: number;
   numberOfLines?: number;
@@ -360,36 +354,36 @@ interface BaseAnimatorProps {
 // Type-specific animation props using discriminated unions
 export type AnimatorProps =
   | (BaseAnimatorProps & {
-    type: "fade";
-    // No additional props for fade animation
-  })
+      type: "fade";
+      // No additional props for fade animation
+    })
   | (BaseAnimatorProps & {
-    type: "grow";
-    initialScale?: number;
-  })
+      type: "grow";
+      initialScale?: number;
+    })
   | (BaseAnimatorProps & {
-    type: "slide";
-    direction?: "up" | "down" | "left" | "right";
-    initialValue?: number;
-  })
+      type: "slide";
+      direction?: "up" | "down" | "left" | "right";
+      initialValue?: number;
+    })
   | (BaseAnimatorProps & {
-    type: "blink";
-    blinkDuration?: number;
-    minOpacity?: number;
-    maxOpacity?: number;
-  })
+      type: "blink";
+      blinkDuration?: number;
+      minOpacity?: number;
+      maxOpacity?: number;
+    })
   | (BaseAnimatorProps & {
-    type: "float";
-    closeDuration?: number;
-    floatDistance?: number;
-    floatDuration?: number;
-  })
+      type: "float";
+      closeDuration?: number;
+      floatDistance?: number;
+      floatDuration?: number;
+    })
   | (BaseAnimatorProps & {
-    type: "roll";
-    initialTranslateY?: number;
-    initialRotate?: string;
-  })
+      type: "roll";
+      initialTranslateY?: number;
+      initialRotate?: string;
+    })
   | (BaseAnimatorProps & {
-    type: "thrownup";
-    // No additional props for thrownup animation
-  });
+      type: "thrownup";
+      // No additional props for thrownup animation
+    });

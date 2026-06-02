@@ -2,7 +2,10 @@
   "name": "@hoddy-ui/monorepo",
   "private": true,
   "scripts": {
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "build:next": "yarn workspace @hoddy-ui/next build",
+    "dev:next": "yarn workspace @hoddy-ui/next dev",
+    "start:test": "yarn workspace my-app start"
   },
   "workspaces": [
     "packages/*",
