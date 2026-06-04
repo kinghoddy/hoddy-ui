@@ -21,7 +21,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ms, ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "../scaling";
 import { useColors, useTheme } from "../hooks";
 import { UIThemeProvider } from "../theme";
 import { PopupProps } from "../types";

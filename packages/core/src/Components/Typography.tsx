@@ -1,23 +1,23 @@
 import React, { forwardRef } from "react";
 import { StyleSheet, Text } from "react-native";
-import { ms } from "react-native-size-matters";
 import { getConfig } from "../config/KeyManager";
 import { useColors } from "../hooks";
+import { ms } from "../scaling";
 import { TypographyProps } from "../types";
 import { getFontFamily } from "../utility";
 
-// Default font sizes (used as fallback)
-const DEFAULT_FONT_SIZES = {
-  h1: ms(42),
-  h2: ms(37),
-  h3: ms(32),
-  h4: ms(27),
-  h5: ms(22),
-  h6: ms(17),
-  body1: ms(15),
-  body2: ms(12),
-  caption: ms(10),
-};
+// Design-time font sizes (px); scaled via ms() at render for tablet factor / device
+const DEFAULT_FONT_SIZE_PX = {
+  h1: 42,
+  h2: 37,
+  h3: 32,
+  h4: 27,
+  h5: 22,
+  h6: 17,
+  body1: 15,
+  body2: 12,
+  caption: 10,
+} as const;
 
 const Typography: React.FC<TypographyProps> = forwardRef(
   (
@@ -36,16 +36,17 @@ const Typography: React.FC<TypographyProps> = forwardRef(
       lineHeight,
       ...props
     },
-    ref
+    ref,
   ) => {
     const colors: any = useColors();
     const config = getConfig();
     const customFontSizes = config.TYPOGRAPHY?.fontSizes;
 
-    // Get font size: prop > config > default, then apply ms() scaling
-    const baseFontSize =
-      customFontSizes?.[variant] ?? DEFAULT_FONT_SIZES[variant];
-    const f = fontSize || (style as any)?.fontSize || baseFontSize;
+    // Get font size: prop > style > scaled(config | default px)
+    const designPx =
+      customFontSizes?.[variant] ?? DEFAULT_FONT_SIZE_PX[variant];
+    const scaledFontSize = ms(designPx);
+    const f = fontSize ?? (style as any)?.fontSize ?? scaledFontSize;
     const lh = lineHeight || f * 1.2;
     const styles: any = StyleSheet.create({
       text: {
@@ -71,7 +72,7 @@ const Typography: React.FC<TypographyProps> = forwardRef(
         {children}
       </Text>
     );
-  }
+  },
 );
 
 export default Typography;

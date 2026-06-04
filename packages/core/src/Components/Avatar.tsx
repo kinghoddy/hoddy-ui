@@ -1,7 +1,7 @@
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Image, View } from "react-native";
-import { ms, ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { AvatarProps } from "../types";
 import Typography from "./Typography";

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { View } from "react-native";
-import { ScaledSheet, ms } from "react-native-size-matters";
+import { ScaledSheet, ms } from "../scaling";
 import { useColors } from "../hooks";
 import { DividerProps } from "../types";
 

@@ -1,7 +1,7 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { forwardRef } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
-import { ScaledSheet, moderateScale, ms } from "react-native-size-matters";
+import { ScaledSheet, ms } from "../scaling";
 import { getConfig } from "../config/KeyManager";
 import { useColors, useTheme } from "../hooks";
 import { ButtonProps, IconButtonProps, LinkButtonProps } from "../types";
@@ -20,7 +20,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
 
   const styles: any = ScaledSheet.create({
     text: {
-      fontSize: moderateScale(fontSize),
+      fontSize: ms(fontSize),
       fontWeight: fontWeight.toString() as any,
       fontFamily: getFontFamily(fontWeight),
       color: disabled ? "#777" : colors[color].main,

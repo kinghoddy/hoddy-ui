@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator, Dimensions, View } from "react-native";
 
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { SpinnerProps } from "../types";
 import Typography from "./Typography";
@@ -30,13 +30,13 @@ const Spinner: React.FC<SpinnerProps> = ({
     content: {
       flexDirection: "row",
       alignItems: "center",
-      paddingVertical: "15@vs",
-      paddingHorizontal: "20@s",
+      paddingVertical: "15@mvs",
+      paddingHorizontal: "20@ms",
       borderRadius: 10,
       // backgroundColor: fullscreen ? colors.light.main : null,
     },
     label: {
-      marginLeft: "10@s",
+      marginLeft: "10@ms",
       color: color === "light" ? colors.white[2] : colors.black[4],
     },
   });

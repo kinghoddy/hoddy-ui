@@ -1,7 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { View } from "react-native";
-import { ms, ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { AlertXProps } from "../types";
 import Typography from "./Typography";

@@ -1,7 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { ListItemProps, ListItemTextProps, ListProps } from "../types";
 import Typography from "./Typography";
@@ -58,10 +58,10 @@ export const ListItem: React.FC<ListItemProps> = ({
     root: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: "10@s",
+      paddingHorizontal: "10@ms",
       borderBottomColor: colors.white[2],
       borderBottomWidth: divider ? 1 : 0,
-      paddingVertical: "10@vs",
+      paddingVertical: "10@mvs",
     },
   });
   return (

@@ -7,6 +7,7 @@ import HoddyUI, { UIThemeProvider } from "@hoddy-ui/next";
 
 HoddyUI.initialize({
   edgeToEdge: true,
+  tabletScaleFactor: 0.2,
   colors: {
     light: {
       primary: { main: "#407463" },

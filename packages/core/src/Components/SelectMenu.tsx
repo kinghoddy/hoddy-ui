@@ -2,7 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, { useCallback, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { SelectMenuProps } from "../types";
 import { Popup } from "./Popup";
@@ -28,16 +28,16 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
   const [search, setSearch] = useState("");
   const styles: any = ScaledSheet.create({
     header: {
-      marginBottom: "20@vs",
+      marginBottom: "20@mvs",
     },
 
     option: {
-      paddingHorizontal: "10@s",
-      paddingVertical: "10@vs",
+      paddingHorizontal: "10@ms",
+      paddingVertical: "10@mvs",
       borderRadius: 8,
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "10@vs",
+      marginBottom: "10@mvs",
     },
   });
 

@@ -162,6 +162,9 @@ initialize({
   // Enable edge-to-edge display mode
   edgeToEdge?: boolean;
 
+  // Moderate-scale factor on tablets (iPad / Android smallest width >= 600dp). Default 0.2.
+  tabletScaleFactor?: number;
+
   // Typography settings
   typography?: {
     // Primary font family
@@ -189,6 +192,7 @@ initialize({
 initialize({
   googleMapApiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxx",
   edgeToEdge: true,
+  tabletScaleFactor: 0.2,
   colors: {
     primary: "#007AFF",
     secondary: "#34C759",
@@ -206,6 +210,22 @@ initialize({
 ```
 
 **Note:** The `fontWeights` property is particularly useful for Android devices where different font weights require separate font family files. This allows you to map each weight (100-900) to its corresponding font family name.
+
+### Responsive scaling (`ms`)
+
+Components use [`react-native-size-matters`](https://www.npmjs.com/package/react-native-size-matters) internally. On tablets (iPad via `Platform.isPad`, Android when smallest screen dimension ≥ 600dp), `tabletScaleFactor` from `initialize()` is passed as the library’s moderate-scale **factor** (same as `ms(size, factor)`), so sizing stays closer to the design size instead of scaling up aggressively.
+
+Import the Hoddy wrapper instead of the raw package in your app:
+
+```tsx
+import { ms, ScaledSheet, isTablet } from "@hoddy-ui/core";
+
+const styles = ScaledSheet.create({
+  box: { padding: "16@ms", marginBottom: "12@mvs" },
+});
+
+<View style={{ padding: ms(16) }} />
+```
 
 ### Theme Configuration
 

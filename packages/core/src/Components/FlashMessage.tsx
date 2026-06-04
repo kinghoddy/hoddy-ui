@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { FlashMessageProps } from "../types";
 import Typography from "./Typography";
@@ -121,11 +121,11 @@ const FlashMessage: React.FC = () => {
 
     action: {
       borderRadius: 20,
-      marginTop: "10@vs",
+      marginTop: "10@mvs",
       flexDirection: "row",
       justifyContent: "center",
       paddingHorizontal: "20@ms",
-      paddingVertical: "8@vs",
+      paddingVertical: "8@mvs",
       backgroundColor: "#fff3",
     },
   });

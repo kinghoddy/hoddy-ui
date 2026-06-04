@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { ms, ScaledSheet } from "react-native-size-matters";
+import { ms, ScaledSheet } from "../scaling";
 import { GridItemProps, GridProps } from "../types";
 
 export const GridItem: React.FC<GridItemProps> = ({

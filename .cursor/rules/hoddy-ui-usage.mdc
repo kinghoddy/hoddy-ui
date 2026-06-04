@@ -10,7 +10,8 @@ This is the source repo for `@hoddy-ui/core`. Follow these rules when authoring 
 ## Setup
 
 - Wrap the app in `UIThemeProvider` once at the root. It also mounts `FlashMessage` and configures the system UI.
-- Call `initialize({...})` BEFORE rendering to register `googleMapApiKey`, `colors`, `edgeToEdge`, and `typography`.
+- Call `initialize({...})` BEFORE rendering to register `googleMapApiKey`, `colors`, `edgeToEdge`, `tabletScaleFactor`, and `typography`.
+- For responsive sizing in app code, import `ms` from `@hoddy-ui/core` (or `@hoddy-ui/core/next`) — do not import `ms` from `react-native-size-matters` directly.
 - For Next.js / web entry use `@hoddy-ui/core/next`; for React Native use `@hoddy-ui/core` (root).
 
 ```tsx
@@ -18,6 +19,7 @@ import { UIThemeProvider, initialize } from "@hoddy-ui/core";
 
 initialize({
   edgeToEdge: true,
+  tabletScaleFactor: 0.2,
   colors: { light: { primary: { main: "#ff8800" } } },
   typography: { fontFamily: "Inter", fontWeights: { 500: "Inter-Medium" } },
 });

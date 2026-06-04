@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { FormWrapperProps } from "../types";
 
 export const FormWrapper = forwardRef<ScrollView, FormWrapperProps>(

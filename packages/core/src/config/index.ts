@@ -22,6 +22,7 @@ type TypographyVariant =
  * initialize({
  *   googleMapApiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxx",
  *   edgeToEdge: true,
+ *   tabletScaleFactor: 0.2,
  *   colors: {
  *     primary: "#007AFF",
  *     secondary: "#34C759"
@@ -51,6 +52,10 @@ type configProps = {
   colors?: extraColorTypes;
   /** Enable edge-to-edge display mode */
   edgeToEdge?: boolean;
+  /**
+   * Moderate-scale factor passed to `react-native-size-matters` on tablets (iPad / Android smallest width >= 600dp). Lower values scale less (default 0.2; library default on phones is 0.5).
+   */
+  tabletScaleFactor?: number;
   /** Typography settings */
   typography?: {
     /** Primary font family */
@@ -72,6 +77,7 @@ export function initialize(config: configProps): void {
       GOOGLE_MAP_API_KEY: config.googleMapApiKey,
       TYPOGRAPHY: config.typography,
       EDGE_TO_EDGE: config.edgeToEdge ?? false,
+      TABLET_SCALE_FACTOR: config.tabletScaleFactor,
     });
     if (config.colors) setExtraColors(config.colors);
   } catch (error) {

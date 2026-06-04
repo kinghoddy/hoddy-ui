@@ -8,13 +8,8 @@ import {
   View,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {
-  ScaledSheet,
-  moderateScale,
-  ms,
-  verticalScale,
-} from "react-native-size-matters";
 import { useColors, useTheme } from "../hooks";
+import { ScaledSheet, ms } from "../scaling";
 import { TextFieldProps } from "../types";
 import { getFontFamily } from "../utility";
 import SelectMenu from "./SelectMenu";
@@ -129,7 +124,7 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
     const isFloating = labelVariant === "floating";
     const labelOpen = labelAlwaysOpen || focused || value;
 
-    const baseHeight = moderateScale(
+    const baseHeight = ms(
       multiline ? 50 + (props.numberOfLines || 1) * 18 : 50,
     );
     const sizeMultiplier = isFloating
@@ -142,22 +137,20 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
     const height = baseHeight * sizeMultiplier;
 
     const labelAnim = useRef(
-      new Animated.Value(
-        height / moderateScale(variant === "text" ? 2.5 : 3.2),
-      ),
+      new Animated.Value(height / ms(variant === "text" ? 2.5 : 3.2)),
     ).current;
 
     React.useEffect(() => {
       if (!isFloating) return;
       if (labelOpen) {
         Animated.timing(labelAnim, {
-          toValue: verticalScale(variant === "text" ? 2 : 4),
+          toValue: ms(variant === "text" ? 2 : 4),
           duration: 300,
           useNativeDriver: false,
         }).start();
       } else {
         Animated.timing(labelAnim, {
-          toValue: height / moderateScale(variant === "text" ? 2.5 : 3.2),
+          toValue: height / ms(variant === "text" ? 2.5 : 3.2),
           duration: 300,
           useNativeDriver: false,
         }).start();
@@ -184,8 +177,7 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
       }
     };
 
-    const inputPadding =
-      variant === "text" ? 0 : moderateScale(isFloating ? 15 : 10);
+    const inputPadding = variant === "text" ? 0 : ms(isFloating ? 15 : 10);
     const containerBorderRadius =
       variant === "text" ? 0 : rounded ? 30 : isFloating ? 7 : 10;
     const datePlaceholderColor = colors.textSecondary.light;
@@ -236,7 +228,7 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
         padding: 0,
         paddingLeft: inputPadding,
         lineHeight: "18@ms",
-        paddingRight: moderateScale(10),
+        paddingRight: ms(10),
         ...(isFloating
           ? { marginTop: "13@ms", fontFamily: getFontFamily(400) }
           : {}),
@@ -254,7 +246,7 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
         alignItems: "center",
         flex: 1,
         paddingLeft: inputPadding,
-        paddingRight: moderateScale(10),
+        paddingRight: ms(10),
         paddingTop: isFloating
           ? variant === "text"
             ? ms(13)

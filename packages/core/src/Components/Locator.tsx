@@ -5,7 +5,7 @@ import { ListItem } from "./List";
 import TextField from "./TextField";
 
 import * as Location from "expo-location";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { LocatorProps } from "../types";
 

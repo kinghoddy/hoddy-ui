@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "../scaling";
 import { useColors } from "../hooks";
 import { RatingInputProps, RatingStarsProps } from "../types";
 import Button from "./Button";
@@ -31,7 +31,7 @@ export const RatingInput: FC<RatingInputProps> = ({
       alignItems: "center",
     },
     inputCon: {
-      marginBottom: "20@vs",
+      marginBottom: "20@mvs",
       backgroundColor: colors.white[3],
       padding: "15@ms",
       borderRadius: 20,
@@ -39,7 +39,7 @@ export const RatingInput: FC<RatingInputProps> = ({
     input: {
       fontSize: "16@ms",
       color: colors.dark.main,
-      height: "100@vs",
+      height: "100@mvs",
     },
   });
 

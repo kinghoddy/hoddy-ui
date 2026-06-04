@@ -23,8 +23,18 @@ export { default as TextField } from "./src/Components/TextField";
 export { default as Typography } from "./src/Components/Typography";
 
 // Animation hooks
-export * from "./src/Components/Animators/hooks";
 export * from "./src/Components/Animators/Animator";
+export * from "./src/Components/Animators/hooks";
+
+// Scaling
+export {
+  getTabletScaleFactor,
+  isTablet,
+  moderateScale,
+  ms,
+  mvs,
+  ScaledSheet,
+} from "./src/scaling";
 
 // Others
 export * from "./src/hooks";

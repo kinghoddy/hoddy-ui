@@ -21,11 +21,13 @@ type configTypes = {
     };
   };
   EDGE_TO_EDGE?: boolean;
+  TABLET_SCALE_FACTOR?: number;
 };
 
 let config: configTypes = {
   GOOGLE_MAP_API_KEY: "",
   EDGE_TO_EDGE: true,
+  TABLET_SCALE_FACTOR: 0.2,
 };
 
 export function setConfig(key: configTypes): void {
