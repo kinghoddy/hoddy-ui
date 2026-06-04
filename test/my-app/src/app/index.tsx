@@ -8,7 +8,6 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { WebBadge } from "@/components/web-badge";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-import { Typography } from "@hoddy-ui/next";
 
 function getDevMenuHint() {
   if (Platform.OS === "web") {
@@ -39,9 +38,7 @@ export default function HomeScreen() {
             Welcome to&nbsp;Expo
           </ThemedText>
         </ThemedView>
-        <Typography variant="h3" color="primary">
-          HELLO
-        </Typography>
+
         <ThemedText type="code" style={styles.code}>
           get started
         </ThemedText>

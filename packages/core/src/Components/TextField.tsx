@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import TextFieldDatePickerModal from "./TextFieldDatePickerModal";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {
   ScaledSheet,
   moderateScale,
@@ -575,8 +575,9 @@ export const TextFieldBase = React.forwardRef<TextInput, TextFieldBaseProps>(
           />
         ) : null}
         {isDate ? (
-          <TextFieldDatePickerModal
-            visible={datePickerVisible}
+          <DateTimePickerModal
+            isVisible={datePickerVisible}
+            mode="date"
             date={parseDateValue(value)}
             onConfirm={handleDateConfirm}
             onCancel={() => {

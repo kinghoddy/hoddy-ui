@@ -54,13 +54,10 @@ const ConfigureSystemUI = () => {
           } else {
             NavigationBar.setStyle("dark");
           }
+        } else if (theme === "dark") {
+          NavigationBar.setStyle("light");
         } else {
-          NavigationBar.setBackgroundColorAsync(colors.white[1]);
-          if (theme === "dark") {
-            NavigationBar.setButtonStyleAsync("light");
-          } else {
-            NavigationBar.setButtonStyleAsync("dark");
-          }
+          NavigationBar.setStyle("dark");
         }
       }
     }
@@ -75,7 +72,8 @@ export const UIThemeProvider = ({ children }: ThemeProviderProps) => {
     value: "light",
   });
 
-  const colorScheme: ThemeTypes = useColorScheme()!;
+  const colorScheme: ThemeTypes =
+    useColorScheme() === "dark" ? "dark" : "light";
 
   React.useEffect(() => {
     AsyncStorage.getItem("theme").then((val: any) => {

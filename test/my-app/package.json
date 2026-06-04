@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
-    "@hoddy-ui/next": "*",
     "@expo/ui": "~56.0.15",
+    "@hoddy-ui/next": "*",
     "expo": "~56.0.8",
     "expo-constants": "~56.0.16",
     "expo-device": "~56.0.4",
@@ -12,6 +12,7 @@
     "expo-glass-effect": "~56.0.4",
     "expo-image": "~56.0.9",
     "expo-linking": "~56.0.13",
+    "expo-navigation-bar": "~56.0.3",
     "expo-router": "~56.2.8",
     "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
@@ -33,12 +34,12 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "start": "expo start",
+    "start": "npx expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios",
+    "web": "npx expo start --web",
+    "lint": "npx expo lint"
   },
   "private": true
 }

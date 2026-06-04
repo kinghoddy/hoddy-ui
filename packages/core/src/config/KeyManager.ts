@@ -25,7 +25,7 @@ type configTypes = {
 
 let config: configTypes = {
   GOOGLE_MAP_API_KEY: "",
-  EDGE_TO_EDGE: false,
+  EDGE_TO_EDGE: true,
 };
 
 export function setConfig(key: configTypes): void {

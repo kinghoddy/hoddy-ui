@@ -17,7 +17,8 @@ export const useTheme = () => {
 
 export const useThemeContext = () => {
   const { themeState: theme, themeDispatch } = useContext(UIThemeContext);
-  const colorScheme: ThemeTypes = useColorScheme()!;
+  const colorScheme: ThemeTypes =
+    useColorScheme() === "dark" ? "dark" : "light";
 
   const setTheme = (theme: ThemeModes) => {
     if (theme === "default") {

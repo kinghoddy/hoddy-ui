@@ -230,7 +230,7 @@ export interface SpinnerProps {
   style?: ViewStyle;
 }
 
-export interface TextFieldProps extends TextInputProps {
+export interface TextFieldProps extends Omit<TextInputProps, "style"> {
   label?: string;
   labelProps?: TypographyProps;
   variant?: "outlined" | "text" | "contained";
@@ -259,7 +259,7 @@ export interface TextFieldProps extends TextInputProps {
   labelAlwaysOpen?: boolean;
 }
 
-export interface TypographyProps extends TextProps {
+export interface TypographyProps extends Omit<TextProps, "style"> {
   children: ReactNode;
   color?: colorTypes | (string & {});
   style?: StyleProp<TextStyle | ViewStyle>;

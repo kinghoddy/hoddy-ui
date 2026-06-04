@@ -17,11 +17,13 @@ HoddyUI.initialize({
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   return (
-    <UIThemeProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <AnimatedSplashOverlay />
-        <AppTabs />
-      </ThemeProvider>
-    </UIThemeProvider>
+    <>
+      {/* <UIThemeProvider> */}
+      {/* <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */}
+      <AnimatedSplashOverlay />
+      <AppTabs />
+      {/* </ThemeProvider> */}
+      {/* </UIThemeProvider> */}
+    </>
   );
 }
