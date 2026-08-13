@@ -20,6 +20,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ms, ScaledSheet } from "../scaling";
 import { useColors, useTheme } from "../hooks";
@@ -40,7 +45,11 @@ export const Popup: React.FC<PopupProps> = ({
   onModalShow,
   onModalHide,
   disableAutoKeyboardManagement = false,
+  draggable = !!sheet,
+  showHandle,
+  cancelButtonPosition = "left",
 }) => {
+  const handleVisible = (showHandle ?? draggable) && !!sheet;
   const theme = useTheme();
   const colors = useColors();
   const [modalVisible, setModalVisible] = useState(false);
@@ -115,6 +124,23 @@ export const Popup: React.FC<PopupProps> = ({
     transform: [{ translateY: contentTranslateY.value }],
   }));
 
+  // Drag-to-dismiss gesture (sheet mode). Only downward drag moves the sheet.
+  const dragGesture = Gesture.Pan()
+    .enabled(draggable && !!sheet)
+    .onUpdate((e) => {
+      contentTranslateY.value = Math.max(0, e.translationY);
+    })
+    .onEnd((e) => {
+      const shouldClose = e.translationY > 120 || e.velocityY > 800;
+      if (shouldClose) {
+        contentTranslateY.value = withTiming(1000, { duration: 200 }, () => {
+          runOnJS(closeAction)();
+        });
+      } else {
+        contentTranslateY.value = withTiming(0, { duration: 200 });
+      }
+    });
+
   const styles: any = ScaledSheet.create({
     root: {
       height: "100%",
@@ -161,7 +187,19 @@ export const Popup: React.FC<PopupProps> = ({
     },
     titleIcon: {
       position: "absolute",
-      left: "15@ms",
+      left: cancelButtonPosition === "left" ? "15@ms" : undefined,
+      right: cancelButtonPosition === "right" ? "15@ms" : undefined,
+    },
+    handleWrap: {
+      alignItems: "center",
+      paddingTop: "8@ms",
+      paddingBottom: "4@ms",
+    },
+    handle: {
+      width: "40@ms",
+      height: "5@ms",
+      borderRadius: 999,
+      backgroundColor: theme === "dark" ? "#444" : "#0002",
     },
     backdrop: {
       position: "absolute",
@@ -185,6 +223,7 @@ export const Popup: React.FC<PopupProps> = ({
       onRequestClose={closeAction}
       navigationBarTranslucent
     >
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <UIThemeProvider>
         <Animated.View style={[styles.backdrop, backdropAnimatedStyle]} />
         <KeyboardAvoidingView
@@ -218,20 +257,29 @@ export const Popup: React.FC<PopupProps> = ({
                 }
               >
                 <View style={styles.container}>
-                  {!bare && (
-                    <View style={styles.title}>
-                      <View style={styles.titleIcon}>
-                        <IconButton
-                          size={20}
-                          icon="close"
-                          onPress={closeAction}
-                        />
-                      </View>
-                      <Typography align="center" fontWeight={500}>
-                        {title}
-                      </Typography>
+                  <GestureDetector gesture={dragGesture}>
+                    <View>
+                      {handleVisible && (
+                        <View style={styles.handleWrap}>
+                          <View style={styles.handle} />
+                        </View>
+                      )}
+                      {!bare && (
+                        <View style={styles.title}>
+                          <View style={styles.titleIcon}>
+                            <IconButton
+                              size={20}
+                              icon="close"
+                              onPress={closeAction}
+                            />
+                          </View>
+                          <Typography align="center" fontWeight={500}>
+                            {title}
+                          </Typography>
+                        </View>
+                      )}
                     </View>
-                  )}
+                  </GestureDetector>
 
                   <View style={styles.content}>{children}</View>
                 </View>
@@ -240,6 +288,7 @@ export const Popup: React.FC<PopupProps> = ({
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       </UIThemeProvider>
+      </GestureHandlerRootView>
     </Modal>
   );
 };

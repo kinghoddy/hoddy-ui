@@ -220,6 +220,12 @@ export interface PopupProps {
   disableAutoKeyboardManagement?: boolean;
   onModalShow?: () => void;
   onModalHide?: () => void;
+  /** Show a draggable handle bar; drag down to dismiss (sheet mode only). Default true when `sheet`. */
+  draggable?: boolean;
+  /** Show the grabber handle bar at top of the sheet. Default follows `draggable`. */
+  showHandle?: boolean;
+  /** Position of the cancel/close button in the title bar. Default "left". */
+  cancelButtonPosition?: "left" | "right";
 }
 
 export interface SpinnerProps {
